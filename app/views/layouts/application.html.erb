@@ -86,7 +86,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
       </ul>
       <% if(!user_signed_in?) %>
       <span class="navbar-text">
-        <%= link_to('Log In', new_user_session_path) %>
+        <%= link_to('Log In', new_user_session_path) %> | <%= link_to('Sign Up', new_user_registration_path) %>
       </span>
       <% else %>
       <ul class="navbar-nav">
