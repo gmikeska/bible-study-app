@@ -1,0 +1,75 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+ @import "bootstrap-custom";
+ @import "rails_bootstrap_forms";
+.btn-default{
+  background-color:#fe4110;
+  color:white;
+}
+.toolbar {
+     margin-bottom: 1%;
+ }
+ .toolbar a {
+    margin-right: 8px;
+}
+ .navbar-light .navbar-nav .nav-link {
+     color: rgba(0, 0, 0, 0.8);
+ }
+ .bg-default {
+    background-color: #4b1310;
+    color: white;
+
+}
+ .btn-default:hover {
+    background-color: red;
+    color: darkgrey;
+
+}
+.nav-tabs{
+  li{
+    a{
+      color:#4b1310;
+    }
+  }
+}
+.dropdown-item.active, .dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background: #4b1310 linear-gradient(180deg, #4b1310, maroon) repeat-x;
+}
+/* Drag & Drop CSS */
+.placeholder{
+  height:5px;
+}
+.dragged {
+  opacity:.5;
+}
+.header-cell{
+  padding: 0.75rem;
+  font-weight: bold;
+  display: table-cell;
+}
+.header-row{
+  border-top: 1px solid #dee2e6;
+  border-bottom: 2px solid #dee2e6;
+  display: table-row;
+}
+div.table {
+  border-collapse: collapse;
+}
+div.table div.col{
+  padding: 0.75rem;
+}

@@ -1,0 +1,56 @@
+<% if(result == :correct)
+  resultMark = "<span class='text-success' title='Correct' style='font-size:x-large; float:left'>✓</span>".html_safe
+elsif(result == :incorrect)
+  resultMark = "<span class='text-danger' title='Incorrect' style='font-size:x-large; float:left'>&times</span>".html_safe
+end %>
+<% if(question[:field_type] == "text_field") %>
+<%= resultMark %><h3><%= number.to_s+". "+question[:text] %></h3>Student's Answer:<span class="border"><%= user_answer %></span>
+<div class="container"  id="question-<%= number.to_s %>-review">
+  <% if(result == :incorrect) %>
+    Correct Answer:<%= correct_answer %>
+  <% elsif(result == :pending) %>
+    <%= form.hidden_field "answers[][index]".to_sym, value:number-1 %>
+    <%= form.form_group "answers[][isCorrect]".to_sym, label: { text: "Is this correct?" } do %>
+        <%= form.radio_button "answers[][isCorrect]".to_sym, "yes", label: "Yes" %>
+        <%= form.radio_button "answers[][isCorrect]".to_sym, "no", label: "No" %>
+    <% end %>
+    <div class="container" id="question-<%= number.to_s %>-comment" style="display: none;">
+      <%= form.text_field "answers[][comment]".to_sym, label:"Response to student" %>
+
+    </div>
+
+  <% end %>
+</div>
+<% end %>
+<% if(question[:field_type] == "text_area") %>
+  <%= resultMark %><h3><%= number.to_s+". "+question[:text] %></h3>Student's Answer:<span class="border"><%= user_answer %></span>
+  <div class="container"  id="question-<%= number.to_s %>-review">
+  <% if(result == :incorrect) %>
+    <br>Correct Answer:<%= correct_answer %>
+    <% elsif(result == :pending) %>
+      <%= form.hidden_field "answers[][index]".to_sym, value:number-1 %>
+      <%= form.form_group "answers[][isCorrect]".to_sym, label: { text: "Is this correct?" } do %>
+          <%= form.radio_button "answers[][isCorrect]".to_sym, "yes", label: "Yes" %>
+          <%= form.radio_button "answers[][isCorrect]".to_sym, "no", label: "No" %>
+      <% end %>
+      <div class="container" id="question-<%= number.to_s %>-comment" style="display: none;">
+        <%= form.text_field "answers[][comment]".to_sym, label:"Response to student" %>
+      </div>
+  <% end %>
+  </div>
+<% end %>
+<% if(question[:field_type] == "radio_button") %>
+  <%= resultMark %><h3><%= number.to_s+". "+question[:text] %></h3>
+      <div class="container"  id="question-<%= number.to_s %>-review">
+      <% question[:choices].each_index do |i|; choice = question[:choices][i] %>
+        <% if(i == user_answer)%>
+        &bull;<%= choice %><br>
+        <% else %>
+        &#x25cb;<%= choice %><br>
+        <% end %>
+    <% if(result == :incorrect) %>
+      Correct Answer:<%= question[:choices][correct_answer.to_i] %>
+    <% end %>
+  <% end %>
+    </div>
+<% end %>

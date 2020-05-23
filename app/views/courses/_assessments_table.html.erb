@@ -1,0 +1,29 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Assessment Score</th>
+      <th>Status</th>
+      <th>Name</th>
+      <th>Pet's Name</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% enrollments.each do |enrollment|; student = enrollment.pet; quizzes = enrollment.quiz_responses.keys
+       quizzes.each do |quiz|; assessment = enrollment.quiz_responses[quiz] %>
+        <tr>
+          <td> <%= assessment[:score] %> </td>
+          <% if(enrollment.status?(quiz) == :pending) %>
+          <td class="text-danger"><%= enrollment.status?(quiz).to_s.titleize %> </td>
+          <% else %>
+          <td class="text-success"><%= enrollment.status?(quiz).to_s.titleize %><span style="font-size:x-large">✓</span></td>
+          <% end %>
+          <td> <%= student.owner.name %> </td>
+          <td> <%= student.name %> </td>
+          <td> <%= link_to 'Review', course_chapter_lesson_quiz_url(quiz.course,quiz.lesson.chapter,quiz.lesson,quiz)+"/#{student.id}/review", class: 'btn btn-sm btn-default' %> </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

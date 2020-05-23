@@ -1,0 +1,31 @@
+<h1>My Courses</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Pet</th>
+      <% if(@user.isStaff?) %>
+      <th colspan="2"></th>
+      <% else %>
+      <th colspan="1"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <% @enrollments.each do |enrollment| %>
+      <tr>
+        <td> <%= enrollment.course.name %> </td>
+        <td> <%= enrollment.course.description %> </td>
+        <td> <%= enrollment.pet.name %> </td>
+
+        <td><%= link_to 'View', enrollment.course, class: 'btn btn-sm btn-default' %></td>
+        <% if(@user.isStaff?) %>
+        <td><%= link_to 'Edit', enrollment.course, class: 'btn btn-sm btn-secondary' %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

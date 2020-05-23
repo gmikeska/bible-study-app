@@ -1,0 +1,21 @@
+<ul class="nav nav-pills mb-3 border-top" id="pills-tab" role="tablist" style="padding-top:10px;">
+  <li class="nav-item">
+    <a class="nav-link active" title="Paid users can see the course information." id="pills-paid-tab" data-toggle="pill" href="#pills-paid" role="tab" aria-controls="pills-paid" aria-selected="true">Paid</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="pills-all-tab" title="This tab allows you to see all who have enrolled in the course." data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="false">All</a>
+  </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-paid" role="tabpanel" aria-labelledby="paid-tab"><%= render 'students_table', enrollments:@course.enrollments, show_unpaid:false %></div>
+  <div class="tab-pane fade" id="pills-all" role="tabpanel" aria-labelledby="all-tab"><%= render 'students_table', enrollments:@course.enrollments, show_unpaid:true %></div>
+  <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="all-tab">...</div> -->
+</div>
+<style media="screen">
+  .nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    background-color:#4b1310;
+  }
+  a {
+    color:#4b1310;
+  }
+</style>

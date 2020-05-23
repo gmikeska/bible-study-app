@@ -1,0 +1,4 @@
+<%= toolbar([link_to('Back', @quiz.course, class:"btn btn-secondary")]) %>
+<h1>Editing Quiz Questions for <%= @course.name %> - <%= @quiz.lesson.chapter.name %></h1>
+
+<%= render 'form', quiz: @quiz, chapter:@quiz.lesson.chapter %>

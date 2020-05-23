@@ -1,0 +1,29 @@
+
+
+<% if(current_user.isStaff?) %>
+<%= toolbar([link_to('New Chapter', new_course_chapter_path(@course), class: 'btn btn-sm btn-default'), link_to('New Lesson', new_course_lesson_path(@course), class: 'btn btn-sm btn-secondary')], style:"margin-top: 10px;") %>
+<% end %>
+
+<% if(@course.chapters.count > 0) %>
+  <h3>Course Chapters</h3>
+  <% if(current_user.present? && current_user.isStaff?) %>
+    <%= render "show_chapters" %>
+  <% else %>
+    <%= render "show_student_chapters" %>
+  <% end %>
+<% elsif(current_user.present? && current_user.isStaff?) %>
+<div class="row border">
+  There are no chapters yet. Use the button above to create the first chapter.
+</div>
+<% elsif(current_user.present? && !current_user.isStaff?) %>
+<div class="row border">
+  There are no chapters yet. Your instructor will reach out when the course is available for study.
+</div>
+<% end %>
+
+  <% if(current_user.isStaff?) %>
+    <% if(@course.lessons.select{ |l| l.chapter_id.nil? }.count > 0)%>
+    <h3>Unfiled Lessons</h3>
+    <%= render "lessons_table", lessons:@course.lessons.select{ |l| l.chapter_id.nil? } %>
+    <% end %>
+<% end %>

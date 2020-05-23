@@ -1,0 +1,9 @@
+<%= toolbar([link_to('Back', @quiz.course, class:"btn btn-secondary")]) %>
+<h1>New Quiz for <%= @course.name %> - <%= @chapter.name %></h1>
+
+<%= render 'form', quiz: @quiz, chapter:@chapter %>
+<script type="text/javascript">
+  $("body").ready(()=>{
+    $("#addQuestion").click()
+  })
+</script>

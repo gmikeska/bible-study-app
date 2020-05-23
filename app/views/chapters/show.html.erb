@@ -1,0 +1,58 @@
+<p id="notice"><%= notice %></p>
+<div style="float:right">
+  <a href="#">Next Lesson</a>
+</div>
+<div class="row">
+  <div class="col">
+    <h1><%= @chapter.lessons.first.name %></h1>
+  </div>
+  <% if(current_user && current_user.isAdmin?) %>
+    <div class="col" style="margin-top: 1.5%;">
+      <strong>Visibility:</strong><%= @chapter.course.visibility %><br>
+    </div>
+  <% end %>
+</div>
+<%
+  buttons = []
+  if(current_user && current_user.isAdmin?)
+      buttons << back_button(@chapter.course)
+      buttons << edit_button(edit_course_chapter_path(@chapter.course,@chapter))
+      buttons << link_to('Import Lesson (docx)', course_chapter_lessons_import_path(@chapter.course,@chapter), class: 'btn btn-sm btn-secondary')
+  else
+    buttons << back_button(:back)
+  end
+%>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <% if(current_user.isStaff?) %>
+        <th>Visibility</th>
+      <% end %>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @chapter.lessons.each do |lesson| %>
+      <% if(lesson.visible_to(current_user)) %>
+        <tr>
+          <td> <%= lesson.name %> </td>
+          <td> <%= lesson.description %> </td>
+          <% if(current_user.isStaff?) %>
+            <td> <%= lesson.visibility %> </td>
+          <% end %>
+          <td><%= view_button lesson_path(lesson) %></td>
+          <% if(current_user.isStaff?) %>
+            <td><%= edit_button edit_lesson_path(lesson), class:'btn btn-sm btn-secondary' %></td>
+            <td><%= delete_button lesson_path(lesson) %></td>
+          <% else %>
+            <td></td>
+            <td></td>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

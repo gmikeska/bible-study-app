@@ -1,0 +1,27 @@
+  <div class="fieldset" id="question-<%= index %>">
+    <div class="field">
+      <%= link_to("Remove Question", "#", class:"btn btn-sm btn-default toolbar removeQuestion",style:"float:right;") %>
+      <%= form.text_field "questions[#{index.to_s}][text]".to_sym, value:question[:text], label:"Question #{index+1}." %>
+    </div>
+
+    <div class="field questionType">
+      <%= form.select "questions[#{index.to_s}][field_type]".to_sym, Quiz.question_types, selected:question[:field_type], label:"Field Type" %>
+    </div>
+
+    <div class="field answer">
+      <% if(question[:field_type] == "text_field") %>
+        <%= form.text_field "questions[#{index.to_s}][answer]".to_sym, label:"Answer" %>
+      <% end %>
+      <% if(question[:field_type] == "text_area") %>
+        <%= form.text_area "questions[#{index.to_s}][answer]".to_sym, label:"Answer" %>
+      <% end %>
+      <% if(question[:field_type] == "radio_button") %>
+        <%= form.form_group "questions[#{index.to_s}][answer][]".to_sym, label:{ text: "Answer" } do %>
+          <% question[:choices].each_index do |choice_index|; choice = question[:choices][choice_index] %>
+            <%= form.radio_button "questions[#{index.to_s}][answer]".to_sym, choice_index, label:(form.text_field "questions[#{index.to_s}][choices[#{choice_index}]]".to_sym, value:choice, label:"Choice #{choice_index+1}.",append:(link_to "&times".html_safe, "#", class:"btn text-danger removeChoice", title:"Remove Choice")).html_safe, checked:(choice_index.to_s == question[:answer].to_s) %>
+          <% end %>
+          <%= link_to "Add Choice", "#", class:"btn btn-sm btn-default addChoice" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>

@@ -1,0 +1,40 @@
+
+<div class="row">
+  <h1>Lesson: <%= @lesson.name %></h1>
+</div>
+
+ <% if(@lesson.slides.nil? || @lesson.slides.length == 0) %>
+  <%= render "lesson_content", lesson:@lesson  %>
+ <% else %>
+  <% if(@chapter.present? && @chapter.lessons.length > 1)
+      buttons = []
+      buttons << back_button(@course)
+      buttons << "<div class='col'>&nbsp</div>"
+      if(@lesson != @chapter.lessons.first)
+        previousLessonLink = link_to("Previous Lesson", [@chapter.course, @chapter, @chapter.lessons[@index-1]], class:'btn btn-sm btn-default chapterLesson previousLesson', style:"float: right; display:none")
+      end
+      if(@lesson != @chapter.lessons.last)
+        nextLesson = @chapter.lessons[@index+1]
+        nextLessonLink = link_to("Next Lesson", [@chapter.course, @chapter, @chapter.lessons[@index+1]], class:'btn btn-sm btn-default chapterLesson nextLesson', style:"float: right; display:none")
+      end
+      if(@lesson != @chapter.lessons.last)
+       buttons << nextLessonLink
+      end
+      if(@lesson != @chapter.lessons.first) %>
+        <% buttons << previousLessonLink %>
+      <% end %>
+      <%= toolbar(buttons)  %>
+    <% end %>
+
+    <%= render "slides", lesson:@lesson  %>
+  <% end %>
+
+
+<% if(@chapter.present? && @chapter.lessons.length > 1)
+  if(@lesson != @chapter.lessons.first) %>
+    <%= link_to("Previous Lesson", [@chapter.course, @chapter, @chapter.lessons[@index-1]], class:'btn btn-sm btn-default toolbar chapterLesson previousLesson', style:"float: left;margin-top: 6px; margin-right: 6px; display:none")  %>
+  <% end %><%
+  if(@lesson != @chapter.lessons.last) %>
+    <%= link_to("Next Lesson", [@chapter.course, @chapter, @chapter.lessons[@index+1]], class:'btn btn-sm btn-default toolbar chapterLesson nextLesson', style:"float: right;margin-top: 6px; margin-right: 6px; display:none")  %>
+<% end
+end %>

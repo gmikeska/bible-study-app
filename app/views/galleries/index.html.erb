@@ -1,0 +1,26 @@
+<p id='notice'><%= notice %></p>
+
+<h1> Galleries </h1>
+<%= link_to 'New Gallery', new_gallery_path, class:'btn btn-sm btn-default toolbar' %>
+<table class='table'>
+  <thead>
+    <tr>
+        <th>Name</th>
+        <th>count</th>
+        <th colspan=3></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @galleries.each do |gallery| %>
+      <tr>
+          <td> <%= gallery.name %> </td>
+          <td> <%= gallery.files.count %> </td>
+          <td><%= link_to 'View', gallery_path(gallery), class: 'btn btn-sm btn-default' %></td>
+          <td><%= link_to 'Edit', edit_gallery_path(gallery), class: 'btn btn-sm btn-secondary'%></td>
+          <td><%= link_to 'Delete', gallery, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %></td>
+      </tr>
+     <% end %>
+  </tbody>
+</table>
+<br>

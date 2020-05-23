@@ -1,0 +1,72 @@
+<% if(notice) %>
+<div class='alert alert-primary' role='alert' id='notice' style='margin-top:1%;'><%= notice %></div>
+<% end %>
+
+  <h1>Gallery: <%= @gallery.name %></h1>
+
+  <%= link_to 'Upload File', "#", class: 'btn btn-sm btn-default toolbar', id:"startUpload" %> <%= link_to 'Back', galleries_path, class: 'btn btn-sm btn-outline-primary toolbar' %>
+
+
+<%= render 'show_files', gallery: @gallery %>
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload Files</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= render 'add_file', gallery: @gallery %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-default" id="submit">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    $('body').ready(()=>{
+      completeUpload = ()=>{
+        pth = $("#pathHolder").data("path")
+        pth = pth.replace('upload','show_files')
+        $.get(pth,(content)=>{
+            $("#fileList").replaceWith(content)
+        })
+        $('#uploadModal').modal('hide')
+      }
+      $('#uploadModal').modal({
+        show: false
+      })
+      $('input','.actions').hide()
+      $('#startUpload').click((e)=>{
+        e.preventDefault()
+        $('#uploadModal').modal('show')
+      })
+      $('#submit').click(()=>{
+        uf = $('form')
+        data = new FormData($('form')[0])
+        for(let n=0; n < $(':file')[0].files.length; n++)
+        {
+          data.append("files",$(':file')[0].files[0])
+        }
+        $.ajax({
+            url: $('form')[0].action,
+            data: data,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success:()=>{
+              completeUpload()
+            }
+        });
+        path =  $('form')[0].action
+        $('.modal-body').empty()
+        $('.modal-body').html(`<div class="d-flex justify-content-center"><div class="spinner-grow" role="status">
+          <div id="pathHolder" data-path="${path}" style="hidden:true"></div><span class="sr-only">Loading...</span></div></div>`)
+      })
+    })
+  </script>

@@ -1,0 +1,61 @@
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<%= link_to "Back", :back, class: 'btn btn-sm btn-default toolbar' %>
+<%= bootstrap_form_with(model:@user, url: "/users/#{@user.id}") do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+  </div>
+  <%= f.hidden_field :id, value:@user.id %>
+
+  <div class="row field">
+  <div class="col">
+    <%= f.text_field :name %>
+  </div>
+  <div class="col">
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+<% if(resource.email == current_user.email) %>
+  <div class="row field">
+  <div class=" col">
+    <%= f.password_field :password, autocomplete: "new-password", label:"New Password" %>
+    <% if @minimum_password_length %>
+    <em><%= @minimum_password_length %> characters minimum</em>
+    <% end %>
+  </div>
+
+  <div class=" col">
+    <%= f.password_field :password_confirmation, autocomplete: "new-password",label:"Confirm New Password" %>
+  </div>
+  </div>
+
+  <div class="row field">
+  <div class="col">
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+  <div class="col ">
+
+  </div>
+  </div>
+<% elsif(current_user.type = "admin") %>
+<div class='field'>
+  <%= f.select :user_type, [['Admin', 'admin'], ['Instructor', 'instructor'], ['Student', 'student']], selected:resource.user_type %>
+</div>
+<% end %>
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
+<% if(resource.email == current_user.email) %>
+  <h3>Cancel my account</h3>
+
+  <p>We'd hate to see you go, but click here to <%= link_to "Cancel your account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class:"btn btn-sm btn-secondary" %></p>
+<% else %>
+<h3>Remove account</h3>
+
+<p><%= link_to "Remove User", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class:"btn btn-sm btn-secondary" %></p>
+<% end %>

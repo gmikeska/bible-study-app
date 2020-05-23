@@ -1,0 +1,117 @@
+<%= bootstrap_form_with(model: [@course, @quiz.lesson.chapter,@lesson, @quiz], local: true, method:"POST") do |form| %>
+  <% if chapter.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(chapter.errors.count, "error") %> prohibited this chapter from being saved:</h2>
+
+      <ul>
+        <% chapter.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="fields">
+    <% @quiz.questions.each_index do |index|; question = @quiz.questions[index] %>
+        <%= render 'edit_question', form: form, question:question, index:index %>
+      <hr>
+    <% end %>
+  </div>
+  <div class="actions">
+    <%= link_to "+ Add Question", "#", class:"btn btn-default", id:"addQuestion" %>
+  </div>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $("body").ready(()=>{
+    questionTypeHandler = (e)=>{
+      qType = e.currentTarget.value
+      qRoot = e.currentTarget.parentElement.parentElement.parentElement
+      qAnswer = $(".field.answer",qRoot)
+      answerDiv = $(".form-group", qAnswer)
+      switch(qType){
+        case "text_field":
+          fieldContent = `<input class="form-control" type="text" name="quiz[questions[][answer]]" id="quiz_questions[][answer]">`
+          break;
+        case "text_area":
+          fieldContent = `<textarea class="form-control" name="quiz[questions[][answer]]" id="quiz_questions[][answer]"></textarea>`
+          break;
+        case "radio_button":
+          fieldContent = buildMCOption(0)+buildMCOption(1)+`<a class="btn btn-sm btn-default addChoice" href="#">Add Choice</a>`
+          break;
+        }
+      newContent = `<div class="field"><label for="quiz_questions[][answer]">Answer</label>${fieldContent}</div>`
+      answerDiv.html(newContent)
+      if(qType == "radio_button")
+      {
+        $(".addChoice",answerDiv).click(addChoiceHandler)
+        $(".removeChoice",answerDiv).click(choiceRemoveHandler)
+      }
+    }
+    choiceRemoveHandler = (e)=>{
+      e.preventDefault()
+      targetChoice = e.currentTarget.parentElement.parentElement.parentElement.parentElement.parentElement
+      qDiv = e.currentTarget.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+      choiceCount = $(".form-check",qDiv).length
+      if(choiceCount > 2)
+      {
+        $(targetChoice).remove()
+      }
+      else {
+        $("input",e.currentTarget.parentElement.parentElement).val("")
+      }
+    }
+    addChoiceHandler = (e)=>{
+      e.preventDefault()
+      choiceDiv = e.currentTarget.parentElement
+      index = $(".form-check",choiceDiv).length
+      mcTemplate = buildMCOption(index)
+      newChoice = $(mcTemplate)
+      $(newChoice).insertBefore(e.currentTarget)
+      $(".removeChoice",newChoice).click(choiceRemoveHandler)
+    }
+    removeQuestionHandler = (e)=>{
+      e.preventDefault()
+      if($(".fieldset").length > 1)
+      {
+        $(e.currentTarget.parentElement.parentElement).remove()
+      }
+    }
+    $("select",".field.questionType").change(questionTypeHandler)
+    $(".addChoice").click(addChoiceHandler)
+    $(".removeChoice").click(choiceRemoveHandler)
+    $(".removeQuestion").click(removeQuestionHandler)
+    $("#addQuestion").click((e)=>{
+      e.preventDefault()
+      index = $(".fieldset").length
+      $(".fields").append(buildQuestion(index))
+      $($("select",".questionType")[index]).change(questionTypeHandler)
+      $(".removeQuestion",$(".fieldset")[index]).click(removeQuestionHandler)
+      // $($("select",".questionType")[index]).change()
+    })
+  })
+
+  buildQuestion = (index)=>{return `<div class="fieldset" id="question-${index}">
+  <div class="field">
+    <a class="btn btn-sm btn-default toolbar removeQuestion" style="float:right;" href="#">Remove Question</a>
+    <div class="form-group"><label for="quiz_questions[][text]">Question</label><input value="" class="form-control" type="text" name="quiz[questions[][text]]" id="quiz_questions[][text]"></div>
+  </div>
+
+  <div class="field questionType">
+    <div class="form-group"><label for="quiz_questions[][field_type]">Field Type</label><select class="form-control" name="quiz[questions[][field_type]]" id="quiz_questions[][field_type]"><option selected="selected" value="text_field">Short Answer</option>
+      <option value="text_area">Long Answer</option>
+      <option value="radio_button">Multiple Choice</option>
+      <option value="file_field">Attach File</option></select>
+    </div>
+  </div>
+  <div class="field answer">
+      <div class="form-group"><label for="quiz_questions[][answer]">Answer</label><input class="form-control" type="text" name="quiz[questions[][answer]]" id="quiz_questions[][answer]"></div>
+  </div>
+
+    </div>
+    <hr>`}
+
+  buildMCOption = (index)=>{ return `<div class="form-check"><input class="form-check-input" type="radio" value="${index}" name="quiz[questions[][answer]]" id="quiz_questions[][answer]_${index}"><label class="form-check-label" for="quiz_questions[][answer]_${index}"><div class="form-group"><label for="quiz_questions[][choices[${index}]]">Choice ${index+1}.</label><div class="input-group"><input class="form-control" type="text" name="quiz[questions[][choices[${index}]]]" id="quiz_questions[][choices[${index}]]"><div class="input-group-append"><a class="btn text-danger removeChoice" title="Remove Choice" href="#">×</a></div></div></div></label></div>`}
+
+</script>

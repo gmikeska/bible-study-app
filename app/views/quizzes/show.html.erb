@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+<%= toolbar([back_button(@quiz.course)]) %>
+<% if(@enrollment.present? && @enrollment.completed?(@quiz)) %>
+<h1>Completed Quiz for <%= @course.name %> - <%= @lesson.name %></h1>
+Status: <%= @enrollment.status?(@quiz).to_s.titleize %><br>
+Score:<%= @enrollment.quiz_responses[@quiz][:score].to_s.titleize %>
+  <%= bootstrap_form_tag  do |form| %>
+    <% @quiz.questions.each_index do |index|; question = @quiz.questions[index] %>
+      <%= render 'show_answer', number:index, form: form, question:question, user_answer:@enrollment.quiz_responses[@quiz][:answers][index], correct_answer:@enrollment.quiz_responses[@quiz][:correct_answer][index],result:@enrollment.quiz_responses[@quiz][:results][index] %>
+    <% end %>
+  <% end %>
+<% elsif(@enrollment.present? && !@enrollment.completed?(@quiz)) %>
+<h1>Quiz for <%= @course.name %> - <%= @lesson.name %></h1>
+  <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@quiz.course, @lesson.chapter,@lesson, @quiz)+"/#{current_user.id}/response/") do |form| %>
+    <% @quiz.questions.each_index do |index|; question = @quiz.questions[index] %>
+      <%= render 'show_question', number:index, form: form, question:question %>
+    <% end %>
+    <div class="actions">
+      <%= form.submit "Submit Answers" %>
+    </div>
+  <% end %>
+<% elsif(!@enrollment.present?) %>
+<%= render 'quiz_info' %>
+<% end %>

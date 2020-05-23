@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Waggie Pet Zone Online Classes</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- <script src="/assets/jquery.js" type="text/javascript"></script> -->
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css" integrity="sha256-ol2N5Xr80jdDqxK0lte3orKGb9Ja3sOnpAUV7TTADmg=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/white.min.css" integrity="sha256-7dwMOkQRlAVq/G79bV034hezbpLtwWpwTS3g4lp47yo=" crossorigin="anonymous" />
+<!--
+    <script src="/assets/bootstrap.min.js" type="text/javascript"></script> -->
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+    <link href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/ckeditor5/18.0.0/classic/ckeditor.js"></script>
+  <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+  <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar border navbar-expand-lg navbar-light" style="background: rgba(226,226,226,1);
+background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(226,226,226,1)), color-stop(49%, rgba(219,219,219,1)), color-stop(53%, rgba(209,209,209,1)), color-stop(100%, rgba(254,254,254,1)));
+background: -webkit-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+background: -o-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+background: -ms-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );">
+      <a class="navbar-brand" href="/">
+        <img src="<%= image_path("umlogo_100_transparent.gif") %>" width="300" alt="">
+      </a>
+      <ul class="navbar-nav mr-auto">
+        <% Page.all.each do |page| %>
+          <% if @page %>
+              <% if @page.id == page.id %>
+                <li class="nav-item active">
+              <% else %>
+                <li class="nav-item">
+              <% end %>
+              <% if(page.name == "home") %><a class="nav-link" href="/"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a>
+              <% else %><a class="nav-link" href="/pages/<%= page.slug %>"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a><% end %>
+              </li>
+          <% else %>
+                <li class="nav-item"><a class="nav-link" href="/pages/<%= page.slug %>"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a></li>
+          <% end %>
+        <% end %>
+        <% courses = Course.all %>
+        <% if(courses.count > 0) %>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="courseDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Courses
+        </a>
+        <div class="dropdown-menu" aria-labelledby="courseDropdown">
+          <% courses.each do |course| %>
+            <a class="dropdown-item" href="/courses/<%= course.slug %>"><%= course.name %></a>
+          <% end %>
+          <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/courses/">All Courses</a>
+        </div>
+        </li>
+        <% end %>
+      </ul>
+      <% if(!user_signed_in?) %>
+      <span class="navbar-text">
+        <%= link_to('Log In', new_user_session_path) %>
+      </span>
+      <% else %>
+      <ul class="navbar-nav">
+        <% if(current_user.isAdmin? && Course.count_pending_reviews > 0) %>
+        <li class="nav-item">
+          <a class="nav-link" href="/assessments">
+            <span class="badge badge-danger"><%= pluralize(Course.count_pending_reviews,"assessment") %> awaiting review!</span>
+          </a>
+        </li>
+        <% end %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= current_user.email %>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="userDropdown">
+              <%= link_to('My Profile', "/users/#{current_user.id}/edit", class:"dropdown-item") %>
+              <% if(current_user.isStudent?) %>
+              <a class="dropdown-item" href="/my-courses/">My Courses</a>
+              <a class="dropdown-item" href="/my-pets/">My Pets</a>
+              <div class="dropdown-divider"></div>
+              <% elsif(current_user.isAdmin?) %>
+                <a class="dropdown-item" href="/users/">User Management</a>
+                <div class="dropdown-divider"></div>
+              <% end %>
+              <%= link_to('Log Out', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+          </div>
+        </li>
+      </ul>
+      <% end %>
+    </nav>
+    <div class="container">
+      <% if notice %>
+        <%== "<p class='alert alert-success'>#{notice}</p>" %>
+    <% end %>
+      <% if alert %>
+        <%== "<p class='alert alert-success'>#{alert}</p>" %>
+    <% end %>
+    </div>
+    <div class="container">
+
+      <%= yield %>
+    </div>
+  </body>
+  <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+</html>

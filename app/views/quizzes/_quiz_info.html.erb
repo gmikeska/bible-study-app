@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h3>Quiz Questions</h3>
+<%= edit_button edit_lesson_quiz_path(lesson), class:'btn btn-sm btn-default toolbar' %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Question</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if(@quiz.questions.length > 0) %>
+      <% @quiz.questions.each_index do |index|; question = @quiz.questions[index] %>
+        <tr>
+          <td><%= (index+1).to_s %></td>
+          <td><%= question[:text] %></td>
+          <td><%=  Quiz.question_types.select{|opt| opt[1] == question[:field_type] }.first[0] %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="3" style="padding-left:31%">There are no questions in this quiz yet. Click the edit button above to add questions.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

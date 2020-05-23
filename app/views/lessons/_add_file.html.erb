@@ -1,0 +1,27 @@
+<% form_model = [lesson.course]
+  if(lesson.chapter)
+    form_model << lesson.chapter
+  end
+  form_model << lesson
+%>
+<%= form_with(model:form_model, url:lesson_upload_path(lesson)) do |form| %>
+<% if lesson.errors.any? %>
+  <div id='error_explanation'>
+    <h2><%= pluralize(lesson.errors.count, 'error') %> prohibited this component from being saved:</h2>
+
+    <ul>
+      <% lesson.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class='field'>
+  <%= form.file_field :files, multiple: true, direct_upload: true %>
+</div>
+
+<div class='actions'>
+<%= form.submit %>
+</div>
+<% end %>

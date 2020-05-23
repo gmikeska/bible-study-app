@@ -1,0 +1,26 @@
+<h1>User Management</h1>
+<%= toolbar([link_to('All users', "/users/", class:'btn btn-sm btn-default'),link_to( 'Admins', "/users/admins", class:'btn btn-sm btn-default'),link_to( 'Instructors', "/users/instructors", class:'btn btn-sm btn-default'),link_to( 'Students', "/users/students", class:'btn btn-sm btn-default')])%>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Type</th>
+      <th># of Pets</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.type.capitalize %></td>
+        <td><%= user.pets.count %></td>
+        <td><%= link_to 'Edit', "/users/#{user.id}/edit", class:'btn btn-sm btn-secondary' %></td>
+        <td><%= link_to 'Delete', user_registration_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

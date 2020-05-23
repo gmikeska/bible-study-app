@@ -1,0 +1,75 @@
+  <div class="row">
+    <div class="col">
+      <h1><%= @course.name %></h1>
+    </div>
+    <% if(current_user && current_user.isAdmin?) %>
+      <div class="col" style="margin-top: 1.5%;">
+        <strong>Visibility:</strong><%= @course.visibility %><br>
+        <strong>Price:</strong>$<%= @course.price  %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row border" style="text-indent: 3em; margin-bottom: 1%;"><p>
+    <%= @course.description %>
+  </p>
+  </div>
+  <%
+    buttons = []
+    if(current_user && current_user.isStaff?)
+        buttons << back_button(courses_path)
+        buttons << edit_button(edit_course_path(@course), class: 'btn btn-sm btn-secondary')
+        # if(is_dev(current_user))
+        #   buttons << link_to('Enter Classroom', url_for(@course.instruction), class: 'btn btn-sm btn-default')
+        # end
+        buttons << link_to('Import Lesson (docx)', course_lessons_import_path(@course), class: 'btn btn-sm btn-default')
+    elsif(current_user.present? && !current_user.isStaff?)
+      buttons << back_button(:back)
+      buttons << link_to("Join Class", course_enrollment_url(@course), class: 'btn btn-sm btn-default')
+    else
+      buttons << back_button(:back)
+    end
+  %>
+  <%= toolbar(buttons) %>
+  <% if(current_user.present? && @course.visible_to(current_user)) %>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <% if(current_user.isStaff?) %>
+          <li class="nav-item">
+            <a class="nav-link active" id="lessons-tab" data-toggle="tab" href="#lessons" role="tab" aria-controls="lessons" aria-selected="false">Lessons</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="roster-tab" data-toggle="tab" href="#roster" role="tab" aria-controls="roster" aria-selected="true">Roster</a>
+          </li>
+          <li class="nav-item">
+            <% if(@course.count_pending_reviews > 0) %>
+              <a class="nav-link" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="true">Assessments <span class="badge badge-danger"><%= @course.count_pending_reviews %> new</span></a>
+            <% else %>
+              <a class="nav-link" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="true">Assessments</a>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="live-tab" data-toggle="tab" href="#live" role="tab" aria-controls="live" aria-selected="false">Live Sessions</a>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <a class="nav-link active" id="lessons-tab" data-toggle="tab" href="#lessons" role="tab" aria-controls="lessons" aria-selected="true">Lessons</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="live-tab" data-toggle="tab" href="#live" role="tab" aria-controls="live" aria-selected="false">Live Sessions</a>
+          </li>
+        <% end %>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <% if(current_user.isStaff?) %>
+          <div class="tab-pane fade show active" id="lessons" role="tabpanel" aria-labelledby="lessons-tab"><%= render 'show_lessons' %></div>
+          <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab"><%= render 'students_tables', enrollments:@course.enrollments %></div>
+          <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab"><%= render 'assessments_table', enrollments:@course.enrollments %></div>
+          <div class="tab-pane fade" id="live" role="tabpanel" aria-labelledby="live-tab">History of classroom meetings can be rendered here.</div>
+        <% else %>
+          <div class="tab-pane fade show active" id="lessons" role="tabpanel" aria-labelledby="lessons-tab"><%= render 'show_lessons' %></div>
+          <div class="tab-pane fade" id="live" role="tabpanel" aria-labelledby="live-tab">History of classroom meetings can be rendered here.</div>
+        <% end %>
+      </div>
+  <% else %>
+<%= render 'enrollment' %>
+  <% end %>

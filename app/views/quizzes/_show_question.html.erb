@@ -1,0 +1,13 @@
+<% if(question[:field_type] == "text_field") %>
+  <%= form.text_field "answers[#{number}]".to_sym, label:(number+1).to_s+". "+question[:text] %>
+<% end %>
+<% if(question[:field_type] == "text_area") %>
+  <%= form.text_area "answers[#{number}]".to_sym, label:(number+1).to_s+". "+question[:text] %>
+<% end %>
+<% if(question[:field_type] == "radio_button") %>
+  <%= form.form_group "answers[#{number}]".to_sym, label: { text: (number+1).to_s+". "+question[:text] } do %>
+    <% question[:choices].each_index do |index|; choice = question[:choices][index] %>
+      <%= form.radio_button "answers[#{number}]".to_sym, index, label: choice %>
+    <% end %>
+  <% end %>
+<% end %>

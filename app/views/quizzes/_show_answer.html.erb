@@ -1,0 +1,30 @@
+<% if(result == :correct)
+  resultMark = "<span class='text-success' title='Correct' style='font-size:x-large'>✓</span>".html_safe
+elsif(result == :incorrect)
+  resultMark = "<span class='text-danger' title='Incorrect' style='font-size:x-large'>&times</span>".html_safe
+else
+  resultMark = "<span class='text-warning' title='Your instructor will score this question.' style='font-size:x-large;'>&#x231b;</span>".html_safe
+
+end %>
+<% if(question[:field_type] == "text_field") %>
+  <%= form.text_field "answers[#{number}]".to_sym, label:resultMark+number.to_s+". "+question[:text],value:user_answer, disabled:true %>
+  <% if(result == :incorrect) %>
+  Correct Answer:<%= correct_answer %>
+  <% end %>
+<% end %>
+<% if(question[:field_type] == "text_area") %>
+  <%= form.text_area "answers[#{number}]".to_sym, label:resultMark+number.to_s+". "+question[:text],value:user_answer, disabled:true %>
+  <% if(result == :incorrect) %>
+    Correct Answer:<%= correct_answer %>
+  <% end %>
+<% end %>
+<% if(question[:field_type] == "radio_button") %>
+  <%= form.form_group "answers[#{number}]".to_sym, label: { text: resultMark+number.to_s+". "+question[:text] }, disabled:true do %>
+    <% question[:choices].each_index do |i|; choice = question[:choices][i] %>
+      <%= form.radio_button "answers[#{number}]".to_sym, i, label: choice, checked:(i.to_s == user_answer.to_s), disabled:true %>
+    <% end %>
+    <% if(result == :incorrect) %>
+    Correct Answer:<%= question[:choices][correct_answer.to_i] %>
+    <% end %>
+  <% end %>
+<% end %>

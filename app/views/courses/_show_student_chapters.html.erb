@@ -1,0 +1,19 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @course.chapters.each do |chapter| %>
+      <% if(chapter.lessons.count > 0) %>
+        <tr>
+          <td> <%= chapter.name %> </td>
+          <td><%= view_button lesson_path(chapter.course,chapter, chapter.lessons.first) %></td>
+       </tr>
+       <% end %>
+    <% end %>
+  </tbody>
+</table>

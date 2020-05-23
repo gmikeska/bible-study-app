@@ -1,0 +1,37 @@
+<%= bootstrap_form_with(url:lesson_url(@lesson)+"/slides/new") do |form| %>
+<div class='field'>
+  <%= form.text_field :title %>
+</div>
+<div class='field'>
+  <% if(@index.present?) %>
+    <%= form.text_area :content, id:"editor",value:@lesson.slides[@index][:content].html_safe %>
+  <% else %>
+    <%= form.text_area :content, id:"editor" %>
+  <% end %>
+</div>
+<%
+questions = []
+@lesson.quiz.questions.each_index do |index|
+  questions << [(index+1).to_s+". "+@lesson.quiz.questions[index][:text], index]
+ end %>
+<div class='fieldWrap'>
+<div class='fieldset'>
+<div class='field question'>
+      <%= form.select "questions[]".to_sym, questions,label:"Question", include_blank:true %>
+</div>
+</div>
+<%= link_to "Add Question", "#",id:"addQuestion", class:"btn btn-sm btn-default toolbar" %>
+</div>
+<%= form.submit "Save Changes", class:"btn btn-sm btn-default toolbar" %>
+<% end %>
+<script type="text/javascript">
+  $("body").ready(()=>{
+    $("#addQuestion").click((e)=>{
+      e.preventDefault()
+      questionDivs = $(".question")
+      newQuestionDiv = $(questionDivs[questionDivs.length-1]).clone()
+      $(".fieldset").append(newQuestionDiv)
+      newQuestionDiv.val("")
+    })
+  })
+</script>

@@ -1,0 +1,35 @@
+<h1>Completed Quiz for <%= @course.name %> - <%= @lesson.name %></h1>
+<h4><%= @user.name %> - <%= @pet.name %></h4>
+<% if(@enrollment.status?(@quiz) == :pending) %>
+Status: <%= @enrollment.status?(@quiz).to_s.titleize %><br>
+Current Score:<%= @enrollment.quiz_responses[@quiz][:score].to_s.titleize %>
+<% else %>
+Status: <%= @enrollment.status?(@quiz).to_s.titleize %><br>
+Score:<%= @enrollment.quiz_responses[@quiz][:score].to_s.titleize %>
+<% end %>
+  <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@lesson.course,  @lesson.chapter,@lesson, @lesson.quiz)+"/#{@pet.id}/review/")  do |form| %>
+    <% @quiz.questions.each_index do |index|; question = @quiz.questions[index] %>
+      <%= render 'show_answer', number:index+1, form: form, question:question, user_answer:@enrollment.quiz_responses[@quiz][:answers][index], correct_answer:@enrollment.quiz_responses[@quiz][:correct_answer][index],result:@enrollment.quiz_responses[@quiz][:results][index] %>
+    <% end %>
+    <% if(@enrollment.status?(@quiz) == :pending) %>
+    <div class="actions">
+      <%= form.submit "Submit Review" %>
+    </div>
+    <% end %>
+  <% end %>
+
+<script type="text/javascript">
+  $("body").ready(
+  $("[type=radio]").click((e)=>{
+    node = e.currentTarget
+    qNumber = node.parentElement.parentElement.parentElement.id.split("-")[1]
+    if(node.value =="no")
+    {
+      $(`#question-${qNumber}-comment`).show()
+    }
+    else {
+      $(`#question-${qNumber}-comment`).hide()
+    }
+  })
+  )
+</script>

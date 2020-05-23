@@ -1,0 +1,46 @@
+<div class="accordion" id="chapterAccordion">
+  <%
+    @course.chapters.each_with_index do |chapter,i|; cssId ="chapter#{i}"
+    # if(i == 0)
+    #   cssClass = "collapse show"
+    # else
+      cssClass = "collapse"
+    # end
+     %>
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h2 class="mb-0 row">
+          <div class="col">
+            <button class="btn btn-link btn-default" type="button" data-toggle="collapse" data-target="#<%= cssId %>" aria-expanded="true" aria-controls="<%= cssId %>">
+              <%= chapter.name %>
+            </button>
+          </div>
+          <div class="col">
+            &nbsp
+          </div>
+          <div class="col">
+            &nbsp
+          </div>
+          <div class="col-4">
+
+            <% if(chapter.lessons.count > 0) %>
+            <%= view_button lesson_path(chapter.lessons.first) %>
+            <% end %>
+            <% if(current_user.isStaff?) %>
+              <%= link_to "Rename", edit_course_chapter_path(chapter.course,chapter), class:'btn btn-sm btn-secondary' %>
+              <%= delete_button course_chapter_path(chapter.course,chapter) %>
+            <% end %>
+           </div>
+        </h2>
+      </div>
+
+      <div id="<%= cssId %>" class="<%= cssClass %>" aria-labelledby="headingOne" data-parent="#chapterAccordion">
+        <div class="card-body">
+          <%= toolbar([link_to('Import Lesson (docx)', course_chapter_lessons_import_path(@course,chapter), class: 'btn btn-sm btn-default'),link_to('New Lesson', new_lesson_path(chapter), class: 'btn btn-sm btn-secondary')]) %>
+            <%= render "lessons_table", lessons:chapter.lessons %>
+
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>

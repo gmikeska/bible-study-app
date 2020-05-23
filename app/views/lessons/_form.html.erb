@@ -1,0 +1,43 @@
+<%= bootstrap_form_with(model: [lesson.course,lesson.chapter,lesson], local: true) do |form| %>
+  <% if lesson.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(lesson.errors.count, "error") %> prohibited this lesson from being saved:</h2>
+
+      <ul>
+        <% lesson.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= form.submit "Save Changes", class:"btn btn-sm btn-default toolbar" %>
+  <div class='field row'>
+    <%
+    allCourseChapters = lesson.course.chapters.collect{|c| [c.name, c.slug]}
+    if(lesson.chapter)
+      selected = lesson.chapter.slug
+    else
+      selected = "none"
+    end
+    %>
+    <div class='col'>
+      <%= form.select :chapter, allCourseChapters, selected:selected, include_blank:true %>
+    </div>
+  </div>
+  <div class='field row'>
+  <div class='col'>
+    <%= form.text_field :name %>
+  </div>
+  <div class='col'>
+    <%= form.select :visibility, [['Public', 'Public'], ['Enrolled', 'Enrolled'], ['Private', 'Private']], selected:@lesson.visibility %>
+  </div>
+  </div>
+  <div class='field'>
+    <%= form.text_field :description %>
+  </div>
+  <% if(@lesson.slug.present?) %>
+    <%= render "slides_table", lesson:@lesson  %>
+    <%= render "quizzes/quiz_info", lesson:@lesson  %>
+  <% end %>
+  <%= form.submit "Save Changes", class:"btn btn-sm btn-default toolbar" %>
+  <% end %>
