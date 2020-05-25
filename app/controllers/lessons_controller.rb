@@ -11,8 +11,9 @@ class LessonsController < ApplicationController
   # GET /lessons/1
   # GET /lessons/1.json
   def show
-    # enrolled =  @lesson.visible_to(current_user)
-    return unless requester_is_authorized(true)
+    if(!@course.visibility == "Public" && !@chapter.visibility == "Public")
+      return unless requester_is_authorized(true)
+    end
     if(@chapter)
       @index = @chapter.lessons.index(@lesson)
     end
@@ -129,7 +130,7 @@ class LessonsController < ApplicationController
       response = { uploaded: 1, fileName: filename, url: "#{lesson_path(@lesson)}/files/#{filename}" }
     end
     if(@chapter.present? && @lesson.chapter.nil?)
-      @lesson.chapter = chapter
+      @lesson.chapter = @chapter
       @lesson.save
     end
     render :json => response
