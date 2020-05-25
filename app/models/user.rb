@@ -5,8 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :email, presence:true
-  has_many :courses
   has_many :enrollments
+  has_many :courses, through: :enrollments
   has_many :invoices, through: :enrollments
   has_many :children, class_name: "User",
                           foreign_key: "parent_id"
@@ -27,6 +27,12 @@ class User < ApplicationRecord
       if(typestr == "admin" || typestr == "instructor" || typestr == "student")
         user_type = typestr
       end
+    end
+    def isParent?
+      return children.count > 0
+    end
+    def isChild?
+      return parent.present?
     end
     def isStudent?
       return user_type == "student"

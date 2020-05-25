@@ -88,7 +88,7 @@ class Lesson < ApplicationRecord
     if(visibility == "Public")
       return true
     elsif(visibility == "Enrolled")
-      return(user.present? && (user.courses.include?(self.course) || user.isStaff?))
+      return(user.present? && (user.isStaff? || user.courses.include?(self.course)))
     else
       return (user.isStaff?)
     end
