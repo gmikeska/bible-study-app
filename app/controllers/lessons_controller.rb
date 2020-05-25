@@ -11,9 +11,8 @@ class LessonsController < ApplicationController
   # GET /lessons/1
   # GET /lessons/1.json
   def show
-    if(!@course.visibility == "Public" && !@chapter.visibility == "Public")
-      return unless requester_is_authorized(true)
-    end
+    # enrolled =  @lesson.visible_to(current_user)
+    return unless requester_is_authorized(true)
     if(@chapter)
       @index = @chapter.lessons.index(@lesson)
     end
