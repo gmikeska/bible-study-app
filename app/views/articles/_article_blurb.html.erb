@@ -1,0 +1,8 @@
+<div class="container article">
+  <a href="<%= article_url(article) %>" class="txt-default"><h1><%= article.title %></h1></a>
+  <%== article.content %>
+</div>
+<a href="<%= article_url(article) %>" class="txt-default border read-more">Read More</a>
+<div class="container">
+  <a href="<%= article_url(article) %>" class="txt-default"><strong class="txt-default">Posted <%= article.created_at.strftime("%m/%d/%y") %></strong></a>
+</div>

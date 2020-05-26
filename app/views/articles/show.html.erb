@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+<% buttons = [];buttons << back_button(:back); if(current_user && current_user.isStaff?) %>
+<% buttons << edit_button( edit_article_path(@article)) %>
+<% end %>
+<%= toolbar(buttons) %>
+<h1><%= @article.title %></h1>
+<div class="container">
+  <%== @article.content %>
+</div>
