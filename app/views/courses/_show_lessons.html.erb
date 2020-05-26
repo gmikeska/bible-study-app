@@ -1,6 +1,6 @@
 
 
-<% if(current_user.isStaff?) %>
+<% if(current_user.present? && current_user.isStaff?) %>
 <%= toolbar([link_to('New Chapter', new_course_chapter_path(@course), class: 'btn btn-sm btn-default'), link_to('New Lesson', new_course_lesson_path(@course), class: 'btn btn-sm btn-secondary')], style:"margin-top: 10px;") %>
 <% end %>
 
@@ -21,7 +21,7 @@
 </div>
 <% end %>
 
-  <% if(current_user.isStaff?) %>
+  <% if(current_user.present? && current_user.isStaff?) %>
     <% if(@course.lessons.select{ |l| l.chapter_id.nil? }.count > 0)%>
     <h3>Unfiled Lessons</h3>
     <%= render "lessons_table", lessons:@course.lessons.select{ |l| l.chapter_id.nil? } %>

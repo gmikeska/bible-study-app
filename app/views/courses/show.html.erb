@@ -5,7 +5,11 @@
     <% if(current_user && current_user.isAdmin?) %>
       <div class="col" style="margin-top: 1.5%;">
         <strong>Visibility:</strong><%= @course.visibility %><br>
-        <strong>Price:</strong>$<%= @course.price  %>
+        <% if(@course.price.to_i > 0) %>
+          <strong>Price:</strong>$<%= @course.price  %>
+        <% else %>
+          <strong>Price:</strong>Free
+        <% end %>
       </div>
     <% end %>
   </div>
@@ -31,9 +35,9 @@
     end
   %>
   <%= toolbar(buttons) %>
-  <% if(current_user.present? && @course.visible_to(current_user)) %>
+  <% if((current_user.present? && @course.visible_to(current_user)) || @course.visibility == "Public") %>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <% if(current_user.isStaff?) %>
+        <% if(current_user.present? && current_user.isStaff?) %>
           <li class="nav-item">
             <a class="nav-link active" id="lessons-tab" data-toggle="tab" href="#lessons" role="tab" aria-controls="lessons" aria-selected="false">Lessons</a>
           </li>
@@ -60,7 +64,7 @@
         <% end %>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <% if(current_user.isStaff?) %>
+        <% if(current_user.present? && current_user.isStaff?) %>
           <div class="tab-pane fade show active" id="lessons" role="tabpanel" aria-labelledby="lessons-tab"><%= render 'show_lessons' %></div>
           <div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab"><%= render 'students_tables', enrollments:@course.enrollments %></div>
           <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab"><%= render 'assessments_table', enrollments:@course.enrollments %></div>

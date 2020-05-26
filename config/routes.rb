@@ -1,5 +1,21 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations',
+    confirmations: 'users/confirmations',
+    unlocks: 'users/unlocks',
+    passwords: 'users/passwords',
+
+  }
+  devise_scope :user do
+    get "/users/", to:"users/registrations#index"
+    get "/users/:type", to:"users/registrations#index"
+    get "/users/:id/edit", to:"users/registrations#edit"
+    patch "/users/:id", to:"users/registrations#update"
+    get "my-profile", to:"users/registrations#edit"
+    get "my-courses", to:"users/registrations#my_courses"
+    get "my-pets", to:"users/registrations#my_pets"
+  end
   get "sign_in", to:redirect('/users/sign_in')
   #get "sign_out", to:redirect('/users/sign_out')
   resources 'pages', param: :slug, controller: 'pages'
@@ -8,7 +24,7 @@ Rails.application.routes.draw do
   root to:"pages#home"
 
 resources :courses, param: :slug do
-    get "enroll", to:"courses#enroll_pet", as:"enrollment"
+    get "enroll", to:"courses#enroll_student", as:"enrollment"
     post "enroll", to:"courses#enroll"
     get '/lessons/import', to:"lessons#import"
     post '/lessons/import', to:"lessons#do_import"
@@ -40,6 +56,7 @@ resources :courses, param: :slug do
       get '/lessons/:slug/videos/:filename', to: 'lessons#show_video'
       resources :lessons, param: :slug do
         get '/files/:filename', to: 'lessons#show_file',as:"file"
+        get '/videos/:filename', to: 'lessons#show_video'
         patch '/upload', to: 'lessons#upload', as:"upload"
         post '/upload', to: 'lessons#upload'
         get '/slides/new', to:'lessons#new_slide'

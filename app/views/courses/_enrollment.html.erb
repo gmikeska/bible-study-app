@@ -13,6 +13,8 @@
 
   <% end %>
 <% else %>
-  <strong>Registration Fee</strong>:$<%= @course.price  %>
+  <% if(Course.first.price.to_i > 0) %>
+    <strong>Registration Fee</strong>:$<%= @course.price  %>
+  <% end %>
   <%= link_to 'Enroll Today!',course_enrollment_url(@course), class:"btn btn-default" %>
 <% end %>

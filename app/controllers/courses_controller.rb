@@ -1,5 +1,5 @@
 class CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :edit, :update, :destroy, :enroll, :enroll_pet]
+  before_action :set_course, only: [:show, :edit, :update, :destroy, :enroll, :enroll_student]
 
   # GET /courses
   # GET /courses.json
@@ -24,17 +24,31 @@ class CoursesController < ApplicationController
     return unless requester_is_staff
   end
 
-  def enroll_pet
+  def enroll_student
     return unless requester_is_authorized(current_user.present?)
-    render "enroll_pet"
+    if(!current_user.isParent?)
+      enroll
+      return
+    else
+      render "enroll_student"
+    end
   end
 
   def enroll
     return unless requester_is_authorized(current_user.present?)
-    @pet = Pet.find(params[:pet_id].to_i)
-    enrollment = @course.enroll(@pet)
+    if(params[:student_id].present?)
+      @enrollee = User.find(params[:student_id].to_i)
+    else
+      @enrollee = current_user
+    end
+    enrollment = @course.enroll(@enrollee)
     # byebug
-    redirect_to enrollment.invoice
+    if(@course.price.to_i == 0)
+      redirect_to @course
+      return
+    else
+      redirect_to enrollment.invoice
+    end
   end
   # POST /courses
   # POST /courses.json

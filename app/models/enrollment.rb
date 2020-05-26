@@ -1,7 +1,7 @@
 class Enrollment < ApplicationRecord
   belongs_to :course
   belongs_to :user
-  belongs_to :invoice
+  belongs_to :invoice, optional:true
   belongs_to :current_chapter, class_name:"Chapter"
   serialize :quiz_responses, Hash
   # has_many :completed_chapters, class_name:"Chapter"

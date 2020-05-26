@@ -11,7 +11,7 @@
       <% if(chapter.lessons.count > 0) %>
         <tr>
           <td> <%= chapter.name %> </td>
-          <td><%= view_button lesson_path(chapter.course,chapter, chapter.lessons.first) %></td>
+          <td><%= view_button lesson_path(chapter.lessons.first) %></td>
        </tr>
        <% end %>
     <% end %>

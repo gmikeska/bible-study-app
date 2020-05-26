@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col">
+    <h1><%= @course.name %></h1>
+  </div>
+</div>
+
+<div class="row border" style="text-indent: 3em; margin-bottom: 1%;"><p>
+  <%= @course.description %>
+</p>
+</div>
+<%= bootstrap_form_with(url:course_enrollment_url(@course)) do |form| %>
+  <%
+    student_choices = current_user.children.select{|student| !@course.enrolled?(student)}.collect{|pet| [student.name.titleize,student.id]}
+    student_choices.unshift(["Myself",0])
+    if(current_user.children.select{|student| !@course.enrolled?(student)}.length > 0)
+      selected_student = current_user.pets.select{|student| !@course.enrolled?(student)}.first.id
+    else
+      selected_student = 0
+    end
+   %>
+  <%= form.select :student_id, student_choices, selected:selected_student,label:"Select a Student to Enroll"  %>
+  <%= form.submit "Enroll User", class:"btn btn-default" %>
+<% end %>

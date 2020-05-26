@@ -111,7 +111,7 @@ class LessonsController < ApplicationController
   def show_file
     set_lesson
     att = @lesson.files.select{|f| f.filename.to_s == params[:filename]+"."+params[:format]}.first
-    file = ActiveStorage::Blob.service.send(:path_for, att.key)
+    file = ActiveStorage::Blob.service.send(:download, att.key)
     data = File.open(file)
     send_data(data.read, type:att.content_type, disposition: 'inline')
   end

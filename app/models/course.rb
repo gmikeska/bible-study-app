@@ -61,19 +61,29 @@ class Course < ApplicationRecord
     if(chapter.nil?)
       chapter = chapters.first
     end
-    # if(student.invoices.select{|i| !i.paid?}.length == 0)
-    #   invoice = Invoice.create(user:student.owner)
-    # else
-    #   invoice = student.invoices.select{|i| !i.paid? }.last
-    # end
-    return Enrollment.create(user:student, course:self, current_chapter:chapter, invoice:invoice)
-  end
-  def enrolled?(entity)
-    if(entity.class.name == "User")
-      owners.include?(entity)
-    elsif(entity.class.name == "Pet")
-      students.include?(entity)
+    if(self.price.to_i > 0)
+      if(student.invoices.select{|i| !i.paid?}.length == 0)
+        invoice = Invoice.create(user:student.owner)
+      else
+        invoice = student.invoices.select{|i| !i.paid? }.last
+      end
+      return Enrollment.create(user:student, course:self, current_chapter:chapter, invoice:invoice)
+    else
+      return Enrollment.create(user:student, course:self, current_chapter:chapter)
     end
+
+  end
+  def enrolled?(student_or_parent)
+    if(students.include?(student_or_parent))
+      return true
+    elsif(student_or_parent.isParent?)
+      student_or_parent.children.each do |student|
+        if(students.include?(student))
+          return true
+        end
+      end
+    end
+
   end
   def enrolled_pets_for(user)
     self.students.where({owner_id:user.id})
