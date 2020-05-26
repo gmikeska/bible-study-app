@@ -9,7 +9,7 @@
         <div class="container <%= slide[:vertical_alignment] %> <%= slide[:horizontal_alignment] %>">
           <% slide[:media].each_index do |index|;filename = slide[:media][index];file = @lesson.get_file(filename) %>
           <video-js class="videoPlayer vjs-big-play-centered" id="media-<%= index %>" controls>
-            <source src="videos/<%= filename %>" type="video/mp4">
+            <source src="files/<%= filename %>" type="video/mp4">
           Videos are not supported in this browser. Please download a <a href="https://browsehappy.com/">Modern web browser.</a>
           </video-js>
           <% end %>

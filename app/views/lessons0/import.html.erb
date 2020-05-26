@@ -1,6 +1,0 @@
-<%= toolbar [link_to('Back', course_path(@lesson.course), class:"btn btn-sm btn-secondary")] %>
-<h1>Create Lesson from a Word Document</h1>
-<%= render 'import_doc_form', lesson: @lesson %><% if(@chapter)%>
-<small>Lesson will be imported into <%= @chapter.name %>.</small>
-
-<% end %>
