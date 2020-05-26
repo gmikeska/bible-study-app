@@ -97,6 +97,7 @@ Rails.application.configure do
     authentication:       'plain',
     enable_starttls_auto: true }
   config.action_mailer.default_url_options = { :host => 'church-sunday-school.herokuapp.com' }
+  config.active_storage.service = :amazon
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
   # middleware. The `delay` is used to determine how long to wait after a write
