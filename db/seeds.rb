@@ -23,3 +23,6 @@ pass = "temp1234"
 
 admin = User.create(name:"Admin",email:"test@test.com", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 # puts student.email
+
+Article.create({title:"Test Article", content:Faker::Lorem.paragraph(sentence_count:30)})
+Article.create({title:"Another Article", content:Faker::Lorem.paragraph(sentence_count:30)})

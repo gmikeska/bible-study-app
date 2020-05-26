@@ -6,4 +6,9 @@
   <p class="lead">
     <a class="btn btn-default btn-lg" href="/pages/about-us/" role="button">Learn More</a>
   </p>
+  <div class="w-100">&nbsp;</div>
 </div>
+<% Article.all.each do |article|%>
+<hr>
+  <%= render("articles/article_blurb", article:article)%>
+<% end %>

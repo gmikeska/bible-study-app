@@ -10,7 +10,7 @@
   <% @lesson.files.each do |file| %>
   <div class="row" style="margin-bottom: 10px;">
       <div class="col-6" style="padding-top:1%;">
-          <a href="<%= lesson_file_path(@lesson, file.filename.to_s) %>" style="color:#4b1310;"><%= file.filename.to_s %></a>
+          <a href="<%= url_for(file) %>" style="color:#4b1310;"><%= file.filename.to_s %></a>
       </div>
       <div class="col">
         &nbsp
@@ -78,7 +78,6 @@
         $(document).on("direct-upload:progress",(e)=>{
           console.log(e)
         })
-        debugger
       $.ajax({
             url: $('form',"#uploadModal")[0].action,
             data: data,

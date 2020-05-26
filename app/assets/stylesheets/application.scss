@@ -19,6 +19,12 @@
   background-color:#fe4110;
   color:white;
 }
+.txt-default{
+  color:#fe4110;
+}
+.txt-default:hover{
+  color:red;
+}
 .toolbar {
      margin-bottom: 1%;
  }
@@ -45,10 +51,10 @@
     }
   }
 }
-.dropdown-item.active, .dropdown-item:active {
+.dropdown-item:active {
     color: #fff;
     text-decoration: none;
-    background: #4b1310 linear-gradient(180deg, #4b1310, maroon) repeat-x;
+    background: #4b1310 linear-gradient(180deg, #fe4110, crimson) repeat-x;
 }
 /* Drag & Drop CSS */
 .placeholder{
@@ -72,4 +78,21 @@ div.table {
 }
 div.table div.col{
   padding: 0.75rem;
+}
+html {
+  --lh: 1.4rem;
+  line-height: var(--lh);
+}
+
+.article {
+  --max-lines: 6;
+  position: relative;
+  max-height: calc(var(--lh) * var(--max-lines));
+  overflow: hidden;
+  padding-right: 1rem; /* space for ellipsis */
+}
+.read-more {
+  position: absolute;
+      /* top: -8%; */
+      right: 14%;
 }
