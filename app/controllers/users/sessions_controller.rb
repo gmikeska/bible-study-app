@@ -11,9 +11,9 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     super
-    if(current_user.isAdmin? && Rails.env == "production")
-      AdminMailer.with(user:current_user).admin_logs_in.deliver_now
-    end
+    # if(current_user.isAdmin? && Rails.env == "production")
+    #   AdminMailer.with(user:current_user).admin_logs_in.deliver_now
+    # end
   end
 
   # DELETE /resource/sign_out
