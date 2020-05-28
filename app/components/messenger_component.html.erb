@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row" style="height:100%">
+    <div class="col-2 roomlist border">
+      <ul class="list-unstyled">
+        <% @users.each do |user| %>
+          <li><%= user.name %></li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-6 messages border">
+
+    </div>
+  </div>
+</div>

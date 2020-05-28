@@ -250,10 +250,10 @@ class LessonsController < ApplicationController
       set_chapter
       if(params[:slug])
         @lesson = Lesson.find_by slug: params[:slug]
-        @enrollment = @lesson.course.enrollments.select{|e| e.owner == current_user}.first
+        @enrollment = @lesson.course.enrollments.select{|e| e.user == current_user}.first
       elsif(params[:lesson_slug])
         @lesson = Lesson.find_by slug: params[:lesson_slug]
-        @enrollment = @lesson.course.enrollments.select{|e| e.owner == current_user}.first
+        @enrollment = @lesson.course.enrollments.select{|e| e.user == current_user}.first
       end
       if(@lesson.quiz)
         @quiz = @lesson.quiz

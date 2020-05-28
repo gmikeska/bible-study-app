@@ -4,20 +4,22 @@
       <th>Name</th>
       <th>Email</th>
       <th>Current Chapter</th>
-      <th>Pet's Name</th>
-      <th colspan="1"></th>
+      <!-- <th colspan="1"></th> -->
     </tr>
   </thead>
 
   <tbody>
-    <% enrollments.each do |enrollment|; student = enrollment.pet %>
-      <% if((enrollment.present? && enrollment.invoice.present? && enrollment.invoice.paid?) || show_unpaid) %>
+    <% enrollments.each do |enrollment|; student = enrollment.user %>
+      <% if(enrollment.present? && (enrollment.invoice.nil? || enrollment.invoice.paid?) || show_unpaid) %>
         <tr>
-          <td> <%= student.owner.name %> </td>
-          <td> <%= student.owner.email %> </td>
-          <td> <%= enrollment.current_chapter.name %> </td>
           <td> <%= student.name %> </td>
-          <td><%= edit_button( edit_pet_path(student)) %></td>
+          <td> <%= student.email %> </td>
+          <% if(enrollment.current_chapter.present?) %>
+            <td> <%= enrollment.current_chapter.name %> </td>
+          <% else %>
+            <td> &nbsp </td>
+          <% end %>
+          <!-- <td></td> -->
         </tr>
       <% end %>
     <% end %>

@@ -2,15 +2,17 @@
 <% if(current_user.present? && @course.enrolled?(current_user)) %>
   <% if(@course.enrolled_pets_for(current_user).length == 1) %>
     <div class="alert alert-dark" role="alert">
-      Congratulations! You've secured a spot in the course for <%= @course.enrolled_pets_for(current_user).first.name %>! To access course content, all you need to do is <%= link_to 'complete your payment', invoice_checkout_path(current_user.invoices.last), class: 'btn btn-sm btn-default' %>
+      Congratulations! You've secured a spot in the course for <%= @course.enrolled_students_for(current_user).last.name %>!
     </div>
   <% else
-      list = @course.enrolled_pets_for(current_user).collect{|pet| pet.name }
+      list = @course.enrolled_students_for(current_user).collect{|student| student.name }
       last = list.last
       list.delete(last)
       %>
-      Congratulations! You've secured a spot in the course for <%= list.join(', ')+" and #{last}." %> To access course content, all you need to do is <%= link_to 'complete your payment', invoice_checkout_path(current_user.invoices.last), class: 'btn btn-sm btn-default' %>
-
+      Congratulations! You've secured a spot in the course for <%= list.join(', ')+" and #{last}." %>
+  <% end %>
+  <% if(@course.price > 0)%>
+    To access course content, all you need to do is <%= link_to 'complete your payment', invoice_checkout_path(current_user.invoices.last), class: 'btn btn-sm btn-default' %>
   <% end %>
 <% else %>
   <% if(Course.first.price.to_i > 0) %>

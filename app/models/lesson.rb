@@ -5,6 +5,7 @@ class Lesson < ApplicationRecord
   after_save :set_filename
   has_one :quiz, required:false
   serialize :slides, Array
+  serialize :messages, Array
 
 
   def set_filename

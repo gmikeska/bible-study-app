@@ -10,7 +10,7 @@
 </div>
 <%= bootstrap_form_with(url:course_enrollment_url(@course)) do |form| %>
   <%
-    student_choices = current_user.children.select{|student| !@course.enrolled?(student)}.collect{|pet| [student.name.titleize,student.id]}
+    student_choices = current_user.children.select{|student| !@course.enrolled?(student)}.collect{|student| [student.name.titleize,student.id]}
     student_choices.unshift(["Myself",0])
     if(current_user.children.select{|student| !@course.enrolled?(student)}.length > 0)
       selected_student = current_user.pets.select{|student| !@course.enrolled?(student)}.first.id

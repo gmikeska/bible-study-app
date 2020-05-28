@@ -1,0 +1,11 @@
+<table class="table">
+  <%= header %>
+
+  <tbody>
+    <% if(body.present?) %>
+      <%= body %>
+    <% else %>
+    <tr><td style="text-align: center; vertical-align: middle;" colspan=<%= colspan %>><%= placeholder %></td></tr>
+    <% end %>
+  </tbody>
+</table>

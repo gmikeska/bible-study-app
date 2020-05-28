@@ -35,19 +35,37 @@ module ApplicationHelper
     if(args[:class].nil?)
       args[:class] = 'btn btn-sm btn-default'
     end
-    link_to 'View',link, **args
+    if(args[:content].present?)
+      content = args[:content]
+      args.delete(:content)
+    else
+      content = "View"
+    end
+    link_to content, link, **args
   end
   def edit_button(link, **args)
     if(args[:class].nil?)
       args[:class] = 'btn btn-sm btn-default'
     end
-    link_to 'Edit', link, **args
+    if(args[:content].present?)
+      content = args[:content]
+      args.delete(:content)
+    else
+      content = "Edit"
+    end
+    link_to content, link, **args
   end
   def delete_button(link, **args)
     if(args[:class].nil?)
       args[:class] = 'btn btn-sm btn-danger'
     end
-    link_to 'Delete', link, method: :delete, data: { confirm: 'Are you sure?' }, **args
+    if(args[:content].present?)
+      content = args[:content]
+      args.delete(:content)
+    else
+      content = "Delete"
+    end
+    link_to content, link, method: :delete, data: { confirm: 'Are you sure?' }, **args
   end
   def toolbar(buttons,**args)
     if(args[:class].nil?)

@@ -14,12 +14,16 @@ class Users::SessionsController < Devise::SessionsController
     # if(current_user.isAdmin? && Rails.env == "production")
     #   AdminMailer.with(user:current_user).admin_logs_in.deliver_now
     # end
+    current_user.online = true
+    current_user.save
   end
 
   # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  def destroy
+    current_user.online = false
+    current_user.save
+    super
+  end
   def after_sign_in_path_for(resource)
     stored_location_for(resource) || "/"
   end

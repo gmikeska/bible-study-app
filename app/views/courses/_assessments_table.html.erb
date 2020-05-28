@@ -10,7 +10,7 @@
   </thead>
 
   <tbody>
-    <% enrollments.each do |enrollment|; student = enrollment.pet; quizzes = enrollment.quiz_responses.keys
+    <% enrollments.each do |enrollment|; student = enrollment.user; quizzes = enrollment.quiz_responses.keys
        quizzes.each do |quiz|; assessment = enrollment.quiz_responses[quiz] %>
         <tr>
           <td> <%= assessment[:score] %> </td>

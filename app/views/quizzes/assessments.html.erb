@@ -14,7 +14,7 @@
   </thead>
 
   <tbody>
-    <% @assessments.each do |params|;quiz = params[:quiz];enrollment = params[:enrollment]; assessment = enrollment.quiz_responses[quiz]; student = enrollment.pet %>
+    <% @assessments.each do |params|;quiz = params[:quiz];enrollment = params[:enrollment]; assessment = enrollment.quiz_responses[quiz]; student = enrollment.user %>
         <tr>
           <td> <%= assessment[:score] %> </td>
           <td> <%= enrollment.course.name %> </td>

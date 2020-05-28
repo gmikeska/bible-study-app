@@ -1,0 +1,12 @@
+<div class="<%= @css_class %>" <%= @id %><%= @style %>>
+  <% if(@image.present?)%>
+    <img src="<%= @image[:src] %>" class="card-img-top" alt="<%= @image[:alt] %>">
+  <% end %>
+  <div class="card-body">
+    <h5 class="card-title"><%= @title %></h5>
+    <p class="card-text"><%= @text %></p>
+    <% if(@button_text.present? && @button_link.present?) %>
+      <a href="<%= @button_link %>" class="btn btn-primary"><%= @button_text %></a>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<%== filter_bar %>
+<div class="tab-content" id="pills-tabContent">
+  <% @filters.each_index do |index|; filter = @filters[index] %>
+    <%== pane(filter[:name], filter[:content], index) %>
+  <% end %>
+</div>

@@ -6,6 +6,7 @@
       <th>Name</th>
       <th>Email</th>
       <th>Type</th>
+      <th>Online?</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,6 +17,11 @@
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td><%= user.type.capitalize %></td>
+        <% if(user.online) %>
+          <td class="text-success">Online</td>
+        <% else %>
+          <td class="text-danger">Offline</td>
+        <% end %>
         <td><%= link_to 'Edit', "/users/#{user.id}/edit", class:'btn btn-sm btn-secondary' %></td>
         <td><%= link_to 'Delete', user_registration_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-danger' %></td>
       </tr>

@@ -2,9 +2,15 @@ class Enrollment < ApplicationRecord
   belongs_to :course
   belongs_to :user
   belongs_to :invoice, optional:true
-  belongs_to :current_chapter, class_name:"Chapter"
+  belongs_to :current_chapter, class_name:"Chapter", optional:true
   serialize :quiz_responses, Hash
   # has_many :completed_chapters, class_name:"Chapter"
+  after_initialize do |enrollment|
+    if(enrollment.current_chapter.nil? && enrollment.course.chapters.length > 0)
+      enrollment.current_chapter = enrollment.course.chapters.first
+      enrollment.save
+    end
+  end
   def completed?(quiz)
     return quiz_responses[quiz].present?
   end

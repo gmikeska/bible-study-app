@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_124146) do
+ActiveRecord::Schema.define(version: 2020_05_28_114718) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_124146) do
     t.string "title"
     t.string "slug"
     t.text "content"
+    t.boolean "show_in_feed", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -124,6 +125,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_124146) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "chapter_id"
     t.text "slides"
+    t.string "messages"
   end
 
   create_table "pages", force: :cascade do |t|
@@ -153,6 +155,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_124146) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "parent_id"
+    t.boolean "online"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

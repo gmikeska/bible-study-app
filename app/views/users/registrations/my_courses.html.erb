@@ -19,7 +19,7 @@
       <tr>
         <td> <%= enrollment.course.name %> </td>
         <td> <%= enrollment.course.description %> </td>
-        <td> <%= enrollment.pet.name %> </td>
+        <td> <%= enrollment.user.name %> </td>
 
         <td><%= link_to 'View', enrollment.course, class: 'btn btn-sm btn-default' %></td>
         <% if(@user.isStaff?) %>

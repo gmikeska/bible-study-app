@@ -1,27 +1,15 @@
 <p id="notice"><%= notice %></p>
-
 <h1>Articles</h1>
+<%= link_to 'New Article', new_article_path, class:"btn btn-default toolbar" %>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @articles.each do |article| %>
-      <tr>
-        <td><%= article.title %></td>
-        <td><%= view_button article_path(article) %></td>
-        <td><%= edit_button edit_article_path(article), class:'btn btn-sm btn-secondary' %></td>
-        <td><%= delete_button article_path(article) %></td>
-      </tr>
+<%= render(TableComponent.new(fields:[:title])) do |component| %>
+  <% component.with(:header) do %>
+      <%= RecordComponent.new(fields:component.fields, show:component.show, edit:component.edit, delete:component.delete).header %>
     <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Article', new_article_path %>
+  <% component.with(:body) do %>
+    <%= render RecordComponent.with_collection(@articles,fields:component.fields, show:component.show, edit:component.edit, delete:component.delete) %>
+  <% end %>
+  <% component.with(:placeholder) do %>
+    There are no articles yet.
+  <% end %>
+<% end %>

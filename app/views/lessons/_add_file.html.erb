@@ -4,7 +4,7 @@
   end
   form_model << lesson
 %>
-<%= form_with(model:form_model, url:lesson_upload_path(lesson)) do |form| %>
+<%= bootstrap_form_with(model:form_model, url:lesson_upload_path(lesson)) do |form| %>
 <% if lesson.errors.any? %>
   <div id='error_explanation'>
     <h2><%= pluralize(lesson.errors.count, 'error') %> prohibited this component from being saved:</h2>

@@ -1,45 +1,22 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <% if(current_user.isStaff?) %>
-        <th>Visibility</th>
-      <% end %>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<% if(current_user.isStaff?)
+    fields = [:name, :description, :visibility]
+    edit = true;
+    delete = true;
+  else
+    fields = [:name, :description]
+    edit = false;
+    delete = false;
+  end
+%>
 
-  <tbody>
-    <% lessons.each do |lesson| %>
-      <% if(lesson.visible_to(current_user)) %>
-        <tr>
-          <td> <%= lesson.name %> </td>
-          <td> <%= lesson.description %> </td>
-          <% if(current_user.isStaff?) %>
-            <td> <%= lesson.visibility %> </td>
-          <% end %>
-          <% if(lesson.chapter.present?) %>
-            <td><%= view_button lesson_path(lesson) %></td>
-            <% if(current_user.isStaff?) %>
-              <td><%= edit_button edit_lesson_path(lesson), class:'btn btn-sm btn-secondary' %></td>
-              <td><%= delete_button lesson_path(lesson) %></td>
-            <% else %>
-              <td></td>
-              <td></td>
-            <% end %>
-          <% else %>
-            <td><%= view_button lesson_path(lesson) %></td>
-            <% if(current_user.isStaff?) %>
-              <td><%= edit_button edit_lesson_path(lesson), class:'btn btn-sm btn-secondary' %></td>
-              <td><%= delete_button lesson_path(lesson) %></td>
-            <% else %>
-              <td></td>
-              <td></td>
-            <% end %>
-          <% end %>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render(TableComponent.new(fields:fields, edit:edit, delete:delete)) do |component| %>
+  <% component.with(:header) do %>
+      <%= RecordComponent.new(fields:component.fields, show:component.show, edit:component.edit, delete:component.delete).header %>
+  <% end %>
+  <% component.with(:body) do %>
+      <%= render RecordComponent.with_collection(lessons,fields:component.fields, show:component.show, edit:component.edit, delete:component.delete) %>
+  <% end %>
+  <% component.with(:placeholder) do %>
+    There are no articles yet.
+  <% end %>
+<% end %>

@@ -1,0 +1,23 @@
+<% if(@fields.nil?)
+  @fields = @record.class.columns.collect{|c| c.name.to_sym}
+end %>
+<tr data-id=<%= @record[:id] %>>
+  <% @fields.each do |fieldName| %>
+    <td><%= @record[fieldName] %></td>
+  <% end %>
+  <% if(@show.present? && @show == true) %>
+    <td><%= helpers.view_button(@record) %></td>
+  <% elsif(@show.present? && @show.class == String) %>
+    <td><%= helpers.view_button(@record, content:@show) %></td>
+  <% end %>
+  <% if(@edit && @edit == true) %>
+    <td><%= helpers.edit_button(edit_polymorphic_path(@record), class: 'btn btn-sm btn-secondary') %></td>
+  <% elsif(@edit.present? && @edit.class == String) %>
+    <td><%= helpers.edit_button(@record, content:@edit) %></td>
+  <% end %>
+  <% if(@delete && @delete == true) %>
+    <td><%= helpers.delete_button(@record) %></td>
+  <% elsif(@delete.present? && @delete.class == String) %>
+    <td><%= helpers.delete_button(@record, content:@delete) %></td>
+  <% end %>
+</tr>
