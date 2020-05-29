@@ -1,4 +1,4 @@
-<div id="lessonCarousel" class="carousel" style="min-height:400px; width:971px">
+<div id="lessonCarousel" class="carousel" style="min-height:400px; width:942px">
   <div class="carousel-inner border" style="max-width: 80%;">
     <% @lesson.slides.each_index do |index| %>
       <%= render "slide", lesson:@lesson, slide:@lesson.slides[index], index:index  %>
