@@ -1,4 +1,4 @@
-<div id="lessonCarousel" class="carousel" style="min-height:400px">
+<div id="lessonCarousel" class="carousel" style="min-height:400px; width:971px">
   <div class="carousel-inner border" style="max-width: 80%;">
     <% @lesson.slides.each_index do |index| %>
       <%= render "slide", lesson:@lesson, slide:@lesson.slides[index], index:index  %>
@@ -140,7 +140,6 @@ end %>
   .carousel-inner
   {
     margin-left: 14.5%;
-    height:400px;
   }
   .slide-centered p{
     display: table-cell;

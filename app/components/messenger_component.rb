@@ -6,6 +6,4 @@ class MessengerComponent < CustomizableComponent
       @messages = messages
     end
   end
-
-  
 end
