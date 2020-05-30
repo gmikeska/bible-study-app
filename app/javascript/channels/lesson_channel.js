@@ -28,7 +28,7 @@ consumer.subscriptions.create("LessonChannel", {
   received(data) {
     if(data["lesson_slug"] == $('meta[name=lesson-slug]').attr('id'))
     {
-      $("pre","#incoming").append(`${data.from}:${data.content}\n`)
+      $("#incoming").append(`${data.from}:${data.content}\n`)
       console.log(data)
     }
   }

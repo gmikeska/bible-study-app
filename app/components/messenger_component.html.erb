@@ -1,20 +1,20 @@
-    <div class="col roomlist border" style="zoom:.8">
-      <ul class="list-unstyled">
+    <div class="col" style="padding:0; margin:0; max-width:50%">
+    <div class="messages border" style="height: 100%;">
+      <ul class="list-unstyled border" style="float:left; height:100%;">
         <% @users.each do |user| %>
           <li><%= user.name %></li>
         <% end %>
       </ul>
-    </div>
-    <div class="col-3 messages border" style="zoom:.8; padding:0;">
-      <div id="incoming" style="height:75%; width:100%">
-<pre style="padding-left:2px;">
+      <div id="incoming" style="height:80%;margin:0;">
+<!-- <pre style="padding-left:2px;"> -->
 <% @lesson.messages.each do |message| %>
-<%= "#{message["from"]}:#{message["content"]}" %>
+<%= "#{message["from"]}:#{message["content"]}" %><br>
 <% end %>
-</pre>
+<!-- </pre> -->
       </div>
       <div class="" id="chatBox" style="width:100%">
             <textarea id='chatMessage' rows="2" cols="10" class="form-control" placeholder="Write your message here." style="width: 87%; float:left;"></textarea>
-            <span class="btn-sm btn-default" id='chatButton' style="float:right; cursor:pointer;">Submit</span>
+            <span class="btn-sm btn-default" id='chatButton' style="float:left; cursor:pointer;">Submit</span>
       </div>
+    </div>
     </div>
