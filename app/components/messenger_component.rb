@@ -1,8 +1,6 @@
 class MessengerComponent < CustomizableComponent
-  def initialize(users:nil, messages:nil)
+  def initialize(users:nil, lesson:nil)
     @users = users
-    if(messages.present?)
-      @messages = messages
-    end
+    @lesson = lesson
   end
 end

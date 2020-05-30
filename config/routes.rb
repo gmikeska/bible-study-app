@@ -43,6 +43,7 @@ resources :courses, param: :slug do
       post "/quizzes/:id", to:"quizzes#update"
       post '/upload', to: 'lessons#upload'
       patch '/upload', to: 'lessons#upload'
+      post '/chat', to: 'lessons#send_message', as:"chat"
       resources :quizzes do
         post '/:id/response', to:'quizzes#student_response'
         post '/:id/slide_response', to:'quizzes#student_response_partial'
