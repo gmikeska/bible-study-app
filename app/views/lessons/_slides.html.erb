@@ -1,4 +1,4 @@
-<div id="lessonCarousel" class="carousel" style="min-height:400px; width:942px">
+<div id="lessonCarousel" class="carousel" style="width:942px">
   <div class="carousel-inner border" style="max-width: 80%;">
     <% @lesson.slides.each_index do |index| %>
       <%= render "slide", lesson:@lesson, slide:@lesson.slides[index], index:index  %>
@@ -125,14 +125,18 @@ end %>
   {
     background-color: #fe4110;
     height:24px;
+    width:24px;
     border-radius: .25rem;
     margin-top:15%;
     opacity: 1;
+    right: 27px;
   }
   .carousel-control-prev
   {
     background-color: #fe4110;
     height:24px;
+    width:24px;
+    left: 113px;
     border-radius: .25rem;
     margin-top:15%;
     opacity: 1;

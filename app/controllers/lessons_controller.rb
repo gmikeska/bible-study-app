@@ -16,6 +16,7 @@ class LessonsController < ApplicationController
     if(@chapter)
       @index = @chapter.lessons.index(@lesson)
     end
+    render :show, layout:"lesson"
   end
   def show_slide
     set_slide

@@ -1,10 +1,14 @@
-
-<div class="row">
-  <h1>Lesson: <%= @lesson.name %></h1>
+<div class="container">
+  <div class="row">
+    <h1>Lesson: <%= @lesson.name %></h1>
+  </div>
 </div>
 
+<div class="row">
  <% if(@lesson.slides.nil? || @lesson.slides.length == 0) %>
-  <%= render "lesson_content", lesson:@lesson  %>
+   <div class="col">
+     <%= render "lesson_content", lesson:@lesson  %>
+  </div>
  <% else %>
   <% if(@chapter.present? && @chapter.lessons.length > 1)
       buttons = []
@@ -25,9 +29,12 @@
       <% end %>
       <%= toolbar(buttons)  %>
     <% end %>
-
-    <%= render "slides", lesson:@lesson  %>
+    <div class="col">
+      <%= render "slides", lesson:@lesson  %>
+    </div>
+      <%= render MessengerComponent.new(users:@course.online_users, messages:["User:Test Message","Other User:Hello There!"]) %>
   <% end %>
+</div>
 
 
 <% if(@chapter.present? && @chapter.lessons.length > 1)
