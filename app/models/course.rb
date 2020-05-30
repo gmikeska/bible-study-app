@@ -92,7 +92,7 @@ class Course < ApplicationRecord
     end
   end
   def online_users
-    (self.students + User.admins).select{|u| u.online == true}
+    (self.students.to_ary + User.admins).select{|u| u.online == true}
   end
   def visible_to(user)
     if(visibility == "Public")
