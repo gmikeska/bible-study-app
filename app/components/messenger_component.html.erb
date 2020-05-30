@@ -7,9 +7,9 @@
     </div>
     <div class="col-3 messages border" style="zoom:.8; padding:0;">
       <div id="incoming" style="height:75%; width:100%">
-<pre>
+<pre style="padding-left:2px;">
 <% @lesson.messages.each do |message| %>
-<%= message.strip()%>
+<%= "#{message["from"]}:#{message["content"]}" %>
 <% end %>
 </pre>
       </div>

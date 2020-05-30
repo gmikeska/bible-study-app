@@ -10,10 +10,10 @@ class LessonChannel < ApplicationCable::Channel
 
   def receive(data)
     data["from"] = data["from"].titleize
-    message_str = data["from"]+":"+data["message"]
+    # message_str = data["from"]+":"+data["message"]
     lesson = Lesson.find_by slug:data["lesson_slug"]
     puts lesson.messages
-    lesson.messages << message_str
+    lesson.messages << data
     lesson.save
     puts lesson.messages
     # puts data

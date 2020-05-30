@@ -13,7 +13,7 @@ consumer.subscriptions.create("LessonChannel", {
           if($("#chatMessage").val() != "")
           {
             // console.log($("#chatMessage").val())
-            this.send({from:$('meta[name=current-user]').attr('id'), lesson_slug:$('meta[name=lesson-slug]').attr('id'), message:$("#chatMessage").val()})
+            this.send({from:$('meta[name=current-user]').attr('id'), lesson_slug:$('meta[name=lesson-slug]').attr('id'), content:$("#chatMessage").val()})
             $("#chatMessage").val("")
           }
         }
@@ -28,7 +28,7 @@ consumer.subscriptions.create("LessonChannel", {
   received(data) {
     if(data["lesson_slug"] == $('meta[name=lesson-slug]').attr('id'))
     {
-      $("pre","#incoming").append(`<pre>${data.from}:${data.message}</pre>`)
+      $("pre","#incoming").append(`${data.from}:${data.content}\n`)
       console.log(data)
     }
   }
