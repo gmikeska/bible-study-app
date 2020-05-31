@@ -198,7 +198,7 @@ class QuizzesController < ApplicationController
     end
     def set_enrollment
       set_course
-      @enrollment = Enrollment.where(course_id:@course.id).select{|e| e.owner == @user}.first
+      @enrollment = Enrollment.where(course_id:@course.id).select{|e| e.user == @user}.first
     end
 
     # Only allow a list of trusted parameters through.

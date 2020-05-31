@@ -27,8 +27,14 @@ class CoursesController < ApplicationController
   def enroll_student
     return unless requester_is_authorized(current_user.present?)
     if(!current_user.isParent?)
-      enroll
-      return
+      enrollment = @course.enroll(current_user)
+      # byebug
+      if(@course.price.to_i == 0)
+        redirect_to @course
+        return
+      else
+        redirect_to enrollment.invoice
+      end
     else
       render "enroll_student"
     end

@@ -1,6 +1,6 @@
 <p style="text-indent:3em;"><%== @course.summary %></p>
 <% if(current_user.present? && @course.enrolled?(current_user)) %>
-  <% if(@course.enrolled_pets_for(current_user).length == 1) %>
+  <% if(@course.enrolled_students_for(current_user).length == 1) %>
     <div class="alert alert-dark" role="alert">
       Congratulations! You've secured a spot in the course for <%= @course.enrolled_students_for(current_user).last.name %>!
     </div>

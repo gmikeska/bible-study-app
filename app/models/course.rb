@@ -86,19 +86,19 @@ class Course < ApplicationRecord
 
   end
   def enrolled_students_for(user)
-    result = self.students.where({parent_id:user.id})
+    result = self.students.where({parent_id:user.id}).to_ary
     if(self.students.include?(user))
       result << user
     end
   end
   def online_users
-    (self.students.to_ary + User.admins).select{|u| u.online == true}
+    (self.students.to_ary + User.admins).select{|u| u.online == true}.uniq
   end
   def visible_to(user)
     if(visibility == "Public")
       return true
     elsif(visibility == "Enrolled")
-      user_is_enrolled_and_paid = (user.present? && enrolled?(user) && Course.first.enrollments.select{|e| e.owner == user}.first.invoice.paid?)
+      user_is_enrolled_and_paid = (user.present? && enrolled?(user) && (Course.first.enrollments.select{|e| e.user == user}.first.invoice.nil? || Course.first.enrollments.select{|e| e.user == user}.first.invoice.paid?))
       return((user_is_enrolled_and_paid || user.isStaff?))
     else
       return (user.present? && user.isStaff?)
