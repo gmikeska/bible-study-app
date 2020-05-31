@@ -17,22 +17,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
   def index
-    if(current_user.present? && current_user.isAdmin?)
-      if(!params[:type].nil?)
-        @users = User.where({user_type:params[:type].singularize.downcase})
-        render "index"
-      else
-        @users = User.all.order(:id)
-        render "index"
-      end
-    elsif(current_user.nil?)
-      redirect_to "/users/sign_in"
+    return unless requester_is_staff
+    if(params[:type].present?)
+      @users = User.where({user_type:params[:type].singularize.downcase})
+      render "index"
     else
-      redirect_to "/"
+      @users = User.all.order(:id)
+      render "index"
     end
   end
 
   def my_courses
+    return unless requester_is_authorized(true)
     @user = current_user
     if(@user.isStaff?)
       @courses = Course.all()
@@ -42,18 +38,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
     render "my_courses"
   end
   def my_pets
+    return unless requester_is_authorized(true)
     @user = current_user
     render "my_pets"
   end
 
   # GET /resource/edit
   def edit
+    return unless requester_is_authorized(true)
     set_resource
     super
   end
 
   # PUT /resource
   def update
+    return unless requester_is_authorized(true)
     set_resource
     @user.name = params["user"]["name"]
     @user.email = params["user"]["email"]
@@ -70,9 +69,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # DELETE /resource
-  # def destroy
-  #   super
-  # end
+  def destroy
+    return unless requester_is_authorized(true)
+    set_resource
+    if(current_user != @user)
+      @user.delete
+      redirect_to "/users/", notice:"User account was successfully deleted."
+    else
+      super
+    end
+  end
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign

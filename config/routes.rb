@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get "my-profile", to:"users/registrations#edit"
     get "my-courses", to:"users/registrations#my_courses"
     get "my-pets", to:"users/registrations#my_pets"
+    delete "/users/:id", to:"users/registrations#destroy"
   end
   get "sign_in", to:redirect('/users/sign_in')
   #get "sign_out", to:redirect('/users/sign_out')
