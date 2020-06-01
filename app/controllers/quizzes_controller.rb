@@ -133,6 +133,7 @@ class QuizzesController < ApplicationController
   def instructor_review
     return unless requester_is_staff
     set_quiz
+    set_user
     set_enrollment
     render :instructor_review
   end
