@@ -1,5 +1,5 @@
 <h1>Completed Quiz for <%= @course.name %> - <%= @lesson.name %></h1>
-<h4><%= @user.name %> - <%= @pet.name %></h4>
+<h4><%= @user.name %></h4>
 <% if(@enrollment.status?(@quiz) == :pending) %>
 Status: <%= @enrollment.status?(@quiz).to_s.titleize %><br>
 Current Score:<%= @enrollment.quiz_responses[@quiz][:score].to_s.titleize %>

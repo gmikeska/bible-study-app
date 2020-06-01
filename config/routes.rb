@@ -48,8 +48,8 @@ resources :courses, param: :slug do
       resources :quizzes do
         post '/:id/response', to:'quizzes#student_response'
         post '/:id/slide_response', to:'quizzes#student_response_partial'
-        get '/:student_id/review', to:'quizzes#instructor_review'
-        post '/:student_id/review', to:'quizzes#submit_instructor_review'
+        get '/:user_id/review', to:'quizzes#instructor_review'
+        post '/:user_id/review', to:'quizzes#submit_instructor_review'
       end
     end
     resources :chapters, param: :slug do
@@ -73,8 +73,8 @@ resources :courses, param: :slug do
         resources :quizzes do
           post '/:id/response', to:'quizzes#student_response'
           post '/:id/slide_response', to:'quizzes#student_response_partial'
-          get '/:student_id/review', to:'quizzes#instructor_review'
-          post '/:student_id/review', to:'quizzes#submit_instructor_review'
+          get '/:user_id/review', to:'quizzes#instructor_review'
+          post '/:user_id/review', to:'quizzes#submit_instructor_review'
         end
       end
     end

@@ -133,7 +133,6 @@ class QuizzesController < ApplicationController
   def instructor_review
     return unless requester_is_staff
     set_quiz
-    set_student
     set_enrollment
     render :instructor_review
   end
@@ -141,7 +140,6 @@ class QuizzesController < ApplicationController
   def submit_instructor_review
     return unless requester_is_staff
     set_quiz
-    set_student
     set_enrollment
     review = review_params
     response = @enrollment.quiz_responses[@quiz]
@@ -191,10 +189,6 @@ class QuizzesController < ApplicationController
     end
     def set_user
       @user = User.find(params[:user_id])
-    end
-    def set_student
-      @pet = Pet.find(params[:student_id])
-      @user = @pet.owner
     end
     def set_enrollment
       set_course
