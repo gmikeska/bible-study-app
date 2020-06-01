@@ -7,7 +7,7 @@ Current Score:<%= @enrollment.quiz_responses[@quiz][:score].to_s.titleize %>
 Status: <%= @enrollment.status?(@quiz).to_s.titleize %><br>
 Score:<%= @enrollment.quiz_responses[@quiz][:score].to_s.titleize %>
 <% end %>
-  <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@lesson.course,  @lesson.chapter,@lesson, @lesson.quiz)+"/#{@pet.id}/review/")  do |form| %>
+  <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@lesson.course,  @lesson.chapter,@lesson, @lesson.quiz)+"/#{@user.id}/review/")  do |form| %>
     <% @quiz.questions.each_index do |index|; question = @quiz.questions[index] %>
       <%= render 'show_answer', number:index+1, form: form, question:question, user_answer:@enrollment.quiz_responses[@quiz][:answers][index], correct_answer:@enrollment.quiz_responses[@quiz][:correct_answer][index],result:@enrollment.quiz_responses[@quiz][:results][index] %>
     <% end %>
