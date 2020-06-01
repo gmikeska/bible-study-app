@@ -4,7 +4,6 @@
       <th>Assessment Score</th>
       <th>Status</th>
       <th>Name</th>
-      <th>Pet's Name</th>
       <th colspan="1"></th>
     </tr>
   </thead>
@@ -19,7 +18,6 @@
           <% else %>
           <td class="text-success"><%= enrollment.status?(quiz).to_s.titleize %><span style="font-size:x-large">✓</span></td>
           <% end %>
-          <td> <%= student.owner.name %> </td>
           <td> <%= student.name %> </td>
           <td> <%= link_to 'Review', course_chapter_lesson_quiz_url(quiz.course,quiz.lesson.chapter,quiz.lesson,quiz)+"/#{student.id}/review", class: 'btn btn-sm btn-default' %> </td>
         </tr>
