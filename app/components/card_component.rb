@@ -1,11 +1,11 @@
 class CardComponent < CustomizableComponent
-  def initialize(title:nil,text:nil,button_link:nil,button_text:nil, image:nil,css_class:nil, id:nil, **args)
+  def initialize(**args)
 
-    @image = image
-    @title = title
-    @text = text
-    @button_link = button_link
-    @button_text = button_text
+    @image = args[:image]
+    @title = args[:title]
+    @text = args[:text]
+    @button_link = args[:button_link]
+    @button_text = args[:button_text]
 
     super(css_class:css_class,id:id,**args)
   end

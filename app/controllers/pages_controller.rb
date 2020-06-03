@@ -7,11 +7,20 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def home
+    @page = Page.find_by slug:"home"
+    @components = []
+    @page.components.each do |component|
+      @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
+    end
   end
 
   def show
     @pages = Page.all
-    render params[:slug]
+    @components = []
+    @page.components.each do |component|
+      @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
+    end
+    # render params[:slug]
   end
 
   def new
@@ -30,7 +39,13 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   end
 
+  def component_preview
+    args = ((params[:component]+"_preview").camelcase.constantize.new.default)
+    render(partial:"component_preview",layout:false, locals:{component_args:args})
+  end
+
   def update
+    # byebug
     if @page.update(page_params)
       redirect_to @page, notice: 'Page was successfully updated.'
     else
@@ -48,7 +63,16 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
 
   def page_params
-    params.require(:page).permit(:name)
+    p = params.require(:page).permit!
+    components = []
+    p[:components].each do |comp|
+      comp[:args].permit!
+      comp[:args] = comp[:args].to_h.symbolize_keys
+      components << comp
+    end
+    p[:components] = components
+    # byebug
+    return p
   end
 
 

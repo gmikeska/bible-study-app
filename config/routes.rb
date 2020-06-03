@@ -20,7 +20,9 @@ Rails.application.routes.draw do
   end
   get "sign_in", to:redirect('/users/sign_in')
   #get "sign_out", to:redirect('/users/sign_out')
-  resources 'pages', param: :slug, controller: 'pages'
+  get "component/:component/", to:"pages#component_preview", as:"component"
+  resources 'pages', param: :slug, controller: 'pages' do
+  end
   # resources 'lessons', param: :slug, controller: 'lessons'
 
   root to:"pages#home"

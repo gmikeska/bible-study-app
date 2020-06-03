@@ -1,0 +1,5 @@
+<% component[:name].camelcase.constantize.component_params.each do |param|; if(component[:args][param].present?); value = component[:args][param]; else; value = "";end %>
+  <div class="field">
+    <%= form.text_field "components[][args][#{param}]".to_sym, value:value, label:param.to_s.titleize %>
+  </div>
+<% end %>

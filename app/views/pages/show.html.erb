@@ -1,3 +1,5 @@
 <div class='container'>
-  <%== @page.as_html %>
+  <% @components.each do |component|%>
+    <%= render(component) %>
+  <% end %>
 </div>

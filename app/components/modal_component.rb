@@ -1,8 +1,11 @@
 class ModalComponent < CustomizableComponent
-  def initialize(name:nil,title:nil,body:nil,submit_button:nil)
-    @name = name
-    @title = title
-    @body = body
-    @submit_button = submit_button
+  def initialize(**args)
+    @name = args[:name]
+    @title = args[:title]
+    @body = args[:body]
+    @submit_button = args[:submit_button]
+  end
+  def component_params
+    return super().concat([:name,:title,:body,:submit_button])
   end
 end
