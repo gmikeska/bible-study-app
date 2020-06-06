@@ -8,10 +8,10 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   def home
     @page = Page.find_by slug:"home"
-    @components = []
-    @page.components.each do |component|
-      @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
-    end
+    # @components = []
+    # @page.components.each do |component|
+    #   @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
+    # end
   end
 
   def show
