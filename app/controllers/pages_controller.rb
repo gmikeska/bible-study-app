@@ -15,7 +15,6 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def show
-    @pages = Page.all
     @components = []
     @page.components.each do |component|
       @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
