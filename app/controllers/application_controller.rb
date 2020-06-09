@@ -28,5 +28,6 @@ class ApplicationController < ActionController::Base
 
   def load_template_vars
     @pages = Page.order(:id)
+    @courses = Course.order(:id)
   end
 end

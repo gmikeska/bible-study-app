@@ -51,27 +51,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
       </a>
       <ul class="navbar-nav mr-auto">
         <% @pages.each do |page| %>
-          <% if @page %>
-              <% if @page.id == page.id %>
+          <% if(@page.present? && @page.id == page.id) %>
                 <li class="nav-item active">
-              <% else %>
+          <% else %>
                 <li class="nav-item">
-              <% end %>
+          <% end %>
               <% if(page.name == "home") %><a class="nav-link" href="/"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a>
               <% else %><a class="nav-link" href="/pages/<%= page.slug %>"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a><% end %>
               </li>
-          <% else %>
-                <li class="nav-item"><a class="nav-link" href="/pages/<%= page.slug %>"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a></li>
-          <% end %>
         <% end %>
-        <% courses = Course.all %>
-        <% if(courses.count > 0) %>
+        <% if(@courses.count > 0) %>
         <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="courseDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Courses
         </a>
         <div class="dropdown-menu" aria-labelledby="courseDropdown">
-          <% courses.each do |course| %>
+          <% @courses.each do |course| %>
             <a class="dropdown-item" href="/courses/<%= course.slug %>"><%= course.name %></a>
           <% end %>
           <div class="dropdown-divider"></div>
