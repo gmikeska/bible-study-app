@@ -40,13 +40,16 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def component_preview
-    args = ((params[:component_name]+"_preview").camelcase.constantize.new.default)
-    render(partial:"component_preview",layout:false, locals:{component_args:args})
+    set_component
+    if(@args.nil?)
+      @args = (@component[:name]).camelcase.constantize.component_params.defaults
+    end
+    render(partial:"component_preview",layout:false, locals:{component:{name:@component[:name], args:@args}})
   end
 
   def component_settings
-    set_page
-    render(partial:"component_settings_embedded",layout:false, locals:{component:{name:params[:component_name],args:{}}})
+    set_component
+    render(partial:"component_settings_embedded",layout:false, locals:{component:@component})
   end
 
   def update
@@ -80,6 +83,22 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
     return p
   end
 
+
+  def set_component
+    set_page
+
+    if(params[:component_id].length > 1 && params[:component_id].to_i == 0)
+      @component = {name:params[:component_id],args:params[:component_id].camelcase.constantize.component_params.defaults}
+    else
+      @component = @page.components[params[:component_id].to_i]
+    end
+
+    if(params[:args])
+      @args = params[:args].permit!.to_h
+    else
+      @args = @component[:args]
+    end
+  end
 
   def set_page
     @page = Page.find_by slug: params[:slug]

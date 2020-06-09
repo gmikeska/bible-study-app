@@ -11,7 +11,7 @@
     </div>
   <% end %>
   <div id="components">
-
+    <%= form.submit "Save Changes", class:"btn btn-default" %>
     <div class="field">
       <%= form.text_field :name %>
     </div>
@@ -33,10 +33,10 @@
   </div>
 
   <div class="addComponent">
-    <%= link_to "+ Add Component", "#", class:"btn btn-default", id:"addComponent" %>
+    <%= link_to "+ Add Component", "#", class:"btn btn-secondary", id:"addComponent" %>
   </div>
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Save Changes", class:"btn btn-default" %>
   </div>
 <% end %>
 

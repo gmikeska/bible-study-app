@@ -2,7 +2,7 @@
   <% if(component.present?) %>
     <%= form.select("components[][name]".to_sym, component_options, selected:component[:name], label:"Component Type",include_blank:"Select a component type...", label:"Name") %>
     <div class="component-preview" style="zoom:.8">
-      <%= render("component_preview", component_args:(component[:name]+"_preview").camelcase.constantize.new.default ) %>
+      <%= render("component_preview", component:component) %>
     </div>
     <div class="settings">
       <%= render("component_settings",form:form, component:component) %>
@@ -18,18 +18,32 @@
 <script type="text/javascript">
   $("select",".component").change((e)=>{
     wrapper = e.currentTarget.parentElement.parentElement
-    // $.ajax({
-    //       url: `/component/${e.currentTarget.value}`,
-    //       type: "GET",
-    //       success:(data)=>{
-    //         prev = $(".component-preview",wrapper)
-    //         prev.empty()
-    //         prev.append(data)
-    //       }
-    //   });
+    updatePreview(wrapper,e.currentTarget.value)
+    loadSettings(wrapper,e.currentTarget.value)
+  })
+  updatePreview = (wrapper,componentName)=>{
+    args = $("input",wrapper)
+    formData = {}
+    varSearch = new RegExp('page_components\\[\\]\\[args\\]\\[(\\w+)\\]');
 
+    $("input",wrapper).each(function(x){
+      argName = this.id.match(varSearch)[1]
+      formData[argName] = $(this).val()
+      // console.log(`${this.id}=${$(this).val()}`)
+    })
+    $.post({
+          url: `/component/${componentName}`,
+          data:{args:formData},
+          success:(data)=>{
+            prev = $(".component-preview",wrapper)
+            prev.empty()
+            prev.append(data)
+          }
+      });
+  }
+  loadSettings = (wrapper,componentName)=>{
     $.ajax({
-          url: `/component/${e.currentTarget.value}/settings`,
+          url: `/component/${componentName}/settings`,
           type: "GET",
           success:(data)=>{
             el = $(data)
@@ -39,6 +53,5 @@
             settings.append(lines)
           }
       });
-
-  })
+  }
 </script>

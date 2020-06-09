@@ -1,1 +1,1 @@
-<%= render(component_args[:component], component_args[:args], &component_args[:block]) %>
+<%= render(component[:name].camelcase.constantize.new(**component[:args].symbolize_keys, &component[:block])) %>

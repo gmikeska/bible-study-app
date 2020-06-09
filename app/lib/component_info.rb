@@ -22,6 +22,14 @@ class ComponentInfo
     end
   end
 
+  def defaults
+    results = {}
+    @params.each do |key, value|
+      results[key] = value[:default]
+    end
+    return results
+  end
+
   def get_type(key)
     @params[key.to_sym][:dataType]
   end
