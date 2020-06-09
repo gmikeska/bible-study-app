@@ -79,7 +79,6 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
       components << comp
     end
     p[:components] = components
-    # byebug
     return p
   end
 
