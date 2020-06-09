@@ -1,4 +1,4 @@
-<div class="component">
+<div class="component-select">
   <% if(component.present?) %>
     <%= form.select("components[][name]".to_sym, component_options, selected:component[:name], label:"Component Type",include_blank:"Select a component type...", label:"Name") %>
     <div class="component-preview" style="zoom:.8">
@@ -18,13 +18,25 @@
 <script type="text/javascript">
   $("select",".component").change((e)=>{
     wrapper = e.currentTarget.parentElement.parentElement
+    // $.ajax({
+    //       url: `/component/${e.currentTarget.value}`,
+    //       type: "GET",
+    //       success:(data)=>{
+    //         prev = $(".component-preview",wrapper)
+    //         prev.empty()
+    //         prev.append(data)
+    //       }
+    //   });
+
     $.ajax({
-          url: `/component/${e.currentTarget.value}`,
+          url: `/component/${e.currentTarget.value}/settings`,
           type: "GET",
           success:(data)=>{
-            prev = $(".component-preview",wrapper)
-            prev.empty()
-            prev.append(data)
+            el = $(data)
+            lines = el.html().split("\n").slice(1)
+            settings = $(".settings",wrapper)
+            settings.empty()
+            settings.append(lines)
           }
       });
 

@@ -8,10 +8,10 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   def home
     @page = Page.find_by slug:"home"
-    # @components = []
-    # @page.components.each do |component|
-    #   @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
-    # end
+    @components = []
+    @page.components.each do |component|
+      @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
+    end
   end
 
   def show
@@ -40,8 +40,13 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def component_preview
-    args = ((params[:component]+"_preview").camelcase.constantize.new.default)
+    args = ((params[:component_name]+"_preview").camelcase.constantize.new.default)
     render(partial:"component_preview",layout:false, locals:{component_args:args})
+  end
+
+  def component_settings
+    set_page
+    render(partial:"component_settings_embedded",layout:false, locals:{component:{name:params[:component_name],args:{}}})
   end
 
   def update

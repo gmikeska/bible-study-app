@@ -21,6 +21,6 @@ class CustomizableComponent < ViewComponent::Base
     @style = "style=#{@style}"
   end
   def self.component_params
-    return [:css_class,:id]
+    return ComponentInfo.new([:css_class,:id])
   end
 end

@@ -1,5 +1,6 @@
-<% component[:name].camelcase.constantize.component_params.each do |param|; if(component[:args][param].present?); value = component[:args][param]; else; value = "";end %>
-  <div class="field">
-    <%= form.text_field "components[][args][#{param}]".to_sym, value:value, label:param.to_s.titleize %>
-  </div>
+<% info = (component[:name]).camelcase.constantize.component_params.to_h
+  info.keys.each do |key|; if(component[:args][key].present?); value = component[:args][key]; else; value = "";end %>
+    <div class="field">
+      <%= form.text_field "components[][args][#{key}]".to_sym, value:value, label:key.to_s.titleize, placeholder:info[key][:default] %>
+    </div>
 <% end %>

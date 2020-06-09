@@ -1,4 +1,4 @@
-<div class='container'>
+<!-- <div class='container'>
   <h1 class="display-4">Online Activity Center</h1>
   <p class="lead">Welcome! Come worship the Lord with us!</p>
   <hr class="my-4">
@@ -7,8 +7,10 @@
     <a class="btn btn-default btn-lg" href="/pages/about-us/" role="button">Learn More</a>
   </p>
   <div class="w-100">&nbsp;</div>
-</div>
-
+</div> -->
+<% @components.each do |component|%>
+  <%= render(component) %>
+<% end %>
 <% Article.all.each do |article|%>
 <hr>
   <%= render("articles/article_blurb", article:article)%>
