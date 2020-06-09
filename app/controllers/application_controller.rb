@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :load_template_vars
 
   def requester_is_authorized(condition,target=nil)
     if(current_user.present? && condition)
@@ -23,5 +24,9 @@ class ApplicationController < ActionController::Base
 
   def requester_is_admin
     return requester_is_authorized(current_user.present? && current_user.isAdmin?)
+  end
+
+  def load_template_vars
+    @pages = Page.order(:id)
   end
 end

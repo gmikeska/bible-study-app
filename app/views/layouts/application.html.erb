@@ -50,7 +50,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
         <img src="<%= image_path("umlogo_100_transparent.gif") %>" alt=""> Memorial United Methodist Church
       </a>
       <ul class="navbar-nav mr-auto">
-        <% Page.all.each do |page| %>
+        <% @pages.each do |page| %>
           <% if @page %>
               <% if @page.id == page.id %>
                 <li class="nav-item active">

@@ -3,7 +3,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   layout 'application'
 
   def index
-    @pages = Page.all
+    # @pages = Page.all
   end
 
   def home
