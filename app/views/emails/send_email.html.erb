@@ -1,0 +1,29 @@
+<div class="container border">
+  <strong>From:</strong>
+  <%= "noreply@church-sunday-school.herokuapp.com" %><br>
+  <strong>To:</strong>
+  <%= "All users" %><br>
+  <strong>Subject:</strong>
+  <%= @email.subject %>
+</div>
+<div class="container border email-content">
+  <%== @email.content %>
+</div>
+<%= bootstrap_form_with(model: @email, url:email_path(@email)+"/send") do |form| %>
+
+  <% @email.input_variables.each do |var_name| %>
+    <%= form.text_field var_name.to_sym %>
+  <% end %>
+  <div class="actions">
+    <%= form.submit "Send" %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  content = $(".email-content").html()
+  matches = content.match(/\{(\S*)\}/g)
+  $(matches).each(function(){
+    substr = this.slice(1,this.length-1)
+    content = content.replace(this,`<span class="badge badge-pill badge-default">${substr}</span>`)
+  })
+  $(".email-content").html(content)
+</script>

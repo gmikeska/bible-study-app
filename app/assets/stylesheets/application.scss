@@ -19,6 +19,10 @@
   background-color:#fe4110;
   color:white;
 }
+.badge-default{
+  background-color:#fe4110;
+  color:white;
+}
 .txt-default{
   color:#fe4110;
 }
@@ -95,4 +99,14 @@ html {
   position: absolute;
       /* top: -8%; */
       right: 14%;
+}
+.btn-sm:visited {
+    color: white;
+}
+.btn:visited {
+    color: white;
+}
+.navbar-light .navbar-brand:hover, .navbar-light .navbar-brand:focus {
+    color: inherit;
+    background-color: inherit;
 }

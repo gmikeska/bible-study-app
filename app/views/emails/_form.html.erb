@@ -1,0 +1,47 @@
+<%= bootstrap_form_with(model: email, local: true) do |form| %>
+  <% if email.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(email.errors.count, "error") %> prohibited this email from being saved:</h2>
+
+      <ul>
+        <% email.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.text_field :subject %>
+  </div>
+
+  <div class="field">
+    <%= form.text_area :content, rows: "10", id:"editor" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+<style>
+.ck-editor__editable_inline {
+    min-height: 400px;
+}
+</style>
+<script>
+  // debugger
+      ClassicEditor
+              .create( document.querySelector( '#editor' ) )
+              .then( editor => {
+                      console.log( editor );
+                        // $(".ck-content").css("height","400px")
+              } )
+              .catch( error => {
+                      console.error( error );
+              } );
+
+</script>

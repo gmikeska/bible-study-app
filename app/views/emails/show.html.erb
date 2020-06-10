@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+<%= toolbar([(back_button emails_path), (edit_button edit_email_path(@email)),link_to("Send", email_path(@email)+"/send", class:"btn btn-sm btn-default")]) %>
+  <h1><%= @email.name %></h1>
+<div class="container border">
+  <strong>From:</strong>
+  <%= "noreply@church-sunday-school.herokuapp.com" %><br>
+  <strong>To:</strong>
+  <%= "All users" %><br>
+  <strong>Subject:</strong>
+  <%= @email.subject %>
+</div>
+
+<div class="container border email-content" style="min-height:400px;">
+  <%== @email.content %>
+</div>
+<script type="text/javascript">
+  content = $(".email-content").html()
+  matches = content.match(/\{(\S*)\}/g)
+  $(matches).each(function(){
+    substr = this.slice(1,this.length-1)
+    content = content.replace(this,`<span class="badge badge-pill badge-default">${substr}</span>`)
+  })
+  $(".email-content").html(content)
+</script>
