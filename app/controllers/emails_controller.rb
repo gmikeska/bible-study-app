@@ -4,18 +4,22 @@ class EmailsController < ApplicationController
   # GET /emails
   # GET /emails.json
   def index
+    return unless requester_is_staff
     @emails = Email.all
   end
 
   # GET /emails/1
   # GET /emails/1.json
   def show
+    return unless requester_is_staff
   end
 
   def send_email
+    return unless requester_is_staff
   end
 
   def submit_email_send
+    return unless requester_is_staff
     User.all.each do |user|
       body = @email.compile_message(sending_params,user)
       CustomMailer.with(user:user,body:body,subject:@email.subject).dynamic.deliver_now
@@ -24,16 +28,19 @@ class EmailsController < ApplicationController
 
   # GET /emails/new
   def new
+    return unless requester_is_staff
     @email = Email.new
   end
 
   # GET /emails/1/edit
   def edit
+    return unless requester_is_staff
   end
 
   # POST /emails
   # POST /emails.json
   def create
+    return unless requester_is_staff
     @email = Email.new(email_params)
 
     respond_to do |format|
@@ -50,6 +57,7 @@ class EmailsController < ApplicationController
   # PATCH/PUT /emails/1
   # PATCH/PUT /emails/1.json
   def update
+    return unless requester_is_staff
     respond_to do |format|
       if @email.update(email_params)
         format.html { redirect_to @email, notice: 'Email was successfully updated.' }
@@ -64,6 +72,7 @@ class EmailsController < ApplicationController
   # DELETE /emails/1
   # DELETE /emails/1.json
   def destroy
+    return unless requester_is_staff
     @email.destroy
     respond_to do |format|
       format.html { redirect_to emails_url, notice: 'Email was successfully destroyed.' }
