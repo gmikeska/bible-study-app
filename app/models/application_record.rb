@@ -1,6 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
-  def resource_scope
+  def resource_name
     self.class.name.downcase
   end
   def resource_identifier
@@ -10,7 +10,10 @@ class ApplicationRecord < ActiveRecord::Base
     return "model"
   end
   def pointer
-    return "#{resource_type}:#{resource_scope}:#{resource_identifier}"
+    return "#{resource_type}:#{resource_name}:#{resource_identifier}"
+  end
+  def self.pointer(scope)
+    return "collection:#{resource_name}:#{scope}"
   end
   def url
     Rails.application.routes.url_helpers.polymorphic_url(self, only_path: true)
@@ -21,7 +24,7 @@ class ApplicationRecord < ActiveRecord::Base
 
     if(pointer.include? "file")
       target = parse_pointer(pointer)
-      return target[:scope].capitalize.constantize.where({slug:target[:param]}).first.get_url(target[:resource])
+      return target[:class].capitalize.constantize.where({slug:target[:param]}).first.get_url(target[:resource])
     else
       return retrieve_pointer(pointer).url
     end
@@ -29,27 +32,29 @@ class ApplicationRecord < ActiveRecord::Base
 
   def retrieve_pointer(pointer)
     pointer = parse_pointer(pointer)
-    searchScope = pointer[:scope].capitalize.constantize
-
-    if(searchScope.columns.to_a.select {|c| c.name == "slug"}.count == 0)
-      record = searchScope.find(pointer[:param])
-    else
-      record = searchScope.find_by slug:pointer[:param]
-    end
-
-    if(pointer[:attribute].present?)
-      return(record[pointer[:attribute].to_sym])
-    else
-      return record
+    searchClass = pointer[:class].capitalize.constantize
+    if(pointer[:type]=="model")
+      if(searchClass.columns.to_a.select {|c| c.name == "slug"}.count == 0)
+        record = searchClass.find(pointer[:param])
+      else
+        record = searchClass.find_by slug:pointer[:param]
+      end
+      if(pointer[:attribute].present?)
+        return(record[pointer[:attribute].to_sym])
+      else
+        return record
+      end
+    elsif(pointer[:type]=="collection")
+      return searchClass.send(pointer[:param])
     end
   end
 
   def parse_pointer(pointer)
     parts = pointer.split(":")
     if(parts[0] == "file")
-      data = {type:parts[0], scope:"Gallery", param:parts[1], resource:parts[2]}
+      data = {type:parts[0], class:"Gallery", param:parts[1], resource:parts[2]}
     else
-      data = {type:parts[0], scope:parts[1].capitalize, param:parts[2]}
+      data = {type:parts[0], class:parts[1].capitalize, param:parts[2]}
     end
     if(parts[3].present?)
       data[:attribute] = parts[3]

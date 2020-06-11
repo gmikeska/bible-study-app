@@ -5,7 +5,7 @@
   <strong>From:</strong>
   <%= "noreply@church-sunday-school.herokuapp.com" %><br>
   <strong>To:</strong>
-  <%= "All users" %><br>
+  <%= @recipients.collect{|r| r.name }.join(",  ") %><br>
   <strong>Subject:</strong>
   <%= @email.subject %>
 </div>

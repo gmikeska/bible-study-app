@@ -20,10 +20,11 @@ class EmailsController < ApplicationController
 
   def submit_email_send
     return unless requester_is_staff
-    User.all.each do |user|
+    @recipients.each do |user|
       body = @email.compile_message(sending_params,user)
       CustomMailer.with(user:user,body:body,subject:@email.subject).dynamic.deliver_now
     end
+    redirect_to @email, notice: 'Email was successfully created.'
   end
 
   # GET /emails/new
@@ -84,6 +85,7 @@ class EmailsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_email
       @email = Email.find(params[:id])
+      @recipients = @email.recipient_list
     end
 
     # Only allow a list of trusted parameters through.

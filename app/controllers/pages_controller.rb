@@ -35,7 +35,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def edit
-
+    
   end
 
   def component_preview

@@ -13,7 +13,7 @@ class ComponentInfo
   def concat(args)
     if(args.is_a? Array)
       args.each do |arg|
-        @params[arg.to_sym] = String
+        @params[arg.to_sym] = {dataType:String, default:""}
       end
     else
       args.keys.each do |key|
