@@ -1,7 +1,18 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+  @@__scopes__ = [:all]
+  def self.resource_name
+    self.name.downcase
+  end
   def resource_name
     self.class.name.downcase
+  end
+  def self.scope(name, body, &block)
+    @@__scopes__ << name
+    super
+  end
+  def self.scope_names
+    return @@__scopes__
   end
   def resource_identifier
     to_param
@@ -13,27 +24,26 @@ class ApplicationRecord < ActiveRecord::Base
     return "#{resource_type}:#{resource_name}:#{resource_identifier}"
   end
   def self.pointer(scope)
-    return "collection:#{resource_name}:#{scope}"
+    if(self.scope_names.include?(scope.to_sym))
+      return "scope:#{resource_name}:#{scope.to_s}"
+    end
   end
   def url
     Rails.application.routes.url_helpers.polymorphic_url(self, only_path: true)
   end
   def get_url(pointer)
-
-    puts pointer
-
     if(pointer.include? "file")
       target = parse_pointer(pointer)
       return target[:class].capitalize.constantize.where({slug:target[:param]}).first.get_url(target[:resource])
     else
-      return retrieve_pointer(pointer).url
+      return resolve_pointer(pointer).url
     end
   end
 
-  def retrieve_pointer(pointer)
+  def resolve_pointer(pointer)
     pointer = parse_pointer(pointer)
     searchClass = pointer[:class].capitalize.constantize
-    if(pointer[:type]=="model")
+    if(pointer[:type] == "model")
       if(searchClass.columns.to_a.select {|c| c.name == "slug"}.count == 0)
         record = searchClass.find(pointer[:param])
       else
@@ -44,7 +54,7 @@ class ApplicationRecord < ActiveRecord::Base
       else
         return record
       end
-    elsif(pointer[:type]=="collection")
+    elsif(pointer[:type] == "scope" && searchClass.scope_names.include?(pointer[:param].to_sym) )
       return searchClass.send(pointer[:param])
     end
   end

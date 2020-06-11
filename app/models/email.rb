@@ -29,7 +29,7 @@ class Email < ApplicationRecord
     if(recipients.length > 0)
       recipients.each do |r|
         if(is_pointer(r))
-          result = retrieve_pointer(r)
+          result = resolve_pointer(r)
           if(result.is_a? ActiveRecord::Relation)
             arr << result.to_a
           else
@@ -42,4 +42,16 @@ class Email < ApplicationRecord
     end
     return arr.flatten
   end
+
+  def deliver_now(sending_params)
+    recipient_list.each do |user|
+      CustomMailer.with(user:user,body:self.compile_message(sending_params,user),subject:@email.subject).dynamic.deliver_now
+    end
+  end
+  def deliver_later(sending_params)
+    recipient_list.each do |user|
+      CustomMailer.with(user:user,body:self.compile_message(sending_params,user),subject:@email.subject).dynamic.deliver_later
+    end
+  end
+
 end

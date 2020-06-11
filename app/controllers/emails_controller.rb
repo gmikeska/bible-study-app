@@ -20,10 +20,7 @@ class EmailsController < ApplicationController
 
   def submit_email_send
     return unless requester_is_staff
-    @recipients.each do |user|
-      body = @email.compile_message(sending_params,user)
-      CustomMailer.with(user:user,body:body,subject:@email.subject).dynamic.deliver_now
-    end
+    @email.deliver_now(sending_params)
     redirect_to @email, notice: 'Email was successfully sent.'
   end
 
