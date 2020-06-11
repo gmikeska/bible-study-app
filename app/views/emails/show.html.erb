@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+
 <%= toolbar([(back_button emails_path), (edit_button edit_email_path(@email)),link_to("Send", email_path(@email)+"/send", class:"btn btn-sm btn-default")]) %>
   <h1><%= @email.name %></h1>
 <div class="container border">

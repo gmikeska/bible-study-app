@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+
 <% buttons = [];buttons << back_button(:back); if(current_user && current_user.isStaff?) %>
 <% buttons << edit_button( edit_article_path(@article)) %>
 <% end %>

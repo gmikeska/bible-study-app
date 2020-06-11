@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+
 <%= toolbar([back_button(@quiz.course)]) %>
 <% if(@enrollment.present? && @enrollment.completed?(@quiz)) %>
 <h1>Completed Quiz for <%= @course.name %> - <%= @lesson.name %></h1>
