@@ -21,7 +21,7 @@ class EmailsController < ApplicationController
   def submit_email_send
     return unless requester_is_staff
     @email.deliver_now(sending_params)
-    redirect_to @email, notice: 'Email was successfully sent.'
+    redirect_to @email, notice: `'#{@email.name}' was successfully sent.`
   end
 
   # GET /emails/new
