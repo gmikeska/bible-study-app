@@ -24,7 +24,7 @@ class EmailsController < ApplicationController
       body = @email.compile_message(sending_params,user)
       CustomMailer.with(user:user,body:body,subject:@email.subject).dynamic.deliver_now
     end
-    redirect_to @email, notice: 'Email was successfully created.'
+    redirect_to @email, notice: 'Email was successfully sent.'
   end
 
   # GET /emails/new
