@@ -17,6 +17,7 @@ admin = User.create(name:"Admin",email:"test@test.com", password:"temp1234", pas
 # admin = User.create(name:"Cynthia Kepler-Karrer",email:"pastor.cynthia@earthlink.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 # admin = User.create(name:"Clayton Karrer",email:"	karrerct@sbcglobal.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 # admin = User.create(name:"Kendall Smith",email:"kendallsmith@accentfoods.com", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
+# admin = User.create(name:"Mark Corry",email:"mark@corrywood.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 
 demo_course = Course.create(name:"Demo Course", description:"Example of Course Capabilities", summary:"This is an example of the features included for course development",price:Money.new(0, 'USD')*100)
 example_chapter = demo_course.chapters.create(name:"Example Chapter")
