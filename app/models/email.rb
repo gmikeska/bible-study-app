@@ -45,12 +45,12 @@ class Email < ApplicationRecord
 
   def deliver_now(sending_params)
     recipient_list.each do |user|
-      CustomMailer.with(user:user,body:self.compile_message(sending_params,user),subject:@email.subject).dynamic.deliver_now
+      CustomMailer.with(user:user,body:self.compile_message(sending_params,user),subject:self.subject).dynamic.deliver_now
     end
   end
   def deliver_later(sending_params)
     recipient_list.each do |user|
-      CustomMailer.with(user:user,body:self.compile_message(sending_params,user),subject:@email.subject).dynamic.deliver_later
+      CustomMailer.with(user:user,body:self.compile_message(sending_params,user),subject:self.subject).dynamic.deliver_later
     end
   end
 
