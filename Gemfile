@@ -67,5 +67,7 @@ gem "awesome_print"
 gem 'money-rails', '~> 1.13', '>= 1.13.3'
 gem 'braintree'
 gem "view_component"
+gem 'money-tree'
+gem 'money-uphold-bank'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
