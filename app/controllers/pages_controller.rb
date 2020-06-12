@@ -35,7 +35,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def edit
-    
+
   end
 
   def component_preview
@@ -70,22 +70,18 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
 
   def page_params
-    p = params.require(:page).permit!
-    components = []
-    p[:components].each do |comp|
-      comp[:args].permit!
-      comp[:args] = comp[:args].to_h.symbolize_keys
-      components << comp
-    end
-    p[:components] = components
+    p = params.require(:page).permit(:name,components:[:name,args:{}]).to_h.symbolize_keys
+    p[:components] = p[:components].map{|c| c.to_h.symbolize_keys; }
     return p
   end
 
 
   def set_component
     set_page
-
-    if(params[:component_id].length > 1 && params[:component_id].to_i == 0)
+    # byebug
+    if(!params[:component_id].present?)
+      @component = {name:params[:component_name],args:params[:component_name].camelcase.constantize.component_params.defaults}
+    elsif(params[:component_id].present? && params[:component_id].length > 1 && params[:component_id].to_i == 0)
       @component = {name:params[:component_id],args:params[:component_id].camelcase.constantize.component_params.defaults}
     else
       @component = @page.components[params[:component_id].to_i]
