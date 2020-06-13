@@ -6,8 +6,9 @@ class Invoice < ApplicationRecord
   def self.status_options
      ["unpaid","pending","settled"]
   end
-  has_one :user, through: :enrollments
+  has_one :user
   has_many :enrollments
+  has_many :donations
   has_many :courses, through: :enrollments
   serialize :payments, Array
   after_initialize do |invoice|

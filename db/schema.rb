@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_11_174506) do
+ActiveRecord::Schema.define(version: 2020_06_13_133754) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -42,6 +42,23 @@ ActiveRecord::Schema.define(version: 2020_06_11_174506) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "bibles", force: :cascade do |t|
+    t.string "bible_id"
+    t.string "dblId"
+    t.string "name"
+    t.string "language"
+    t.string "language_id"
+    t.string "nameLocal"
+    t.string "abbreviation"
+    t.string "abbreviationLocal"
+    t.string "description"
+    t.string "descriptionLocal"
+    t.string "books"
+    t.string "copyright"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "chapters", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -67,6 +84,20 @@ ActiveRecord::Schema.define(version: 2020_06_11_174506) do
     t.integer "pet_id", null: false
     t.index ["course_id"], name: "index_courses_pets_on_course_id"
     t.index ["pet_id"], name: "index_courses_pets_on_pet_id"
+  end
+
+  create_table "donations", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "amount_cents", default: 0, null: false
+    t.string "amount_currency", default: "USD", null: false
+    t.integer "amount_in_btc_cents", default: 0, null: false
+    t.string "amount_in_btc_currency", default: "USD", null: false
+    t.string "payment_method"
+    t.string "category"
+    t.string "payment_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_donations_on_user_id"
   end
 
   create_table "emails", force: :cascade do |t|
@@ -120,7 +151,6 @@ ActiveRecord::Schema.define(version: 2020_06_11_174506) do
     t.string "payments"
     t.string "number"
     t.boolean "refunded"
-    t.string "donations"
     t.index ["user_id"], name: "index_invoices_on_user_id"
   end
 
@@ -168,6 +198,16 @@ ActiveRecord::Schema.define(version: 2020_06_11_174506) do
     t.boolean "online"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "verses", force: :cascade do |t|
+    t.integer "bible_id"
+    t.string "verse_id"
+    t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "reading_id"
+    t.index ["bible_id"], name: "index_verses_on_bible_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

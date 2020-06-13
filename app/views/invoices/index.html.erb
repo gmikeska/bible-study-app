@@ -1,0 +1,39 @@
+<h1>Invoices</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Invoice #</th>
+      <th>User</th>
+      <th>Courses</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @invoices.each do |invoice| %>
+      <tr>
+        <td><%= invoice.number %></td>
+        <td><%= invoice.user.name %></td>
+        <td><%= invoice.courses.count %></td>
+        <% if(!invoice.status_info(invoice.status).nil?) %>
+          <td><span title="<%= invoice.status_info(invoice.status) %>" style="font-size: large; color: maroon;">🛈&nbsp</span><%= invoice.status.titleize %></td>
+        <% else %>
+          <td><%= invoice.status.titleize %></td>
+        <% end %>
+        <td><%= view_button(invoice) %></td>
+        <td><%= edit_button(edit_invoice_path(invoice), class: 'btn btn-sm btn-secondary') %></td>
+        <% if(invoice.status == "unpaid" || invoice.status == "voided" || invoice.status == "refunded" ) %>
+          <td><%= delete_button(invoice, title:"Click here to delete the site's record of this transaction. You can still view payment info in Braintree's logs if invoice was paid.") %></td>
+          <% else %>
+          <td><%= link_to 'Refund', invoice_refund_url(invoice),title:"Click here to refund, or prevent settlement if the payment has not yet settled.", data: { confirm: 'Are you sure?' },class: 'btn btn-sm btn-danger' %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Invoice', new_invoice_path %>

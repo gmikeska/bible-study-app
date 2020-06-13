@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   validates :email, presence:true
   has_many :enrollments
+  has_many :donations
   has_many :courses, through: :enrollments
   has_many :invoices, through: :enrollments
   has_many :children, class_name: "User",

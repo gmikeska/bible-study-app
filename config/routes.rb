@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+  resources :donations do
+    get "/payment", to:"donations#payment", as:"payment"
+  end
   resources :emails
+  resources :bibles
+  get "bibles/:id/load/", to:"bibles#load", as:"load_bible"
   get "emails/:id/send/", to:"emails#send_email"
   patch "emails/:id/send/", to:"emails#submit_email_send"
   resources :articles, param: :slug

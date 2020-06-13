@@ -68,16 +68,20 @@ class ApiEngine
     response = http.request(request)
     @last_query_time = DateTime.now.strftime('%s').to_i
     data = JSON.parse(response.read_body)['data']
-
+    if(response.code == "200")
+      # puts "success"
+      return data
+    else
+      puts response.code.to_s+" "+response.message
+    end
     # if(@endpoint[args[:endpoint][:block]])
       # return @endpoint[args[:endpoint]][:block](data)
     # else
-      return data
+
     # end
 
   end
   def method_missing(m, **args, &block)
-    puts "#{m}"
     if(@endpoints[m.to_sym].present?)
       request(endpoint:m.to_sym,**args)
     else
@@ -122,8 +126,8 @@ class ApiEngine
           arg_name.to_sym
         end
       end
-      if(args[:path].match(/\{(\S*)\}/))
-        path_args = args[:path].scan(/\{(\S*)\}/).flatten
+      if(args[:path].match(/\{([a-zA-Z_0-9\-]*)\}/))
+        path_args = args[:path].scan(/\{([a-zA-Z_0-9\-]*)\}/).flatten
         path_args.each do |name|
           args[:args] << name.to_sym
         end

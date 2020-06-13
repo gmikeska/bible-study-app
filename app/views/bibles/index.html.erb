@@ -1,0 +1,29 @@
+<h1>Available Bibles</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Bibleid</th>
+      <th>Name</th>
+      <th># of Books</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bibles.each do |bible| %>
+        <tr>
+          <td><%= bible.bible_id %></td>
+          <td><%= bible.name %></td>
+          <td><%= bible.books.length %></td>
+          <% if(bible.is_complete?) %>
+            <td><%= view_button(bible) %></td>
+            <td><%= edit_button(edit_bible_path(bible))  %></td>
+          <% else %>
+            <td><%= link_to 'Load', load_bible_path(bible),class:"btn btn-sm btn-default" %></td>
+            <td></td>
+          <% end %>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
