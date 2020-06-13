@@ -20,7 +20,11 @@
         <td><%= book["abbreviation"] %></td>
         <td><%= book["name"] %></td>
         <td><%= book["nameLong"] %></td>
+        <% if(book['chapters'].present?) %>
         <td><%= book['chapters'].length %></td>
+        <% else %>
+        <td></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
