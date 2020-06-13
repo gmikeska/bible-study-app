@@ -33,11 +33,15 @@ class Bible < ApplicationRecord
         book[:chapters] = @@bible_api.chapters(bible_id:self.bible_id,book_id:book[:id]).map(&:symbolize_keys).collect{|c| {id:c[:id], number:c[:number], name:c[:reference]}}
         save
       end
-      book[:chapters].each do |chapter|
+      book[:chapters].each_index do |i|
+        self.save
+        chapter = book[:chapters][i]
         if(chapter[:last_verse_number].nil?)
           puts "Loading verse count for #{chapter[:name]}"
           chapter[:last_verse_number] = @@bible_api.verses(bible_id:self.bible_id,chapter_id:chapter[:id]).map(&:symbolize_keys).last[:id].split(".").last.to_i
-          save
+          book[:chapters][i] = chapter
+          self.books_will_change!
+          self.save
         else
           puts "#{chapter[:name]} already has verse count."
         end
@@ -52,7 +56,7 @@ class Bible < ApplicationRecord
         #   save
         # end
       end
-      save
+      self.save
     end
   end
 
