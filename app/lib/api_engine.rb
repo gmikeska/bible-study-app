@@ -40,7 +40,9 @@ class ApiEngine
     info = build_request(args)
     current_elapsed = DateTime.now.strftime('%s').to_i - @last_query_time
     if(current_elapsed < @query_interval)
-      sleep(@query_interval - current_elapsed)
+      cooldown = @query_interval - current_elapsed
+      puts "Sleeping #{cooldown} seconds to accomodate query interval."
+      sleep(cooldown)
     end
     query_method = info[:query_method]
     url = info[:url]
@@ -82,6 +84,7 @@ class ApiEngine
 
   end
   def method_missing(m, **args, &block)
+    puts m
     if(@endpoints[m.to_sym].present?)
       request(endpoint:m.to_sym,**args)
     else

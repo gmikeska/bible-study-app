@@ -1,6 +1,7 @@
 class BibleApi < ApiEngine
   def initialize(**options)
     url = "https://api.scripture.api.bible/v1"
+    options[:query_interval] = 10
     if(options[:params].nil?)
       options[:params] = {}
     end
