@@ -19,6 +19,9 @@
           <% if(bible.is_complete?) %>
             <td><%= view_button(bible) %></td>
             <td><%= edit_button(edit_bible_path(bible))  %></td>
+          <% elsif(bible.books.length > 0) %>
+            <td><%= view_button(bible) %></td>
+            <td></td>
           <% else %>
             <td><%= link_to 'Load', load_bible_path(bible),class:"btn btn-sm btn-default" %></td>
             <td></td>
