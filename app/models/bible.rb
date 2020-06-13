@@ -55,7 +55,7 @@ class Bible < ApplicationRecord
 
   def load_chapter(book_index,chapter_index)
     if(self.books[book_index][:chapters][chapter_index][:last_verse_number].nil?)
-      puts "Loading verse count for #{chapter[:name]}"
+      puts "Loading verse count for #{self.books[book_index][:chapters][chapter_index][:name]}"
       self.books[book_index][:chapters][chapter_index][:last_verse_number] = @@bible_api.verses(bible_id:self.bible_id,chapter_id:self.books[book_index][:chapters][chapter_index][:id]).map(&:symbolize_keys).last[:id].split(".").last.to_i
       self.books_will_change!
       self.save
