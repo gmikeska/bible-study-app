@@ -23,28 +23,21 @@ class Bible < ApplicationRecord
     end
   end
 
-  def load
+  def load_books
     if(self.books.nil? || self.books.length == 0)
       self.books = @@bible_api.books(bible_id:self.bible_id).map(&:symbolize_keys)
       save
     end
-    self.books.each do |book|
-      if(book[:chapters].nil? || book[:chapters].length == 0)
-        book[:chapters] = @@bible_api.chapters(bible_id:self.bible_id,book_id:book[:id]).map(&:symbolize_keys).collect{|c| {id:c[:id], number:c[:number], name:c[:reference]}}
+    self.books.each_index do |b|
+      books[b]
+      if(books[b][:chapters].nil? || books[b][:chapters].length == 0)
+        books[b][:chapters] = @@bible_api.chapters(bible_id:self.bible_id,book_id:book[:id]).map(&:symbolize_keys).collect{|c| {id:c[:id], number:c[:number], name:c[:reference]}}
         save
       end
-      book[:chapters].each_index do |i|
+      books[b][:chapters].each_index do |i|
         self.save
-        chapter = book[:chapters][i]
-        if(chapter[:last_verse_number].nil?)
-          puts "Loading verse count for #{chapter[:name]}"
-          chapter[:last_verse_number] = @@bible_api.verses(bible_id:self.bible_id,chapter_id:chapter[:id]).map(&:symbolize_keys).last[:id].split(".").last.to_i
-          book[:chapters][i] = chapter
-          self.books_will_change!
-          self.save
-        else
-          puts "#{chapter[:name]} already has verse count."
-        end
+        chapter = books[b][:chapters][i]
+        load_chapter(b,i)
         # for verse_number in 1..chapter[:last_verse_number]
         #   if(Verse.where({verse_id:"#{chapter[:id]}.#{verse_number.to_s}"}).select{|v| v.bible.bible_id == self.bible_id}.length == 0)
         #     puts "Loading #{chapter[:id]}.#{verse_number.to_s}"
@@ -60,8 +53,16 @@ class Bible < ApplicationRecord
     end
   end
 
-  # def load_verse()
-
+  def load_chapter(book_index,chapter_index)
+    if(self.books[book_index][:chapters][chapter_index][:last_verse_number].nil?)
+      puts "Loading verse count for #{chapter[:name]}"
+      self.books[book_index][:chapters][chapter_index][:last_verse_number] = @@bible_api.verses(bible_id:self.bible_id,chapter_id:chapter[:id]).map(&:symbolize_keys).last[:id].split(".").last.to_i
+      self.books_will_change!
+      self.save
+    else
+      puts "#{chapter[:name]} already has verse count."
+    end
+  end
 
   def self.list_bibles
     all_bibles = @@bible_api.bibles.map(&:symbolize_keys)
