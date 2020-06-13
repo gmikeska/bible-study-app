@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :emails
   resources :bibles
   get "bibles/:id/load/", to:"bibles#load", as:"load_bible"
+  get "bibles/:id/load/:book_index", to:"bibles#load_book", as:"load_bible_book"
   get "emails/:id/send/", to:"emails#send_email"
   patch "emails/:id/send/", to:"emails#submit_email_send"
   resources :articles, param: :slug

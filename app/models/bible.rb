@@ -28,29 +28,35 @@ class Bible < ApplicationRecord
       self.books = @@bible_api.books(bible_id:self.bible_id).map(&:symbolize_keys)
       save
     end
-    self.books.each_index do |b|
-      book = books[b]
-      if(books[b][:chapters].nil? || books[b][:chapters].length == 0)
-        books[b][:chapters] = @@bible_api.chapters(bible_id:self.bible_id,book_id:books[b][:id]).map(&:symbolize_keys).collect{|c| {id:c[:id], number:c[:number], name:c[:reference]}}
-        save
-      end
-      books[b][:chapters].each_index do |i|
-        self.save
-        # chapter = books[b][:chapters][i]
-        load_chapter(b,i)
-        # for verse_number in 1..chapter[:last_verse_number]
-        #   if(Verse.where({verse_id:"#{chapter[:id]}.#{verse_number.to_s}"}).select{|v| v.bible.bible_id == self.bible_id}.length == 0)
-        #     puts "Loading #{chapter[:id]}.#{verse_number.to_s}"
-        #     verse_data = @@bible_api.verse(bible_id:self.bible_id,verse_id:"#{chapter[:id]}.#{verse_number.to_s}").symbolize_keys
-        #     Verse.create(bible:self,verse_id:"#{chapter[:id]}.#{verse_number.to_s}",content:verse_data[:content])
-        #   else
-        #     puts "Verse #{chapter[:id]}.#{verse_number.to_s} already loaded."
-        #   end
-        #   save
-        # end
-      end
-      self.save
+    self.books.each_index do |ind|
+      load_book(ind)
     end
+  end
+  def load_book(book_index)
+    book = books[book_index]
+    if(books[book_index][:chapters].nil? || books[book_index][:chapters].length == 0)
+      books[book_index][:chapters] = @@bible_api.chapters(bible_id:self.bible_id,book_id:books[book_index][:id]).map(&:symbolize_keys).collect{|c| {id:c[:id], number:c[:number], name:c[:reference]}}
+      save
+    end
+
+  end
+  def load_chapters(book_index)
+    books[book_index][:chapters].each_index do |i|
+      self.save
+      # chapter = books[b][:chapters][i]
+      load_chapter(book_index,i)
+      # for verse_number in 1..chapter[:last_verse_number]
+      #   if(Verse.where({verse_id:"#{chapter[:id]}.#{verse_number.to_s}"}).select{|v| v.bible.bible_id == self.bible_id}.length == 0)
+      #     puts "Loading #{chapter[:id]}.#{verse_number.to_s}"
+      #     verse_data = @@bible_api.verse(bible_id:self.bible_id,verse_id:"#{chapter[:id]}.#{verse_number.to_s}").symbolize_keys
+      #     Verse.create(bible:self,verse_id:"#{chapter[:id]}.#{verse_number.to_s}",content:verse_data[:content])
+      #   else
+      #     puts "Verse #{chapter[:id]}.#{verse_number.to_s} already loaded."
+      #   end
+      #   save
+      # end
+    end
+    self.save
   end
 
   def load_chapter(book_index,chapter_index)

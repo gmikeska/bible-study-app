@@ -17,10 +17,10 @@
         <td><%= book[:id] %></td>
         <td><%= book[:name] %></td>
         <td><%= book[:nameLong] %></td>
-        <% if(book[:chapters].present?) %>
+        <% if(book[:chapters].present? && book[:chapters].length > 0) %>
         <td><%= book[:chapters].length %></td>
         <% else %>
-        <td></td>
+        <td><%= link_to "Load Chapters", load_bible_book_path(book_index:@bible.books.index(book)),class:"btn btn-sm btn-default" %></td>
         <% end %>
       </tr>
     <% end %>

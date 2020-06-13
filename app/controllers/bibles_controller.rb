@@ -1,5 +1,5 @@
 class BiblesController < ApplicationController
-  before_action :set_bible, only: [:show, :edit, :update, :destroy]
+  before_action :set_bible, only: [:show, :edit, :update, :destroy,:load_book]
 
   # GET /bibles
   # GET /bibles.json
@@ -15,6 +15,13 @@ class BiblesController < ApplicationController
   # GET /bibles/new
   def new
     @bible = Bible.new
+  end
+
+  def load_book
+    params[:book_index] = params[:book_index].to_i
+    @bible.load_book(params[:book_index])
+    redirect_to @bible, notice: "#{@bible.books[params[:book_index]]} was successfully loaded."
+    @bible.load_chapters(params[:book_index])
   end
 
   # GET /bibles/1/edit
