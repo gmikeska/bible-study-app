@@ -46,6 +46,7 @@ class ApiEngine
     end
     query_method = info[:query_method]
     url = info[:url]
+    puts "#{query_method} #{url}"
     # puts "this method will #{query_method} #{url}"
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -84,7 +85,6 @@ class ApiEngine
 
   end
   def method_missing(m, **args, &block)
-    puts m
     if(@endpoints[m.to_sym].present?)
       request(endpoint:m.to_sym,**args)
     else

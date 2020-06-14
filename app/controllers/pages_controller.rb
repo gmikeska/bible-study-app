@@ -17,6 +17,11 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   def show
     @components = []
     @page.components.each do |component|
+      if(component[:args].nil?)
+        component[:args] = {}
+      else
+        component[:args] = component[:args].symbolize_keys
+      end
       @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
     end
     # render params[:slug]
@@ -35,7 +40,13 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def edit
-
+    @page.components.each do |component|
+      if(component[:args].nil?)
+        component[:args] = {}
+      else
+        component[:args] = component[:args].symbolize_keys
+      end
+    end
   end
 
   def component_preview
@@ -52,7 +63,15 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def update
-    # byebug
+    p = page_params
+    p[:components] = p[:components].map do |c|
+      if(c[:args].nil?)
+        c[:args] = []
+      else
+        c[:args] = c[:args].symbolize_keys
+      end
+    end
+
     if @page.update(page_params)
       redirect_to @page, notice: 'Page was successfully updated.'
     else
@@ -78,7 +97,6 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   def set_component
     set_page
-    # byebug
     if(!params[:component_id].present?)
       @component = {name:params[:component_name],args:params[:component_name].camelcase.constantize.component_params.defaults}
     elsif(params[:component_id].present? && params[:component_id].length > 1 && params[:component_id].to_i == 0)

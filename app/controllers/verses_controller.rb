@@ -14,16 +14,19 @@ class VersesController < ApplicationController
 
   # GET /verses/new
   def new
+    return unless requester_is_staff
     @verse = Verse.new
   end
 
   # GET /verses/1/edit
   def edit
+    return unless requester_is_staff
   end
 
   # POST /verses
   # POST /verses.json
   def create
+    return unless requester_is_staff
     @verse = Verse.new(verse_params)
 
     respond_to do |format|
@@ -40,6 +43,7 @@ class VersesController < ApplicationController
   # PATCH/PUT /verses/1
   # PATCH/PUT /verses/1.json
   def update
+    return unless requester_is_staff
     respond_to do |format|
       if @verse.update(verse_params)
         format.html { redirect_to @verse, notice: 'Verse was successfully updated.' }
@@ -54,6 +58,7 @@ class VersesController < ApplicationController
   # DELETE /verses/1
   # DELETE /verses/1.json
   def destroy
+    return unless requester_is_staff
     @verse.destroy
     respond_to do |format|
       format.html { redirect_to verses_url, notice: 'Verse was successfully destroyed.' }

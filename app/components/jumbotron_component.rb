@@ -9,11 +9,11 @@ class JumbotronComponent < CustomizableComponent
   end
   def self.component_params
     params = super()
-    params.concat(title:{dataType:String, default:"Hello, world!"},
-      slogan:{dataType:String, default:"This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information."},
-      body:{dataType:String, default:"It uses utility classes for typography and spacing to space content out within the larger container."},
-      link:{dataType:String, default:"#"},
-      link_text:{dataType:String, default:"Learn More"})
+    params.concat(title:{dataType:"String", default:"Hello, world!"},
+      slogan:{dataType:"String", default:"This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information."},
+      body:{dataType:"String", default:"It uses utility classes for typography and spacing to space content out within the larger container."},
+      link:{dataType:"String", default:"#"},
+      link_text:{dataType:"String", default:"Learn More"})
     return params
   end
 end

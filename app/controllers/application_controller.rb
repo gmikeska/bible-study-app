@@ -29,5 +29,6 @@ class ApplicationController < ActionController::Base
   def load_template_vars
     @pages = Page.order(:id)
     @courses = Course.order(:id)
+    @bible = Bible.find_by bible_id:"06125adad2d5898a-01"
   end
 end

@@ -11,10 +11,10 @@ class CardComponent < CustomizableComponent
   end
 
   def component_params
-    return super().concat(title:{dataType:String, default:"Example Card"},
-      text:{dataType:String, default:"Card Element"},
-      button_link:{dataType:String, default:"#"},
-      button_text:{dataType:String, default:"More Info"},
-      image:{dataType:String, default:""})
+    return super().concat(title:{dataType:"String", default:"Example Card"},
+      text:{dataType:"String", default:"Card Element"},
+      button_link:{dataType:"String", default:"#"},
+      button_text:{dataType:"String", default:"More Info"},
+      image:{dataType:"String", default:""})
   end
 end

@@ -42,19 +42,7 @@
           }
       });
   }
-  loadSettings = (wrapper,componentName)=>{
-    $.ajax({
-          url: `/component/${componentName}/settings`,
-          type: "GET",
-          success:(data)=>{
-            el = $(data)
-            lines = el.html().split("\n").slice(1)
-            settings = $(".settings",wrapper)
-            settings.empty()
-            settings.append(lines)
-          }
-      });
-  }
+  
   setInputHandlers = (wrapper)=>{
     $("input",wrapper).change(()=>{
       componentName = $(".componentType",wrapper)[0].value

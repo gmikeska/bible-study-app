@@ -42,12 +42,61 @@
 
 <script type="text/javascript">
   $("body").ready(()=>{
+    window.updatePreview = (wrapper,componentName)=>{
+      args = $("input",wrapper)
+      formData = {}
+      varSearch = new RegExp('page_components\\[\\]\\[args\\]\\[(\\w+)\\]');
+
+      $("input",wrapper).each(function(x){
+        argName = this.id.match(varSearch)[1]
+        formData[argName] = $(this).val()
+        // console.log(`${this.id}=${$(this).val()}`)
+      })
+      $.post({
+            url: `/component/${componentName}`,
+            data:{args:formData},
+            success:(data)=>{
+              prev = $(".component-preview",wrapper)
+              prev.empty()
+
+              prev.append(data)
+            }
+        });
+    }
+    window.loadSettings = (wrapper,componentName)=>{
+      $.ajax({
+            url: `/component/${componentName}/settings`,
+            type: "GET",
+            success:(data)=>{
+              el = $(data)
+              lines = el.html().split("\n").slice(1)
+              settings = $(".settings",wrapper)
+              settings.empty()
+              settings.append(lines)
+            }
+        });
+    }
     $("#addComponent").click((e)=>{
       e.preventDefault()
       numComponents = $(".component").length
-      i = parseInt($(".component")[numComponents-1].id.split("-")[1])+1
-      nextId = "component-"+i
-      $("#components").append(`<div class="component" id="${nextId}"></div>`)
+      i = parseInt($(".component")[numComponents-1].id.split("-")[1])
+      nextId = "component-"+(i+1)
+      component_selector = $(`#component-${i}`)[0].cloneNode()
+      component_selector.id = nextId
+      $(component_selector).html($(`#component-${i}`).html())
+      $(".component-preview",component_selector).html("")
+      $(".settings",component_selector).html("")
+      $("#components").append(component_selector)
+      $("select","#"+component_selector.id).val("")
+
+      $("select","#"+component_selector.id).change((e)=>{
+
+        wrapper = e.currentTarget.parentElement.parentElement
+        setInputHandlers(wrapper)
+        updatePreview(wrapper,e.currentTarget.value)
+        loadSettings(wrapper,e.currentTarget.value)
+
+      })
     })
   })
 </script>
