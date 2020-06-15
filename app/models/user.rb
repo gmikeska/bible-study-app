@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   serialize :breeze_data, Hash
   validates :email, presence:true
-  validates :breeze_id, uniqueness:true
+  validates :breeze_id
   has_many :enrollments
   has_many :donations
   has_many :courses, through: :enrollments
