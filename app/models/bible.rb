@@ -128,15 +128,22 @@ class Bible < ApplicationRecord
     return output
   end
   def parse_reference(str)
-    data = str.match(/(?<book>\S+)[\s]+(?<chapter>\d+)[:](?<verses_start>\d+)-(?<verses_end>\d+)/)
+    data = str.match(/(?<prefix>\S?[ ]?)(?<book>\S+)[\s]+(?<chapter>\d+)[:](?<verses_start>\d+)-(?<verses_end>\d+)/)
     if(data.nil?)
-      data = str.match(/(?<book>\S+)[\s]+(?<chapter>\d+)[:](?<verse_number>\d+)/)
+      data = str.match(/(?<prefix>\S?[ ]?)(?<book>\S+)[\s]+(?<chapter>\d+)[:](?<verse_number>\d+)/)
     end
-    book_id = self.books.select{|book| book[:name] == data[:book]}.first[:id]
     reference = {}
-    data.names.each do |name|
-      reference[name.to_sym] = data[name]
+
+    reference[:book] = "#{data[:prefix]}#{data[:book]}"
+    book_id = self.books.select{|book| book[:name] == reference[:book]}.first[:id]
+    reference[:chapter] = data[:chapter]
+    if(data[:verse_number])
+      reference[:verse_number] = data[:verse_number]
+    else
+      reference[:verses_start] = data[:verses_start]
+      reference[:verses_end] = data[:verses_end]
     end
+
     if(data.names.include? "verses_start")
       reference[:query] = (data[:verses_start]..data[:verses_end]).map{|verse_number| "#{book_id}.#{data[:chapter]}.#{verse_number}"}
     else
