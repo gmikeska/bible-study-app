@@ -8,10 +8,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   def home
     @page = Page.find_by slug:"home"
-    @components = []
-    @page.components.each do |component|
-      @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
-    end
+    @components = @page.components
   end
 
   def about_us
@@ -24,15 +21,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def show
-    @components = []
-    @page.components.each do |component|
-      if(component[:args].nil?)
-        component[:args] = {}
-      else
-        component[:args] = component[:args].symbolize_keys
-      end
-      @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
-    end
+    @components = @page.components
     # render params[:slug]
   end
 
@@ -49,21 +38,15 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def edit
-    @page.components.each do |component|
-      if(component[:args].nil?)
-        component[:args] = {}
-      else
-        component[:args] = component[:args].symbolize_keys
-      end
-    end
+
   end
 
   def component_preview
     set_component
     if(@args.nil?)
-      @args = (@component[:name]).camelcase.constantize.component_params.defaults
+      @args = @component.args
     end
-    render(partial:"component_preview",layout:false, locals:{component:{name:@component[:name], args:@args}})
+    render(partial:"component_preview",layout:false, locals:{component:@component})
   end
 
   def component_settings
@@ -73,15 +56,13 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   def update
     p = page_params
-    p[:components] = p[:components].map do |c|
-      if(c[:args].nil?)
-        c[:args] = []
-      else
-        c[:args] = c[:args].symbolize_keys
-      end
+    p[:components].each_index do |i|
+      c = p[:components][i]
+      @page.components[i] = ComponentSettings.new(c[:name],c[:args])
     end
-
-    if @page.update(page_params)
+    @page.save
+    p.delete(:components)
+    if @page.update(p)
       redirect_to @page, notice: 'Page was successfully updated.'
     else
       render :edit
@@ -106,18 +87,18 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   def set_component
     set_page
-    if(!params[:component_id].present?)
-      @component = {name:params[:component_name],args:params[:component_name].camelcase.constantize.component_params.defaults}
-    elsif(params[:component_id].present? && params[:component_id].length > 1 && params[:component_id].to_i == 0)
-      @component = {name:params[:component_id],args:params[:component_id].camelcase.constantize.component_params.defaults}
-    else
+    id_is_name = (params[:component_id].present? && params[:component_id].length > 1 && params[:component_id].to_i == 0)
+
+    if(id_is_name)
+      @component = ComponentSettings.new(params[:component_id])
+    elsif(params[:component_id].present?)
       @component = @page.components[params[:component_id].to_i]
     end
 
     if(params[:args])
       @args = params[:args].permit!.to_h
     else
-      @args = @component[:args]
+      @args = @component.args
     end
   end
 

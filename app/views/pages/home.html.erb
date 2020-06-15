@@ -9,7 +9,7 @@
   <div class="w-100">&nbsp;</div>
 </div> -->
 <% @components.each do |component|%>
-  <%= render(component) %>
+  <%= render(component.view) %>
 <% end %>
 <% Article.all.each do |article|%>
 <hr>

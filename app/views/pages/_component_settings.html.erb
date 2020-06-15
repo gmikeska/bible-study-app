@@ -1,10 +1,7 @@
-<% info = (component[:name]).camelcase.constantize.component_params.to_h
-  info.keys.each do |key|; if(component[:args][key].present?); value = component[:args][key]; else; value = "";end
-  %>
-  <% if(info[key][:dataType] == "String" )%>
-
+<% component.keys.each do |key| %>
+  <% if(component.get_type(key) == "String" )%>
     <div class="field">
-      <%= form.text_field "components[][args][#{key}]".to_sym, value:value, label:key.to_s.titleize, placeholder:info[key][:default] %>
+      <%= form.text_field "components[][args][#{key}]".to_sym, value:component.args[key], label:key.to_s.titleize, placeholder:component.get_default(key) %>
     </div>
 <% end
 end

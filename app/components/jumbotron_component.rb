@@ -7,7 +7,7 @@ class JumbotronComponent < CustomizableComponent
     @link_text = args[:link_text]
     super
   end
-  def self.component_params
+  def self.params
     params = super()
     params.concat(title:{dataType:"String", default:"Hello, world!"},
       slogan:{dataType:"String", default:"This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information."},

@@ -19,14 +19,14 @@
       page.components.each_with_index do |component,i| %>
       <div class="component" id="component-<%= i %>">
         <div class="field">
-          <%= render "component_select", index:i, form:form, component:component, component_options:Page.components %>
+          <%= render "component_select", index:i, form:form, component:component %>
         </div>
         <% end %>
       </div>
     <% else %>
     <div class="component" id="component-0">
       <div class="field">
-        <%= render "component_select", index:0, form:form, component:nil, component_options:Page.components %>
+        <%= render "component_select", index:0, form:form, component:nil %>
       </div>
     </div>
     <% end %>

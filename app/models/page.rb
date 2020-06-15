@@ -6,9 +6,9 @@ class Page < ApplicationRecord
     end
   end
 
-  def self.components
+  def self.component_options
     excludes = ["customizable_component","modal_component","messenger_component"]
-    results = Dir["app/components/*.rb"].collect{|path| path.split("/").last.split(".").first}.collect{|c| [c.titleize, c]}.select{|c| c[1].camelcase.constantize.respond_to? :component_params}
+    results = Dir["app/components/*.rb"].collect{|path| path.split("/").last.split(".").first}.collect{|c| [c.titleize, c]}.select{|c| c[1].camelcase.constantize.respond_to? :params}
     results = results.select{|item| !excludes.include?(item[1])}
     return results
   end
@@ -17,8 +17,8 @@ class Page < ApplicationRecord
     Dir["app/models/*.rb"].collect{|path| [path.split("/").last.split(".").first, path.split("/").last.split(".").first.titleize]}
   end
 
-  def add_component(name, **data)
-    self.components << {name:name, args:data}
+  def add_component(name, component)
+    self.components << component
   end
 
   def to_param

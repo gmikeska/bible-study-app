@@ -1,6 +1,6 @@
 <div class="component-select">
   <% if(component.present?) %>
-    <%= form.select("components[][name]".to_sym, component_options, {selected:component[:name], label:"Component Type",include_blank:"Select a component type..."}, class:"componentType") %>
+    <%= form.select("components[][name]".to_sym, Page.component_options, {selected:component.name, label:"Component Type",include_blank:"Select a component type..."}, class:"componentType") %>
     <div class="component-preview" style="zoom:.8">
       <%= render("component_preview", component:component) %>
     </div>
@@ -8,7 +8,7 @@
       <%= render("component_settings",form:form, component:component) %>
     </div>
   <% elsif(index == 0) %>
-    <%= form.select("components[][name]".to_sym, component_options, {label:"Component Type", include_blank:"Select a component type..."}, class:"componentType") %>
+    <%= form.select("components[][name]".to_sym, Page.component_options, {label:"Component Type", include_blank:"Select a component type..."}, class:"componentType") %>
     <div class="component-preview" style="zoom:.8">
     </div>
     <div class="settings">
@@ -42,7 +42,7 @@
           }
       });
   }
-  
+
   setInputHandlers = (wrapper)=>{
     $("input",wrapper).change(()=>{
       componentName = $(".componentType",wrapper)[0].value

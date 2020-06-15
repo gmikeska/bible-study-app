@@ -6,7 +6,7 @@ class BiblePassageComponent < CustomizableComponent
 
     super
   end
-  def self.component_params
+  def self.params
     params = super()
     params.concat(reference:{dataType:"String", default:"Genesis 1:1-3"})
     return params

@@ -25,7 +25,7 @@ class TableComponent < ViewComponent::Base
     end
     return length
   end
-  def self.component_params
+  def self.params
     return super().concat([:record, :fields, :show, :edit, :delete])
   end
 end
