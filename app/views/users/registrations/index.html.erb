@@ -28,6 +28,7 @@
         <% else %>
           <td class="text-success">&nbsp</td>
         <% end %>
+        <td><%= view_button user %></td>
         <td><%= link_to 'Edit', "/users/#{user.id}/edit", class:'btn btn-sm btn-secondary' %></td>
         <td><%= link_to 'Delete', "/users/#{user.id}/", method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-sm btn-danger' %></td>
       </tr>

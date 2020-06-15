@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   }
   devise_scope :user do
+    get "/users/:id", to:"users/registrations#show", as:'user'
     get "/users/", to:"users/registrations#index"
     get "/users/:type", to:"users/registrations#index"
     get "/users/:id/edit", to:"users/registrations#edit"

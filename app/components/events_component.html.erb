@@ -1,0 +1,23 @@
+<div class="border">
+  <div class="container">
+  <% @events.collect{|e| Date.iso8601(DateTime.parse(e[:start_datetime]).to_s, Date::GREGORIAN)}.uniq.each do |start_date|
+  %>
+  <h1><%= start_date.strftime("%A %B %e, %Y") %></h1>
+  <%
+    events = @events.select{|e| Date.iso8601(DateTime.parse(e[:start_datetime]).to_s , Date::GREGORIAN)== start_date}
+    events.each do |event|
+    %>
+  <div class="container">
+  <h3><%= event[:name] %></h3>
+    <% if(Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN) == Date.iso8601(DateTime.parse(event[:end_datetime]).to_s, Date::GREGORIAN)) %>
+      Date:<%= Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN) %><br>
+    <% else %>
+      Dates:<%= Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN)+"-"+Date.iso8601(DateTime.parse(event[:end_datetime]).to_s, Date::GREGORIAN) %><br>
+    <% end %>
+      Time:<%= DateTime.parse(event[:start_datetime]).strftime('%l:%M %p')+"-"+DateTime.parse(event[:end_datetime]).strftime('%l:%M %p') %>
+</div>
+        <hr>
+    <% end %>
+  <% end %>
+  </div>
+</div>

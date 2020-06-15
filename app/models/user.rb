@@ -32,6 +32,14 @@ class User < ApplicationRecord
     def isParent?
       return children.count > 0
     end
+    def breeze_data
+      if(self.breeze_id)
+        breeze_api = BreezeApi.new
+        return breeze_api.person(person_id:self.breeze_id)
+      else
+        return nil
+      end
+    end
     def isChild?
       return parent.present?
     end

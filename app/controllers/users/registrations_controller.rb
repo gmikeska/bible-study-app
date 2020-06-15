@@ -7,9 +7,24 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
+  def index
+    return unless requester_is_admin
+    @users = User.all
+  end
+
   def new
     @user = User.new
     render "new"
+  end
+
+  def show
+    return unless requester_is_staff
+    @user = User.find(params[:id])
+    breeze_data = @user.breeze_data
+    if(breeze_data.present?)
+      @breeze_data = breeze_data
+    end
+    render "show"
   end
 
   # POST /resource

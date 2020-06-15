@@ -1,0 +1,7 @@
+<% if(@breeze_data.present?) %>
+Name:<%= @breeze_data[:first_name] %> <%= @breeze_data[:last_name] %><br>
+Email:<%= @breeze_data[:details]["1091623166"].first["address"] %><br>
+<% else %>
+Name:<%= @user.name %><br>
+Email:<%= @user.email %><br>
+<% end %>

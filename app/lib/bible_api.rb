@@ -27,6 +27,10 @@ class BibleApi < ApiEngine
     endpoint "verses", path:"/bibles/{bible_id}/chapters/{chapter_id}/verses"
     endpoint "verse", path:"/bibles/{bible_id}/verses/{verse_id}"
   end
+  def request(**args)
+    result = super
+    return result["data"]
+  end
   def range_types
     return [["Book","book"],["Chapter","chapter"],["Verse","verse"]]
   end

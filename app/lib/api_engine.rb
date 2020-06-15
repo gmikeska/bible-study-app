@@ -70,7 +70,8 @@ class ApiEngine
 
     response = http.request(request)
     @last_query_time = DateTime.now.strftime('%s').to_i
-    data = JSON.parse(response.read_body)['data']
+    data = JSON.parse(response.read_body)
+    puts data
     if(response.code == "200")
       # puts "success"
       return data
