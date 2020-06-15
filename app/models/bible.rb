@@ -137,7 +137,6 @@ class Bible < ApplicationRecord
     reference[:book] = "#{data[:prefix]}#{data[:book]}"
     book_id = self.books.select{|book| book[:name] == reference[:book]}.first[:id]
     reference[:chapter] = data[:chapter]
-    byebug
     if(data.names.include?("verse_number"))
       reference[:verse_number] = data[:verse_number]
     else
