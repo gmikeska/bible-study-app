@@ -3,6 +3,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th></th>
       <th>Name</th>
       <th>Email</th>
       <th>Type</th>
@@ -15,6 +16,11 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
+        <% if(user.breeze_data.present?) %>
+          <td><img src="<%= user.image_url %>" alt="<%= user.name %> Profile Image" style="width: 100px;"></td>
+        <% else %>
+          <td></td>
+        <% end %>
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td><%= user.type.capitalize %></td>
