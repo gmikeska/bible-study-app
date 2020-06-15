@@ -6,14 +6,18 @@
   <div class="field">
   </div>
   <%= f.hidden_field :id, value:@user.id %>
-
   <div class="row field">
-  <div class="col">
-    <%= f.text_field :name %>
+    <div class="col">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    </div>
   </div>
-  <div class="col">
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+  <div class="row field">
+    <div class="col field">
+      <%= f.text_field :first_name %>
+    </div>
+    <div class="col field">
+      <%= f.text_field :last_name %>
+    </div>
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>

@@ -34,7 +34,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     build_resource(sign_up_params)
-    resource.name = params[:user][:name]
+    resource.first_name = params[:user][:first_name]
+    resource.last_name = params[:user][:last_name]
     resource.save
     yield resource if block_given?
     if resource.persisted?
@@ -115,7 +116,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def update
     return unless requester_is_authorized(true)
     set_resource
-    @user.name = params["user"]["name"]
+    @user.first_name = params[:user][:first_name]
+    @user.last_name = params[:user][:last_name]
     @user.email = params["user"]["email"]
     @user.user_type = params["user"]["user_type"]
     success = @user.save
@@ -159,7 +161,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :user_type, :id, :breeze_id])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:first_name,:last_name, :user_type, :id, :breeze_id])
   end
 
   # The path used after sign up.
