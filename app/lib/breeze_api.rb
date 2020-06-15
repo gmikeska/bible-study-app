@@ -26,11 +26,7 @@ class BreezeApi < ApiEngine
   end
   def request(**args)
     result = super
-    if(result.is_a? Array)
-      result = result.map(&:symbolize_keys)
-    elsif result.is_a?(Hash)
-      result = result.symbolize_keys
-    end
+    result = prepare_data(result)
     return result
   end
 end

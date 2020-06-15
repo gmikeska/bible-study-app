@@ -102,6 +102,32 @@ class ApiEngine
   def query_params_for(e)
     @endpoints[e.to_sym][:query_params].map{|arg| arg.to_sym}
   end
+  def prepare_data(data, depth=0,&block)
+    if(block.present?)
+      yield(data,depth)
+    end
+    depth = depth + 1
+    if(data.is_a? Array)
+      data.each_index do |i|
+        if(block.present?)
+          data[i] = self.prepare_data(data[i],depth, &block)
+        else
+          data[i] = self.prepare_data(data[i],depth)
+        end
+      end
+    end
+    if(data.is_a? Hash)
+      data.symbolize_keys!
+      data.each_pair do |k,v|
+        if(block.present?)
+          data[k] = self.prepare_data(v,depth, &block)
+        else
+          data[k] = self.prepare_data(v,depth)
+        end
+      end
+    end
+    return data
+  end
   private
     def build_request(args)
       if(args[:endpoint])
@@ -119,6 +145,7 @@ class ApiEngine
 
       return {query_method:query_method,url:url}
     end
+
     def endpoint(name, **args, &block)
       if(args[:path] == nil)
         args[:path] = "/#{name.to_s}"
