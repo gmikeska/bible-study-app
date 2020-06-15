@@ -48,7 +48,7 @@ class User < ApplicationRecord
       return children.count > 0
     end
     def load_breeze_data
-      if(self.breeze_id)
+      if(self.breeze_id.present?)
         breeze_api = BreezeApi.new
         self.breeze_data = breeze_api.person(person_id:self.breeze_id)
         if(self.first_name.nil? && self.breeze_data[:first_name])
