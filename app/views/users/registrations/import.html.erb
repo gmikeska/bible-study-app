@@ -1,0 +1,27 @@
+<h2>Sign Up</h2>
+
+<%= bootstrap_form_for(resource, as: resource_name, url: user_import_path, html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <div class="row">
+    <div class="field col">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email",placeholder:"user@example.com" %>
+    </div>
+
+    <div class="field col">
+      <%= f.text_field :breeze_id, label:"Breeze ID",placeholder:"Example: 25340964" %>
+    </div>
+  </div>
+
+
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+
+
+
+  <div class="actions">
+    <%= f.submit "Import" %>
+  </div>
+<% end %>

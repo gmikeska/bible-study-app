@@ -3,8 +3,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
+  serialize :breeze_data, Hash
   validates :email, presence:true
+  validates :breeze_id, uniqueness:true
   has_many :enrollments
   has_many :donations
   has_many :courses, through: :enrollments
@@ -19,6 +20,7 @@ class User < ApplicationRecord
       if(user.user_type.nil?)
         user.user_type = "student"
       end
+      user.load_breeze_data
     end
     def type
       user_type
@@ -29,15 +31,34 @@ class User < ApplicationRecord
         user_type = typestr
       end
     end
+    def name
+      f = self.first_name || ""
+      l = self.last_name || ""
+      return f+" "+l
+    end
+    def image_url(type=nil)
+      if(self.breeze_id.present?)
+        if(type == :thumbnail)
+          return "https://files.breezechms.com/#{self.breeze_data[:thumb_path]}"
+        else
+          return "https://files.breezechms.com/#{self.breeze_data[:path]}"
+        end
+      end
+    end
     def isParent?
       return children.count > 0
     end
-    def breeze_data
+    def load_breeze_data
       if(self.breeze_id)
         breeze_api = BreezeApi.new
-        return breeze_api.person(person_id:self.breeze_id)
-      else
-        return nil
+        self.breeze_data = breeze_api.person(person_id:self.breeze_id)
+        if(self.first_name.nil? && self.breeze_data[:first_name])
+          self.first_name = self.breeze_data[:first_name]
+        end
+        if(self.last_name.nil? && self.breeze_data[:last_name])
+          self.last_name = self.breeze_data[:last_name]
+        end
+        self.save
       end
     end
     def isChild?
@@ -54,5 +75,23 @@ class User < ApplicationRecord
     end
     def isAdmin?
       return user_type == "admin"
+    end
+    def self.import(params)
+      params = params.to_h.symbolize_keys
+      user_by_email = User.find_by(email:params[:email]).nil?
+      breeze_api = BreezeApi.new
+      if(params[:breeze_id] && User.find_by(breeze_id:params[:breeze_id]).nil? && user_by_email.nil?)
+        data = breeze_api.person(person_id:params[:breeze_id])
+        # byebug
+        params[:first_name]= data[:first_name]
+        params[:last_name]= data[:last_name]
+        if(data[:details]["1091623166".to_sym].first[:address] == params[:email] )
+          return User.new(**params)
+        end
+      elsif(user_by_email.present?)
+        user_by_email.breeze_id = params[:breeze_id]
+        user_by_email.save
+        return user_by_email
+      end
     end
 end

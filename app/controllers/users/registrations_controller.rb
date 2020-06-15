@@ -16,6 +16,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @user = User.new
     render "new"
   end
+  def import
+    @user = User.new
+    render "import"
+  end
 
   def show
     return unless requester_is_staff
@@ -49,6 +53,30 @@ class Users::RegistrationsController < Devise::RegistrationsController
       respond_with resource
     end
   end
+
+  def do_import
+    p = params.require(:user).permit(:email,:breeze_id)
+    p[:password] = "temp1234"
+    p[:password_confirmation]  = "temp1234"
+    if(p[:breeze_id].present? && p[:email].present?)
+      resource = User.import(p)
+      resource.save
+      yield resource if block_given?
+      if resource.persisted?
+        set_flash_message! :notice, "User has been imported from Breeze."
+        if requester_is_admin
+          redirect_to "/users/"
+        else
+          redirect_to "/"
+        end
+      end
+    elsif(p[:breeze_id].nil?)
+      redirect_to "/users/import", notice:"A Breeze ID is required for User Import."
+    elsif(p[:email].nil?)
+      redirect_to "/users/import", notice:"An email address is Required for User Import."
+    end
+  end
+
   def index
     return unless requester_is_staff
     if(params[:type].present?)
@@ -131,7 +159,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :user_type, :id])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :user_type, :id, :breeze_id])
   end
 
   # The path used after sign up.

@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 home = Page.create(name:"home")
-about = Page.create(name:"about us")
+events = Page.create(name:"events")
 
 videos = Gallery.create(name:"Videos")
 images = Gallery.create(name:"Images")

@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   }
   devise_scope :user do
+    get "/users/import", to:"users/registrations#import"
+    post "/users/import", to:"users/registrations#do_import", as:'user_import'
     get "/users/:id", to:"users/registrations#show", as:'user'
     get "/users/", to:"users/registrations#index"
     get "/users/:type", to:"users/registrations#index"
