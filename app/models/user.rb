@@ -78,7 +78,7 @@ class User < ApplicationRecord
     end
     def self.import(params)
       params = params.to_h.symbolize_keys
-      user_by_email = User.find_by(email:params[:email]).nil?
+      user_by_email = User.find_by(email:params[:email])
       breeze_api = BreezeApi.new
       if(params[:breeze_id] && User.find_by(breeze_id:params[:breeze_id]).nil? && user_by_email.nil?)
         data = breeze_api.person(person_id:params[:breeze_id])
