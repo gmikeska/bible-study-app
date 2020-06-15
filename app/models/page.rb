@@ -1,7 +1,7 @@
 class Page < ApplicationRecord
   serialize :components, Array
   after_initialize do |page|
-    if(!slug)
+    if(page.slug != page.name.parameterize)
       page.slug = page.name.parameterize
     end
   end

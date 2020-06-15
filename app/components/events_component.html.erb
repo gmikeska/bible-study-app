@@ -1,9 +1,10 @@
 <h1>Upcoming Events</h1>
-<div class="border">
+<div>
   <div class="container">
   <% @events.collect{|e| Date.iso8601(DateTime.parse(e[:start_datetime]).to_s, Date::GREGORIAN)}.uniq.each do |start_date|
   %>
   <h1><%= start_date.strftime("%A %B %e, %Y") %></h1>
+<hr>
   <%
     events = @events.select{|e| Date.iso8601(DateTime.parse(e[:start_datetime]).to_s , Date::GREGORIAN)== start_date}
     events.each do |event|
@@ -11,13 +12,14 @@
   <div class="container">
   <h3><%= event[:name] %></h3>
     <% if(Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN) == Date.iso8601(DateTime.parse(event[:end_datetime]).to_s, Date::GREGORIAN)) %>
-      Date:<%= Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN) %><br>
+      Date: <%= Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN).strftime("%B %e, %Y") %><br>
     <% else %>
-      Dates:<%= Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN)+"-"+Date.iso8601(DateTime.parse(event[:end_datetime]).to_s, Date::GREGORIAN) %><br>
+      Dates: <%= Date.iso8601(DateTime.parse(event[:start_datetime]).to_s, Date::GREGORIAN).strftime("%B %e, %Y")+"-"+Date.iso8601(DateTime.parse(event[:end_datetime]).to_s, Date::GREGORIAN).strftime("%B %e, %Y") %><br>
     <% end %>
-      Time:<%= DateTime.parse(event[:start_datetime]).strftime('%l:%M %p')+"-"+DateTime.parse(event[:end_datetime]).strftime('%l:%M %p') %>
+      Time: <%= DateTime.parse(event[:start_datetime]).strftime('%l:%M %p')+"-"+DateTime.parse(event[:end_datetime]).strftime('%l:%M %p') %>
+<hr>
 </div>
-        <hr>
+
     <% end %>
   <% end %>
   </div>
