@@ -45,6 +45,9 @@ class ComponentInfo
   def set_default(key,value)
     @params[key.to_sym][:default] = value
   end
+  def keys
+    @params.keys
+  end
 
   def to_h
     @params.deep_dup
