@@ -19,7 +19,9 @@ class User < ApplicationRecord
       if(user.user_type.nil?)
         user.user_type = "student"
       end
-      user.load_breeze_data
+      if(user.breeze_data[:last_update].nil? || (Time.now - user.breeze_data[:last_update])*1.seconds > 5.minutes)
+        user.load_breeze_data
+      end
     end
     def type
       user_type
@@ -50,7 +52,9 @@ class User < ApplicationRecord
     def load_breeze_data
       if(self.breeze_id.present?)
         breeze_api = BreezeApi.new
-        self.breeze_data = breeze_api.person(person_id:self.breeze_id)
+        data = breeze_api.person(person_id:self.breeze_id)
+        data[:last_update] = Time.now
+        self.breeze_data = data
         if(self.first_name.nil? && self.breeze_data[:first_name])
           self.first_name = self.breeze_data[:first_name]
         end
@@ -91,6 +95,24 @@ class User < ApplicationRecord
         user_by_email.breeze_id = params[:breeze_id]
         user_by_email.save
         return user_by_email
+      end
+    end
+    def self.sync
+      breeze_api = BreezeApi.new
+      people = breeze_api.people
+      puts "API returns #{people.length} people"
+      people.each do |person|
+        if(User.find_by(breeze_id:person[:id]).nil?)
+          data = breeze_api.person(person_id:person[:id])
+          if(data[:details].present? && data[:details]["1091623166".to_sym].present? && (data[:details]["1091623166".to_sym].length > 0) && data[:details]["1091623166".to_sym].first[:address].present?)
+            User.import(
+              breeze_id:person[:id],
+              email:data[:details]["1091623166".to_sym].first[:address],
+              password:"temp1234",
+              password_confirmation:"temp1234"
+            )
+          end
+        end
       end
     end
 end
