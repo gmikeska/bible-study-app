@@ -9,6 +9,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # GET /resource/sign_up
   def index
     return unless requester_is_admin
+    
     @users = User.all
   end
 

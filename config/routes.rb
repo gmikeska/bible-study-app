@@ -22,7 +22,6 @@ Rails.application.routes.draw do
     post "/users/import", to:"users/registrations#do_import", as:'user_import'
     get "/users/:id", to:"users/registrations#show", as:'user'
     get "/users/", to:"users/registrations#index"
-    get "/users/:type", to:"users/registrations#index"
     get "/users/:id/edit", to:"users/registrations#edit"
     patch "/users/:id", to:"users/registrations#update"
     get "my-profile", to:"users/registrations#edit"
