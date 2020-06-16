@@ -9,8 +9,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # GET /resource/sign_up
   def index
     return unless requester_is_admin
-    
-    @users = User.all
+
+    @users = User.all.order("created_at desc")
   end
 
   def new
