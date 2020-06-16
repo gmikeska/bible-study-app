@@ -21,10 +21,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def show
     return unless requester_is_staff
     @user = User.find(params[:id])
-    breeze_data = @user.breeze_data
-    if(breeze_data.present?)
-      @breeze_data = breeze_data
-    end
+    @user.load_breeze_data
+
     render "show"
   end
 
@@ -173,8 +171,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     elsif(params["user"]["id"] && params["user"]["id"].to_i != 0)
       user_id = params["user"]["id"].to_i
     end
-    if(current_user.type == "admin" || current_user.id != user_id)
+    if(current_user.id != user_id)
       @user = User.find(user_id)
+      @user.load_breeze_data
     end
   end
 
