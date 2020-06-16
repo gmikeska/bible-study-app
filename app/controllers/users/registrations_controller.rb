@@ -7,11 +7,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  def index
-    return unless requester_is_admin
 
-    @users = User.all.order("created_at desc")
-  end
 
   def new
     @user = User.new
@@ -81,12 +77,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def index
     return unless requester_is_staff
-    if(params[:type].present?)
-      @users = User.where({user_type:params[:type].singularize.downcase})
-      render "index"
+    if(params[:usertype] == "admins")
+      @users = User.admins.order("created_at desc")
+    elsif(params[:usertype] == "instructors")
+      @users = User.instructors.order("created_at desc")
+    elsif(params[:usertype] == "students")
+      @users = User.students.order("created_at desc")
     else
-      @users = User.all.order(:id)
-      render "index"
+      @users = User.all.order("created_at desc")
     end
   end
 
