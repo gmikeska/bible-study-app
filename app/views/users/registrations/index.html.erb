@@ -1,5 +1,6 @@
 <h1>User Management</h1>
-<%= toolbar([link_to('Import from Breeze', "/users/import", class:'btn btn-sm btn-default'),link_to('All users', "/users/", class:'btn btn-sm btn-secondary'),link_to( 'Admins', "/users?usertype=admins", class:'btn btn-sm btn-secondary'),link_to( 'Instructors', "/users?usertype=instructors", class:'btn btn-sm btn-secondary'),link_to( 'Students', "/users?usertype=students", class:'btn btn-sm btn-secondary')])%>
+<%= toolbar([link_to('Import from Breeze', "/users/import", class:'btn btn-sm btn-default')])%>
+<%= toolbar([link_to('All users', "/users/", class:'btn btn-sm btn-secondary'),link_to( 'Admins', "/users?usertype=admins", class:'btn btn-sm btn-secondary'),link_to( 'Instructors', "/users?usertype=instructors", class:'btn btn-sm btn-secondary'),link_to( 'Students', "/users?usertype=students", class:'btn btn-sm btn-secondary')])%>
 <table class="table">
   <thead>
     <tr>

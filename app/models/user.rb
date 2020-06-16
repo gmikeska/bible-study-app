@@ -19,7 +19,7 @@ class User < ApplicationRecord
       if(user.user_type.nil?)
         user.user_type = "student"
       end
-      if(user.breeze_data[:last_update].nil? || (Time.now - user.breeze_data[:last_update])*1.seconds > 5.minutes)
+      if(user.breeze_id.present? &&  user.breeze_data.nil?)
         user.load_breeze_data
       end
     end
