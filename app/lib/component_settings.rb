@@ -27,6 +27,25 @@ class ComponentSettings
   def keys
     return instance.params.keys
   end
+
+  def field_for(key, form)
+    if(get_type(key) == "String")
+      return %Q(<div class="field">
+        #{form.text_field "components[][args][#{key}]".to_sym, value:@args[key], label:key.to_s.titleize, placeholder:get_default(key)}
+      </div>).html_safe
+    end
+    if(get_type(key) == "URL")
+      return %Q(<div class="field">
+        #{form.select "components[][args][#{key}]".to_sym, Page.page_options, selected:@args[key], label:key.to_s.titleize, include_blank:"Select a destination..."}
+      </div>).html_safe
+    end
+    #   return %Q(<div class="field">
+    #     #{form.select "components[][args][#{key}]".to_sym, Page.page_options.concat([["External Link","external_link"]]), selected:@args[key], label:key.to_s.titleize, include_blank:"Select a destination...", style:select_style}
+    #     #{form.text_field "components[][args][#{key}]".to_sym, label:"<p style='#{input_style}'>&nbsp</p>".html_safe, placeholder:"http://www.google.com", style:input_style}
+    #   </div>).html_safe
+    # end
+  end
+
   def get_type(key)
     return instance.params.get_type(key)
   end
