@@ -1,7 +1,13 @@
 require 'bitcoin'
 class BitcoinWallet < ApplicationRecord
   has_many :bitcoin_pubkeys
-
+  serialize :addresses, Hash
+  after_initialize do |w|
+    if(w.last_index.nil?)
+      last_index = 0
+      w.save
+    end
+  end
   def self.get_address_qr_code(address)
     RQRCode::QRCode.new(address)
   end
@@ -16,17 +22,6 @@ class BitcoinWallet < ApplicationRecord
       qr_code:RQRCode::QRCode.new(request)
     }
   end
-  def self.generate_keyset(key_count=1)
-    output = []
-    key_count.times do
-      output <<  MoneyTree::Master.new
-    end
-    if(output.length == 1)
-      return output[0]
-    else
-      return output
-    end
-  end
   def self.get_multisig_address(pubkeys,number_to_verify)
     keys = pubkeys.dup()
     return Bitcoin::Script.new(Bitcoin::Script.to_multisig_script(number_to_verify,*keys)).get_address
@@ -38,31 +33,33 @@ class BitcoinWallet < ApplicationRecord
         keys << k.subkey_at(k.key_path_for_index(index))
       end
       address = BitcoinWallet.get_multisig_address(keys.collect{|sub| sub[:public_key] },self.required_keys)
-      bitcoin_pubkeys.each do |key|
-        key.addresses[index] = address
-      end
+
       return address
     else
       return keys[0].to_address
     end
   end
-  def next_multisig_address
+  def use_next_multisig_address
     return use_multisig_address_at(next_index)
   end
   def next_index
-    last_index+1
+    return last_index+1
   end
   def use_multisig_address_at(index)
-    keys = []
-    bitcoin_pubkeys.each do |key|
-      keys << key.use(index)
+    if(index > last_index)
+      puts "Last Index:#{last_index} Index:#{index}"
+      keys = []
+      self.last_index = index
+      self.save
+      address = address_at(index)
+      addresses[index] = address
+      return address
     end
-    BitcoinWallet.get_multisig_address(keys.collect{|sub| sub[:public_key] },self.required_keys)
   end
   def subkeys(index)
-    subkey = {}
+    subkeys = []
     bitcoin_pubkeys.each do |key|
-      subkey[name] = key.subkey_at(key.key_path_for_index(index))
+      subkeys << key.subkey_at(key.key_path_for_index(index))
     end
   end
 end

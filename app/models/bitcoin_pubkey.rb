@@ -1,6 +1,5 @@
 class BitcoinPubkey < ApplicationRecord
   belongs_to :user
-  serialize :addresses, Hash
   after_initialize do |k|
     if(k.key_path_base.nil?)
       k.key_path_base = "m/0"
@@ -17,13 +16,6 @@ class BitcoinPubkey < ApplicationRecord
   end
 
   def use(index)
-    if(index == :next)
-      index = last_index+1
-    end
-    if(index > last_index)
-      last_index = index
-      save
-    end
     path = key_path_for_index(index)
     return(self.subkey_at(path))
   end
