@@ -13,22 +13,29 @@ images = Gallery.create(name:"Images")
 # images.files.attach(io: File.open(Rails.root.join("public/dog-placeholder.png")), filename: 'dog-placeholder.png')
 # videos.files.attach(io: File.open(Rails.root.join("storage/oceans.mp4")), filename: 'oceans.mp4')
 videos.save
-admin = User.create(name:"Admin",email:"test@test.com", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
-# admin = User.create(name:"Cynthia Kepler-Karrer",email:"pastor.cynthia@earthlink.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
-# admin = User.create(name:"Clayton Karrer",email:"	karrerct@sbcglobal.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
-# admin = User.create(name:"Kendall Smith",email:"kendallsmith@accentfoods.com", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
-# admin = User.create(name:"Mark Corry",email:"mark@corrywood.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
+# admin = User.create(first_name:"Cynthia",last_name:"Kepler-Karrer",email:"pastor.cynthia@earthlink.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
+# admin = User.create(first_name:"Clayton",last_name:"Karrer",email:"	karrerct@sbcglobal.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
+# admin = User.create(first_name:"Kendall",last_name:"Smith",email:"kendallsmith@accentfoods.com", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
+# admin = User.create(first_name:"Mark",last_name:"Corry",email:"mark@corrywood.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 
-demo_course = Course.create(name:"Demo Course", description:"Example of Course Capabilities", summary:"This is an example of the features included for course development",price:Money.new(0, 'USD')*100)
+demo_course = Course.create(name:"Demo Course", description:"Example of Course Capabilities", summary:"This is an example of the features included for course development",price:Money.new(1, 'USD')*100)
 example_chapter = demo_course.chapters.create(name:"Example Chapter")
 lesson = demo_course.lessons.create(name:"Test Lesson", chapter:example_chapter)
 lesson.save
-name = Faker::Name.name
-email = name.split(" ").join('.').downcase.delete(?').split(' ').join('.')+"@"+Faker::Internet.domain_name(domain: "example")
+first_name = Faker::Name.first_name
+last_name = Faker::Name.last_name
+email = [first_name,last_name].join('.').downcase.delete(?').split(' ').join('.')+"@"+Faker::Internet.domain_name(domain: "example")
 pass = "temp1234"
-student = User.create(name:name,email:email, password:pass, password_confirmation:pass, user_type:"student")
+admin = User.create(
+  first_name:"Admin",
+  last_name:"Admin",
+  email:"test@test.com",
+  password:"temp1234",
+  password_confirmation:"temp1234",
+  user_type:"admin"
+)
+student = User.create(first_name:first_name,last_name:last_name,email:email, password:pass, password_confirmation:pass, user_type:"student")
 
-admin = User.create(name:"Admin",email:"test@test.com", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 puts student.email
 demo_course.enroll(student)
 demo_course.save

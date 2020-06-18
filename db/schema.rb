@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_15_151110) do
+ActiveRecord::Schema.define(version: 2020_06_18_170756) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -59,6 +59,25 @@ ActiveRecord::Schema.define(version: 2020_06_15_151110) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "bitcoin_pubkeys", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "public_key"
+    t.string "chain_code"
+    t.string "addresses"
+    t.string "key_path_base"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "bitcoin_wallet_id"
+    t.index ["user_id"], name: "index_bitcoin_pubkeys_on_user_id"
+  end
+
+  create_table "bitcoin_wallets", force: :cascade do |t|
+    t.integer "required_keys"
+    t.integer "last_index"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "chapters", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -84,20 +103,6 @@ ActiveRecord::Schema.define(version: 2020_06_15_151110) do
     t.integer "pet_id", null: false
     t.index ["course_id"], name: "index_courses_pets_on_course_id"
     t.index ["pet_id"], name: "index_courses_pets_on_pet_id"
-  end
-
-  create_table "donations", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "amount_cents", default: 0, null: false
-    t.string "amount_currency", default: "USD", null: false
-    t.integer "amount_in_btc_cents", default: 0, null: false
-    t.string "amount_in_btc_currency", default: "USD", null: false
-    t.string "payment_method"
-    t.string "category"
-    t.string "payment_address"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_donations_on_user_id"
   end
 
   create_table "emails", force: :cascade do |t|
@@ -148,7 +153,6 @@ ActiveRecord::Schema.define(version: 2020_06_15_151110) do
 
   create_table "invoices", force: :cascade do |t|
     t.integer "user_id"
-    t.string "payments"
     t.string "number"
     t.boolean "refunded"
     t.index ["user_id"], name: "index_invoices_on_user_id"
@@ -175,6 +179,27 @@ ActiveRecord::Schema.define(version: 2020_06_15_151110) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "components"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "amount_cents", default: 0, null: false
+    t.string "amount_currency", default: "USD", null: false
+    t.integer "amount_in_btc_cents", default: 0, null: false
+    t.string "amount_in_btc_currency", default: "USD", null: false
+    t.string "payment_method"
+    t.string "category"
+    t.string "payment_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "invoice_id"
+    t.integer "bitcoin_pubkeys_id"
+    t.integer "bitcoin_wallet_id"
+    t.string "transaction_id"
+    t.index ["bitcoin_pubkeys_id"], name: "index_payments_on_bitcoin_pubkeys_id"
+    t.index ["bitcoin_wallet_id"], name: "index_payments_on_bitcoin_wallet_id"
+    t.index ["invoice_id"], name: "index_payments_on_invoice_id"
+    t.index ["user_id"], name: "index_payments_on_user_id"
   end
 
   create_table "quizzes", force: :cascade do |t|
@@ -214,4 +239,7 @@ ActiveRecord::Schema.define(version: 2020_06_15_151110) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "payments", "bitcoin_pubkeys", column: "bitcoin_pubkeys_id"
+  add_foreign_key "payments", "bitcoin_wallets"
+  add_foreign_key "payments", "invoices"
 end
