@@ -29,7 +29,7 @@ module ApplicationHelper
     link_to '⮜ Back',link, **args
   end
   def is_dev(user)
-    return ["Admin","Greg"].include?(user.name)
+    return ["test@test.com","gmikeska07@gmail.com"].include?(user.email)
   end
   def view_button(link, **args)
     if(args[:class].nil?)

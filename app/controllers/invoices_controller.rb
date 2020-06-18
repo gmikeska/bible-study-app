@@ -32,29 +32,8 @@ class InvoicesController < ApplicationController
   def checkout
     authorized = (current_user && (current_user == @invoice.user || current_user.isStaff?))
     return unless requester_is_authorized(authorized)
-    @client_token = Invoice.gateway.client_token.generate
-  end
-
-  def payment
-    authorized = (current_user && (current_user == @invoice.user))
-    return unless requester_is_authorized(authorized)
-    params = payment_params
-    result = Invoice.gateway.transaction.sale(
-      :amount => @invoice.price_total.to_s,
-      :payment_method_nonce => params[:nonce],
-      :options => {
-        :submit_for_settlement => true
-      }
-    )
-    if result.success?
-      @invoice.apply_payment(result.transaction)
-      @invoice.save
-      render :json => result
-      return
-    else
-      puts(result.message)
-      render :json => result
-    end
+    @payment = Payment.new(invoice:@invoice, user:current_user, amount:@invoice.amount_owed)
+    @payment.save
   end
 
   # GET /invoices/new
@@ -102,9 +81,9 @@ class InvoicesController < ApplicationController
     return unless requester_is_staff
     @invoice.payments.each do |transaction|
       if(transaction.status == "settled")
-        result = Invoice.gateway.transaction.refund(transaction.id)
+        result = Payment.gateway.transaction.refund(transaction.id)
       else
-        result = Invoice.gateway.transaction.void(transaction.id)
+        result = Payment.gateway.transaction.void(transaction.id)
       end
       byebug
     end
@@ -133,8 +112,5 @@ class InvoicesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def invoice_params
       params.fetch(:invoice, {})
-    end
-    def payment_params
-      return params.permit(:nonce)
     end
 end

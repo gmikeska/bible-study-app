@@ -72,7 +72,7 @@
               lines = el.html().split("\n").slice(1)
               settings = $(".settings",wrapper)
               settings.empty()
-              settings.append(lines)
+              settings.html(lines.join("\n"))
             }
         });
     }

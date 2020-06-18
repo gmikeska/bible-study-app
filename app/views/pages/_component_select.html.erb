@@ -1,15 +1,16 @@
 <div class="component-select">
   <% if(component.present?) %>
     <%= form.select("components[][name]".to_sym, Page.component_options, {selected:component.name, label:"Component Type",include_blank:"Select a component type..."}, class:"componentType") %>
+    Preview:
     <div class="component-preview" style="zoom:.8">
       <%= render("component_preview", component:component) %>
     </div>
-    <div class="settings">
+    <div class="settings border-bottom">
       <%= render("component_settings",form:form, component:component) %>
     </div>
   <% elsif(index == 0) %>
     <%= form.select("components[][name]".to_sym, Page.component_options, {label:"Component Type", include_blank:"Select a component type..."}, class:"componentType") %>
-    <div class="component-preview" style="zoom:.8">
+    <div class="component-preview" >
     </div>
     <div class="settings">
     </div>

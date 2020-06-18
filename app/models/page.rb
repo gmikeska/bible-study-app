@@ -12,6 +12,11 @@ class Page < ApplicationRecord
     results = results.select{|item| !excludes.include?(item[1])}
     return results
   end
+  
+  def self.page_options
+    results = Page.all.collect{|p| [p.name.titleize, p.pointer] }
+    return results
+  end
 
   def self.data_sources
     Dir["app/models/*.rb"].collect{|path| [path.split("/").last.split(".").first, path.split("/").last.split(".").first.titleize]}

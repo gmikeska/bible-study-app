@@ -4,7 +4,7 @@ class Course < ApplicationRecord
   has_one :instruction
   has_many :enrollments
   has_many :students, through: :enrollments, source: "user"
-  has_many :owners, through: :students
+  has_many :parents, through: :students
   validates :name, presence: true
   monetize :price_cents
   after_initialize do |course|
@@ -61,17 +61,20 @@ class Course < ApplicationRecord
     if(chapter.nil?)
       chapter = chapters.first
     end
+    enrollment = Enrollment.create(user:student, course:self, current_chapter:chapter)
+
     if(self.price.to_i > 0)
+      enrollment = Enrollment.create(user:student, course:self, current_chapter:chapter)
       if(student.invoices.select{|i| !i.paid?}.length == 0)
-        invoice = Invoice.create(user:student.owner)
+        invoice = Invoice.new(user:student)
       else
         invoice = student.invoices.select{|i| !i.paid? }.last
       end
-      return Enrollment.create(user:student, course:self, current_chapter:chapter, invoice:invoice)
-    else
-      return Enrollment.create(user:student, course:self, current_chapter:chapter)
+      invoice.enrollments << enrollment
+      enrollment.invoice = invoice
+      enrollment.save
     end
-
+    return enrollment
   end
   def enrolled?(student_or_parent)
     if(students.include?(student_or_parent))
@@ -98,7 +101,7 @@ class Course < ApplicationRecord
     if(visibility == "Public")
       return true
     elsif(visibility == "Enrolled")
-      user_is_enrolled_and_paid = (user.present? && enrolled?(user) && (Course.first.enrollments.select{|e| e.user == user}.first.invoice.nil? || Course.first.enrollments.select{|e| e.user == user}.first.invoice.paid?))
+      user_is_enrolled_and_paid = (user.present? && enrolled?(user) && (Course.first.enrollments.select{|e| e.user == user}.first.invoices.nil? || Course.first.enrollments.select{|e| e.user == user}.first.invoices.paid?))
       return((user_is_enrolled_and_paid || user.isStaff?))
     else
       return (user.present? && user.isStaff?)

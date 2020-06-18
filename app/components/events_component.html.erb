@@ -1,5 +1,5 @@
 <h1>Upcoming Events</h1>
-<div>
+<%= wrap do %>
   <div class="container">
   <% @events.collect{|e| Date.iso8601(DateTime.parse(e[:start_datetime]).to_s, Date::GREGORIAN)}.uniq.each do |start_date|
   %>
@@ -23,4 +23,4 @@
     <% end %>
   <% end %>
   </div>
-</div>
+<% end %>

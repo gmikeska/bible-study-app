@@ -72,7 +72,7 @@ class ApplicationRecord < ActiveRecord::Base
     return data
   end
 
-  def is_pointer(pointer)
+  def is_pointer?(pointer)
     return !!pointer.match(/(\S+):(\S+):(\S+)/)
   end
 end

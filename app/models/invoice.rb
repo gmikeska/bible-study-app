@@ -1,16 +1,9 @@
 require "braintree"
 class Invoice < ApplicationRecord
-  def self.gateway
-    return Braintree::Gateway.new(environment: :sandbox,merchant_id:ENV["BT_MERCHANT_ID"], public_key:ENV["BT_PUBLIC_KEY"], private_key:ENV["BT_PRIVATE_KEY"])
-  end
-  def self.status_options
-     ["unpaid","pending","settled"]
-  end
-  has_one :user
+  belongs_to :user
   has_many :enrollments
-  has_many :donations
+  has_many :payments
   has_many :courses, through: :enrollments
-  serialize :payments, Array
   after_initialize do |invoice|
     if(invoice.number.nil?)
       suffix = (Time.now.utc.strftime("%S").to_i)*(invoice.user.id)
@@ -37,7 +30,7 @@ class Invoice < ApplicationRecord
 
   def update_payment_status
     payments.each_index do |i|;payment = payments[i]
-      updated = Invoice.gateway.transaction.find(payment.id)
+      updated = Payment.gateway.transaction.find(payment.id)
       payments[i] = updated
     end
     save
@@ -80,5 +73,9 @@ class Invoice < ApplicationRecord
 
   def error?
     ["SettlementDeclined","Failed", "GatewayRejected","ProcessorDeclined"].include?(self.status)
+  end
+
+  def self.status_options
+     ["unpaid","pending","settled"]
   end
 end
