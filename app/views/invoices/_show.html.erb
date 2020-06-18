@@ -2,30 +2,30 @@
   <thead>
     <tr>
       <th>Course</th>
-      <th>Pet</th>
+      <th>Student</th>
       <th>Price</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @invoice.enrollments.each do |enrollment| %>
+    <% invoice.enrollments.each do |enrollment| %>
       <tr>
         <td><%= enrollment.course.name %></td>
-        <td><%= enrollment.pet.name %></td>
+        <td><%= enrollment.user.name %></td>
         <td>$<%= enrollment.price %></td>
       </tr>
     <% end %>
     <tr>
       <td colspan="2"><strong>Total:</strong></td>
-      <td>$<%= @invoice.price_total %></td>
+      <td>$<%= invoice.price_total %></td>
     </tr>
     <tr>
       <td colspan="2">Payments Received:</td>
-      <td>$<%= @invoice.amount_paid %></td>
+      <td>$<%= invoice.amount_paid %></td>
     </tr>
     <tr>
       <td colspan="2"><strong>Amount Owed:</strong></td>
-      <td>$<%= @invoice.amount_owed %></td>
+      <td>$<%= invoice.amount_owed %></td>
     </tr>
   </tbody>
 </table>

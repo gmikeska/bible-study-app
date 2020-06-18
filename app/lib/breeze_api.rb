@@ -1,4 +1,5 @@
-class BreezeApi < ApiEngine
+require "api_gears"
+class BreezeApi < ApiGears
   def initialize(**options)
     if(options[:params].nil?)
       options[:params] = {}

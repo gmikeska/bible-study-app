@@ -1,0 +1,14 @@
+<%= toolbar([back_button(:back)]) %>
+<%= render "show" %>
+
+<% if(@payment.user != current_user) %>
+From: <%= @payment.user.name %><br>
+For: <%= link_to "Invoice ##{@payment.invoice.number.to_s}", @payment.invoice %><br>
+<% end %>
+<% if(@payment.payment_type != "Payment") %>
+Type: <%= @payment.payment_type %><br>
+<% end %>
+<% if(@payment.invoice.present?) %>
+<%= render("invoices/show") %>
+
+<% end %>

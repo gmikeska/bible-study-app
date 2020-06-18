@@ -1,0 +1,58 @@
+<style media="screen">
+  .button {
+  cursor: pointer;
+  font-weight: 500;
+  left: 3px;
+  line-height: inherit;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: inline-block;
+}
+
+.button--small {
+  padding: 10px 20px;
+  font-size: 0.875rem;
+}
+
+.button--green {
+  outline: none;
+  background-color: #64d18a;
+  border-color: #64d18a;
+  color: white;
+  transition: all 200ms ease;
+}
+
+.button--green:hover {
+  background-color: #8bdda8;
+  color: white;
+}
+</style>
+<script type="text/javascript">
+  var button = document.querySelector('#submit-button');
+
+braintree.dropin.create({
+  authorization: `<%= @client_token %>`,
+  selector: '#dropin-container'
+},
+function (err, instance) {
+  button.addEventListener('click', function () {
+    instance.requestPaymentMethod(function (err, payload) {
+      $.ajax({
+            url: "<%= invoice_payment_url(@invoice) %>",
+            data: payload,
+            type: "POST",
+            success:(data)=>{
+              console.log(data)
+              window.location = "<%= invoice_paid_url(@invoice) %>"
+            }
+        });
+    });
+  })
+});
+</script>

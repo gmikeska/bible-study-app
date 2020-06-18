@@ -1,0 +1,35 @@
+<%= bootstrap_form_with(model: payment, local: true) do |form| %>
+  <% if payment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
+
+      <ul>
+        <% payment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+    <div class="field">
+      <% if(amount.nil?) %>
+        <div class="field">
+          <%= form.select :category, Payment.categories %>
+        </div>
+      <% else %>
+          <%= form.hidden_field :category, value:"Payment" %>
+      <% end %>
+    </div>
+    <div class="field">
+      <%= form.select :payment_method, Payment.payment_methods %>
+    </div>
+    <% if(amount.nil?) %>
+      <div class="field">
+        <%= form.number_field :amount, prepend: "$" %>
+      </div>
+    <% else %>
+      <%= form.hidden_field :amount, value:amount %>
+    <% end %>
+  <div class="actions">
+    <%= form.submit "Checkout" %>
+  </div>
+<% end %>

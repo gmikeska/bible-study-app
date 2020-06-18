@@ -1,3 +1,4 @@
+
 <h1>Invoice #<%= @invoice.number %></h1>
 <% if(current_user != @invoice.user) %>
 <div class="border">
@@ -21,7 +22,7 @@
   <%= link_to 'Checkout', invoice_checkout_path(@invoice), class: 'btn btn-sm btn-default' %>
 <% end %>
 <%= link_to 'Back', :back, class: 'btn btn-sm btn-secondary' %>
-<%= render "show", invoice:@invoice %>
+<%= render "show" %>
 <% if(current_user == @invoice.user) %>
   <%= link_to 'Checkout', invoice_checkout_path(@invoice), class: 'btn btn-sm btn-default' %>
 <% end %>

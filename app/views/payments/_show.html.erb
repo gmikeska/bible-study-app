@@ -1,0 +1,12 @@
+<% if( @payment.invoice.present? )%>
+<h1>Payment - Invoice #<%= @payment.invoice.number %></h1>
+<% else %>
+<h1>Payment - <%= @payment.payment_type %></h1>
+<% end %>
+Amount: <%= @payment.amount %> <br>
+Payment Method: <%= @payment.payment_method.titleize %><br>
+<% if(@payment.payment_method == "credit_card")%>
+  <%= render "braintree_payment" %>
+<% elsif(@payment.payment_method == "bitcoin") %>
+  <%= render "bitcoin_payment" %>
+<% end %>
