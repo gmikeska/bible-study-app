@@ -1,14 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe "donations/edit", type: :view do
+RSpec.describe "payments/edit", type: :view do
   before(:each) do
-    @donation = assign(:donation, Donation.create!())
+    @payment = assign(:payment, Payment.create!())
   end
 
-  it "renders the edit donation form" do
+  it "renders the edit payment form" do
     render
 
-    assert_select "form[action=?][method=?]", donation_path(@donation), "post" do
+    assert_select "form[action=?][method=?]", payment_path(@payment), "post" do
     end
   end
 end

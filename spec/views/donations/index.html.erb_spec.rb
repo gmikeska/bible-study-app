@@ -1,14 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe "donations/index", type: :view do
+RSpec.describe "payments/index", type: :view do
   before(:each) do
-    assign(:donations, [
-      Donation.create!(),
-      Donation.create!()
+    assign(:payments, [
+      Payment.create!(),
+      Payment.create!()
     ])
   end
 
-  it "renders a list of donations" do
+  it "renders a list of payments" do
     render
   end
 end

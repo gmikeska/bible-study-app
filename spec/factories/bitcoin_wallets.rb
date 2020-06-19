@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :donation do
+  factory :bitcoin_wallet do
     
   end
 end
