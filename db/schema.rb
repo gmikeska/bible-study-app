@@ -62,7 +62,6 @@ ActiveRecord::Schema.define(version: 2020_06_18_170756) do
   create_table "bitcoin_pubkeys", force: :cascade do |t|
     t.integer "user_id"
     t.string "public_key"
-    t.string "chain_code"
     t.string "addresses"
     t.string "key_path_base"
     t.datetime "created_at", precision: 6, null: false
@@ -73,6 +72,7 @@ ActiveRecord::Schema.define(version: 2020_06_18_170756) do
 
   create_table "bitcoin_wallets", force: :cascade do |t|
     t.integer "required_keys"
+    t.string "addresses"
     t.integer "last_index"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -55,14 +55,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def update
-    p = page_params
-    p[:components].each_index do |i|
-      c = p[:components][i]
-      @page.components[i] = ComponentSettings.new(c[:name],c[:args])
-    end
-    @page.save
-    p.delete(:components)
-    if @page.update(p)
+    if @page.update(page_params)
       redirect_to @page, notice: 'Page was successfully updated.'
     else
       render :edit

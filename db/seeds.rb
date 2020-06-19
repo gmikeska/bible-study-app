@@ -41,3 +41,10 @@ demo_course.enroll(student)
 demo_course.save
 Article.create({title:"Test Article", content:Faker::Lorem.paragraph(sentence_count:30)})
 Article.create({title:"Another Article", content:Faker::Lorem.paragraph(sentence_count:30)})
+3.times do
+  BitcoinPubkey.create(public_key:MoneyTree::Master.new.to_bip32,user:User.first)
+end
+BitcoinWallet.create(bitcoin_pubkeys:BitcoinPubkey.all,required_keys:(BitcoinPubkey.all.count-1))
+Bible.list_bibles
+b = Bible.find_by(bible_id:"06125adad2d5898a-01")
+b.load_book(45)

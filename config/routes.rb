@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
-  resources :donations do
-    get "/payment", to:"donations#payment", as:"payment"
+  resources :payments do
+    get "/payment", to:"payments#payment", as:"payment"
+  end
+  resources :invoices do
+    get "checkout", to:"invoices#checkout", as:"checkout"
+    post "payment", to:"invoices#payment", as:"payment"
+    get "paid", to:"invoices#paid", as:"paid"
+    get "refund", to:"invoices#refund", as:"refund"
   end
   resources :emails
   resources :bibles

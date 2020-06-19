@@ -70,5 +70,8 @@ gem "view_component"
 gem 'money-tree'
 gem 'money-uphold-bank'
 gem "rqrcode"
+gem "stimulus-rails"
+gem "api_gears"
+gem 'bitcoin-ruby', '~> 0.0.8'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
