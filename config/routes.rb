@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   get "sign_in", to:redirect('/users/sign_in')
   #get "sign_out", to:redirect('/users/sign_out')
   post "component/:component_id/", to:"pages#component_preview", as:"component"
+  post "pages/:slug/component/:component_id/", to:"pages#component_preview", as:"page_component"
   get "component/:component_id/settings", to:"pages#component_settings"
   resources 'pages', param: :slug, controller: 'pages'
   # resources 'lessons', param: :slug, controller: 'lessons'

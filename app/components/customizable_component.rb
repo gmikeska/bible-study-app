@@ -34,7 +34,7 @@ class CustomizableComponent < ViewComponent::Base
   def add_class(new_class)
     @css_class = "#{@css_class} #{new_class}"
   end
-  def add_data(key,value)
+  def set_data(key,value)
     @data[key] = value
   end
 

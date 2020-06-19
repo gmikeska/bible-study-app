@@ -1,58 +1,18 @@
-<div class="component-select">
+<div class="component-select" data-controller="component-editor" data-component-editor-index="<%= index %>">
   <% if(component.present?) %>
-    <%= form.select("components[][name]".to_sym, Page.component_options, {selected:component.name, label:"Component Type",include_blank:"Select a component type..."}, class:"componentType") %>
+    <%= form.select("components[][name]".to_sym, Page.component_options, {selected:component.name, label:"Component Type",include_blank:"Select a component type..."}, class:"componentType", data:{action:"component-editor#changeType"}) %>
     Preview:
-    <div class="component-preview" style="zoom:.8">
+    <div class="component-preview" style="zoom:.8" data-target="component-editor.preview">
       <%= render("component_preview", component:component) %>
     </div>
-    <div class="settings border-bottom">
+    <div class="settings border-bottom" data-target="component-editor.settings">
       <%= render("component_settings",form:form, component:component) %>
     </div>
   <% elsif(index == 0) %>
-    <%= form.select("components[][name]".to_sym, Page.component_options, {label:"Component Type", include_blank:"Select a component type..."}, class:"componentType") %>
-    <div class="component-preview" >
+    <%= form.select("components[][name]".to_sym, Page.component_options, {label:"Component Type", include_blank:"Select a component type..."}, class:"componentType", data:{action:"component-editor#changeType"}) %>
+    <div class="component-preview" data-target="component-editor.preview">
     </div>
-    <div class="settings">
+    <div class="settings" data-target="component-editor.settings">
     </div>
   <% end %>
 </div>
-<script type="text/javascript">
-  $("select",".component").change((e)=>{
-    wrapper = e.currentTarget.parentElement.parentElement
-    setInputHandlers(wrapper)
-    updatePreview(wrapper,e.currentTarget.value)
-    loadSettings(wrapper,e.currentTarget.value)
-  })
-  updatePreview = (wrapper,componentName)=>{
-    args = $("input",wrapper)
-    formData = {}
-    varSearch = new RegExp('page_components\\[\\]\\[args\\]\\[(\\w+)\\]');
-
-    $("input",wrapper).each(function(x){
-      argName = this.id.match(varSearch)[1]
-      formData[argName] = $(this).val()
-      // console.log(`${this.id}=${$(this).val()}`)
-    })
-    $.post({
-          url: `/component/${componentName}`,
-          data:{args:formData},
-          success:(data)=>{
-            prev = $(".component-preview",wrapper)
-            prev.empty()
-            prev.append(data)
-          }
-      });
-  }
-
-  setInputHandlers = (wrapper)=>{
-    $("input",wrapper).change(()=>{
-      componentName = $(".componentType",wrapper)[0].value
-      updatePreview(wrapper,componentName)
-    })
-  }
-  $("body").ready(()=>{
-    $(".component-select").each(function(w){
-      setInputHandlers(this)
-    })
-  })
-</script>

@@ -52,30 +52,9 @@
         formData[argName] = $(this).val()
         // console.log(`${this.id}=${$(this).val()}`)
       })
-      $.post({
-            url: `/component/${componentName}`,
-            data:{args:formData},
-            success:(data)=>{
-              prev = $(".component-preview",wrapper)
-              prev.empty()
 
-              prev.append(data)
-            }
-        });
     }
-    window.loadSettings = (wrapper,componentName)=>{
-      $.ajax({
-            url: `/component/${componentName}/settings`,
-            type: "GET",
-            success:(data)=>{
-              el = $(data)
-              lines = el.html().split("\n").slice(1)
-              settings = $(".settings",wrapper)
-              settings.empty()
-              settings.html(lines.join("\n"))
-            }
-        });
-    }
+    
     $("#addComponent").click((e)=>{
       e.preventDefault()
       numComponents = $(".component").length
