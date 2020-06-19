@@ -16,8 +16,8 @@ class Invoice < ApplicationRecord
   end
 
   def amount_paid
-    if(payments.length > 0)
-      payment_list = payments.collect { |transaction| Money.new(transaction.amount.to_f*100) }
+    payment_list = payments.select{|p| p.status == :settled}.collect { |transaction| Money.new(transaction.amount.to_f*100) }
+    if(payment_list.length > 0)
       return payment_list.reduce(:+)
     else
       return 0
@@ -42,12 +42,18 @@ class Invoice < ApplicationRecord
 
   def status
     if(payments.present? && payments.length > 0)
-      response = self.payments.last.status
-      if(self.amount_owed > 0)
-        response = "partial_#{response}"
-      elsif(self.refunded)
+      if(self.refunded)
         return "refunded"
       end
+      statuses = self.payments.collect{|p| p.status}
+      if(statuses.length == 1)
+        return statuses.first
+      else
+        if(self.amount_owed > 0)
+          response = "partial_#{statuses.last}"
+        end
+      end
+
     else
       response = Invoice.status_options.first
     end
@@ -68,7 +74,7 @@ class Invoice < ApplicationRecord
     end
   end
   def paid?
-    (self.amount_owed == 0 && ["settled", "submitted_for_settlement"].include?(self.status))
+    (self.amount_owed == 0 || [:settling,:settled, :submitted_for_settlement].include?(self.payments.first.status))
   end
 
   def error?

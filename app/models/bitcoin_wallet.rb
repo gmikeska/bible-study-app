@@ -43,6 +43,10 @@ class BitcoinWallet < ApplicationRecord
     return use_multisig_address_at(next_index)
   end
   def next_index
+    if(self.last_index.nil?)
+      self.last_index = 0
+      save
+    end
     return last_index+1
   end
   def use_multisig_address_at(index)

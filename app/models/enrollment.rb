@@ -18,7 +18,7 @@ class Enrollment < ApplicationRecord
     return course.price
   end
   def paid?
-    return self.invoice.status == Invoice.status_options.last
+    return self.invoice.paid?
   end
   def status?(quiz)
     if(quiz_responses[quiz].present? && quiz_responses[quiz][:answers].length < quiz.questions.length)

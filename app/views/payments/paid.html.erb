@@ -1,0 +1,20 @@
+<% if( @payment.invoice.present? )%>
+<div class="container">
+  <div class="alert alert-success" role="alert">
+    ✓ Invoice Paid - Thank you!
+  </div>
+  <% if(@payment.invoice.present?) %>
+  <%= render("invoices/show", invoice:@payment.invoice) %>
+
+  <% end %>
+  Proceed to <a class="btn btn-sm btn-default" href="/my-courses/">Your Courses</a>
+</div>
+<% else %>
+<div class="container">
+  <div class="alert alert-success" role="alert">
+    ✓ Donation Recieved - Thank you!
+  </div>
+  <%= render "show" %>
+  Proceed to <a class="btn btn-sm btn-default" href="/my-courses/">Your Courses</a>
+</div>
+<% end %>

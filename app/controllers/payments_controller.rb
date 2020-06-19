@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-  before_action :set_payment, only: [:show, :edit, :update, :destroy, :payment]
+  before_action :set_payment, only: [:show, :edit, :update, :destroy, :braintree_processing,:paid]
 
   # GET /payments
   # GET /payments.json
@@ -12,6 +12,7 @@ class PaymentsController < ApplicationController
   def show
     authorized = (current_user && (current_user == @payment.user))
     return unless requester_is_authorized(authorized)
+
     if(@payment.payment_method == "bitcoin")
       bitcoin_payment_params
       request_data = get_payment_request(address:@bitcoin_address,amount:@payment.amount_in_btc.to_s,message:ERB::Util.url_encode(@payment.category.titleize))
@@ -20,26 +21,32 @@ class PaymentsController < ApplicationController
       @address_qr_code = request_data[:address_qr_code]
     else
       @client_token = Payment.gateway.client_token.generate
-      params = braintree_params
-      result = Payment.gateway.transaction.sale(
-        :amount => @invoice.price_total.to_s,
-        :payment_method_nonce => params[:nonce],
-        :options => {
-          :submit_for_settlement => true
-        }
-      )
-      if result.success?
-        @invoice.apply_payment(result.transaction)
-        @invoice.save
-        render :json => result
-        return
-      else
-        puts(result.message)
-        render :json => result
-      end
     end
   end
 
+  def braintree_processing
+    authorized = (current_user && (current_user == @payment.user))
+    return unless requester_is_authorized(authorized)
+    params = braintree_params
+    result = Payment.gateway.transaction.sale(
+      :amount => @payment.amount.to_s,
+      :payment_method_nonce => params[:nonce],
+      :options => {
+        :submit_for_settlement => true
+      }
+    )
+    if result.success?
+      @payment.transaction_id = result.transaction.id
+
+
+      @payment.save
+      render :json => result
+      return
+    else
+      puts(result.message)
+      render :json => result
+    end
+  end
   # GET /payments/new
   def new
     @payment = Payment.new
@@ -106,8 +113,8 @@ class PaymentsController < ApplicationController
       if(@payment.payment_address.present?)
         @bitcoin_address = @payment.payment_address
       else
-        @bitcoin_address = BitcoinWallet.new().get_address
-        @payment.payment_address = @bitcoin_address
+        @payment.payment_address = BitcoinWallet.first.use_next_multisig_address
+        @bitcoin_address = @payment.payment_address
       end
       if(@payment.amount_in_btc.nil?)
         @payment.amount_in_btc = Money.new(0, 'BTC')

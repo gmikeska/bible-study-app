@@ -20,7 +20,7 @@
         <% if(!invoice.status_info(invoice.status).nil?) %>
           <td><span title="<%= invoice.status_info(invoice.status) %>" style="font-size: large; color: maroon;">🛈&nbsp</span><%= invoice.status.titleize %></td>
         <% else %>
-          <td><%= invoice.status.titleize %></td>
+          <td><%= invoice.status.to_s.titleize %></td>
         <% end %>
         <td><%= view_button(invoice) %></td>
         <td><%= edit_button(edit_invoice_path(invoice), class: 'btn btn-sm btn-secondary') %></td>

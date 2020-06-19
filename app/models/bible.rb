@@ -34,6 +34,10 @@ class Bible < ApplicationRecord
     end
   end
   def load_book(book_index)
+    if(self.books.nil? || self.books.length == 0)
+      self.books = @@bible_api.books(bible_id:self.bible_id).map(&:symbolize_keys)
+      save
+    end
     book = books[book_index]
     if(books[book_index][:chapters].nil? || books[book_index][:chapters].length == 0)
       books[book_index][:chapters] = @@bible_api.chapters(bible_id:self.bible_id,book_id:books[book_index][:id]).map(&:symbolize_keys).collect{|c| {id:c[:id], number:c[:number], name:c[:reference]}}

@@ -5,8 +5,3 @@
 <% end %>
 Amount: <%= @payment.amount %> <br>
 Payment Method: <%= @payment.payment_method.titleize %><br>
-<% if(@payment.payment_method == "credit_card")%>
-  <%= render "braintree_payment" %>
-<% elsif(@payment.payment_method == "bitcoin") %>
-  <%= render "bitcoin_payment" %>
-<% end %>

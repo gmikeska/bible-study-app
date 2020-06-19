@@ -58,23 +58,24 @@ class Course < ApplicationRecord
      return reviews_pending
   end
   def enroll(student, chapter=nil)
-    if(chapter.nil?)
-      chapter = chapters.first
-    end
-    enrollment = Enrollment.create(user:student, course:self, current_chapter:chapter)
-
-    if(self.price.to_i > 0)
-      enrollment = Enrollment.create(user:student, course:self, current_chapter:chapter)
-      if(student.invoices.select{|i| !i.paid?}.length == 0)
-        invoice = Invoice.new(user:student)
-      else
-        invoice = student.invoices.select{|i| !i.paid? }.last
+    if(!self.students.include?(student))
+      if(chapter.nil?)
+        chapter = chapters.first
       end
-      invoice.enrollments << enrollment
-      enrollment.invoice = invoice
-      enrollment.save
+      enrollment = Enrollment.create(user:student, course:self, current_chapter:chapter)
+
+      if(self.price.to_i > 0)
+        if(student.invoices.select{|i| !i.paid?}.length == 0)
+          invoice = Invoice.new(user:student)
+        else
+          invoice = student.invoices.select{|i| !i.paid? }.last
+        end
+        invoice.enrollments << enrollment
+        enrollment.invoice = invoice
+        enrollment.save
+      end
+      return enrollment
     end
-    return enrollment
   end
   def enrolled?(student_or_parent)
     if(students.include?(student_or_parent))
@@ -101,7 +102,7 @@ class Course < ApplicationRecord
     if(visibility == "Public")
       return true
     elsif(visibility == "Enrolled")
-      user_is_enrolled_and_paid = (user.present? && enrolled?(user) && (Course.first.enrollments.select{|e| e.user == user}.first.invoices.nil? || Course.first.enrollments.select{|e| e.user == user}.first.invoices.paid?))
+      user_is_enrolled_and_paid = (user.present? && enrolled?(user) && (self.enrollments.select{|enrollment| enrollment.user == user}.first.invoice.paid?))
       return((user_is_enrolled_and_paid || user.isStaff?))
     else
       return (user.present? && user.isStaff?)

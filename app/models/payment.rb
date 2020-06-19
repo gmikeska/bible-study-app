@@ -3,7 +3,7 @@ class Payment < ApplicationRecord
   monetize :amount_in_btc_cents, with_currency: :btc
   belongs_to :user
   belongs_to :invoice, optional:true
-  belongs_to :bitcoin_wallet
+  belongs_to :bitcoin_wallet, optional:true
   def payment_type
     if(invoice.present?)
       return "Payment"
@@ -13,22 +13,24 @@ class Payment < ApplicationRecord
   end
 
   def status
-    if(self.payment_method == "credit_card")
+    if(self.payment_method == "credit_card" && self.transaction_id.present?)
       data = Payment.gateway.transaction.find(self.transaction_id)
       return data.status.to_sym
+    elsif(self.payment_method == "credit_card" && self.transaction_id.nil?)
+      return :pending
     elsif(self.payment_method == "bitcoin")
       if(self.payment_address.present? && self.transaction_id.nil?)
         address_data = Payment.block_explorer.address_info(address:self.payment_address)
-        if(data["txrefs"].present? && data["txrefs"].length > 0)
-          self.transaction_id = data["txrefs"].last["tx_hash"]
+        if(address_data["txrefs"].present? && address_data["txrefs"].length > 0)
+          self.transaction_id = address_data["txrefs"].last["tx_hash"]
           self.save
         end
       end
       if(self.transaction_id.present?)
         tx_data = Payment.block_explorer.transaction(transaction_id:self.transaction_id)
-        if(data["confirmations"] < 6)
+        if(tx_data["confirmations"] > 0 && tx_data["confirmations"] < 6)
           return :settling
-        else
+        elsif(tx_data["confirmations"] >= 6)
           return :settled
         end
       else

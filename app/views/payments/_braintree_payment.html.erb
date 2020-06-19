@@ -1,3 +1,11 @@
+<script src="https://js.braintreegateway.com/web/dropin/1.22.1/js/dropin.js"></script>
+<script src="https://js.braintreegateway.com/web/3.62.0/js/data-collector.min.js"></script>
+<div id="dropin-container"></div>
+<% if(@payment.payment_type == "Payment") %>
+<button id="submit-button" class="button button--small button--green">Checkout</button>
+<% else %>
+<button id="submit-button" class="button button--small button--green">Give Now</button>
+<% end %>
 <style media="screen">
   .button {
   cursor: pointer;
@@ -44,12 +52,12 @@ function (err, instance) {
   button.addEventListener('click', function () {
     instance.requestPaymentMethod(function (err, payload) {
       $.ajax({
-            url: "<%= invoice_payment_url(@invoice) %>",
+            url: "<%= payment_braintree_processing_url(@payment) %>",
             data: payload,
             type: "POST",
             success:(data)=>{
               console.log(data)
-              window.location = "<%= invoice_paid_url(@invoice) %>"
+              window.location = "<%= payment_paid_url(@payment) %>"
             }
         });
     });

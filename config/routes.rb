@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   resources :payments do
-    get "/payment", to:"payments#payment", as:"payment"
+    post "payment", to:"payments#braintree_processing", as:"braintree_processing"
+    get "paid", to:"payments#paid", as:"paid"
   end
   resources :invoices do
     get "checkout", to:"invoices#checkout", as:"checkout"
     post "payment", to:"invoices#payment", as:"payment"
-    get "paid", to:"invoices#paid", as:"paid"
     get "refund", to:"invoices#refund", as:"refund"
   end
   resources :emails

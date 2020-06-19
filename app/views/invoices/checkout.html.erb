@@ -1,3 +1,3 @@
 <h1>Checkout - Invoice #<%= @invoice.number %></h1>
-<%= render "show" %>
+<%= render "show",invoice:@invoice %>
 <%= render "payments/form",amount:@invoice.amount_owed, payment:@payment %>

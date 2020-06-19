@@ -1,6 +1,1 @@
 <%= render "show" %>
-<% if(@payment.payment_method == "bitcoin") %>
-  <%= render "bitcoin_payment" %>
-<% else %>
-  <%= render "braintree_payment" %>
-<% end %>

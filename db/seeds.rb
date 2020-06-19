@@ -36,7 +36,6 @@ admin = User.create(
 )
 student = User.create(first_name:first_name,last_name:last_name,email:email, password:pass, password_confirmation:pass, user_type:"student")
 
-puts student.email
 demo_course.enroll(student)
 demo_course.save
 Article.create({title:"Test Article", content:Faker::Lorem.paragraph(sentence_count:30)})
@@ -48,3 +47,4 @@ BitcoinWallet.create(bitcoin_pubkeys:BitcoinPubkey.all,required_keys:(BitcoinPub
 Bible.list_bibles
 b = Bible.find_by(bible_id:"06125adad2d5898a-01")
 b.load_book(45)
+puts student.email

@@ -11,7 +11,7 @@
     </div>
   <% end %>
     <div class="field">
-      <% if(amount.nil?) %>
+      <% if(payment.amount.nil?) %>
         <div class="field">
           <%= form.select :category, Payment.categories %>
         </div>
@@ -20,14 +20,14 @@
       <% end %>
     </div>
     <div class="field">
-      <%= form.select :payment_method, Payment.payment_methods %>
+      <%= form.select :payment_method, Payment.payment_methods, include_blank:"Select a payment method..." %>
     </div>
-    <% if(amount.nil?) %>
+    <% if(payment.amount.nil?) %>
       <div class="field">
         <%= form.number_field :amount, prepend: "$" %>
       </div>
     <% else %>
-      <%= form.hidden_field :amount, value:amount %>
+      <%= form.hidden_field :amount, value:payment.amount %>
     <% end %>
   <div class="actions">
     <%= form.submit "Checkout" %>
