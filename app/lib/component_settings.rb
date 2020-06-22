@@ -31,7 +31,15 @@ class ComponentSettings
   def field_for(key, form)
     if(get_type(key) == "String")
       return %Q(<div class="field">
-        #{form.text_field "components[][args][#{key}]".to_sym, value:@args[key], label:key.to_s.titleize, placeholder:get_default(key), data:{action:"component-editor#updatePreview"}}
+        #{form.text_field "components[][args][#{key}]".to_sym, value:@args[key], label:key.to_s.titleize, placeholder:get_default(key), data:{action:"component-editor#settingsChanged"}}
+      </div>).html_safe
+    end
+    if(get_type(key) == "Image")
+      return %Q(<div class="row"><div class="field col">
+        #{form.select "components[][args][#{key}][0]", Gallery.all.collect{|g| [g.name, g.pointer]}, {selected:Page.first.resolve_pointer(@args[key][0]), label:"Gallery for "+key.to_s.titleize, include_blank:"Select a gallery..."},class:"file_select",data:{action:"component-editor#settingsChanged"}}
+      </div>
+      <div class="row"><div class="field col">
+        #{form.select "components[][args][#{key}][1]".to_sym, Gallery.resolve_pointer(@args[key][0]).files.collect{|f| [f.filename.titleize, f.filename] }, {selected:Page.first.resolve_pointer(@args[key][1]), label:key.to_s.titleize, include_blank:"Select a file..."},class:"file_select",data:{action:"component-editor#settingsChanged"}}
       </div>).html_safe
     end
     if(get_type(key) == "URL")
@@ -50,10 +58,10 @@ class ComponentSettings
       end
 
       return %Q(<div class="row"><div class="field col">
-        #{form.select selectName.to_sym, Page.page_options.concat([["External Link...","external_link"]]), {selected:selected, label:key.to_s.titleize, include_blank:"Select a destination"},class:"link_select",data:{action:"component-editor#updatePreview"}}
+        #{form.select selectName.to_sym, Page.page_options.concat([["External Link...","external_link"]]), {selected:selected, label:key.to_s.titleize, include_blank:"Select a destination"},class:"link_select",data:{action:"component-editor#settingsChanged"}}
       </div>
       <div class="field col" style="#{input_style}">
-        #{form.text_field inputName.to_sym, value:value, label:"External Link", placeholder:'http://www.google.com',data:{action:"component-editor#updatePreview"}}
+        #{form.text_field inputName.to_sym, value:value, label:"External Link", placeholder:'http://www.google.com',data:{action:"component-editor#settingsChanged"}}
       </div></div>).html_safe
     end
     #   return %Q(<div class="field">

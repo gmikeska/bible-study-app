@@ -42,8 +42,8 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def component_preview
-    set_component
-    render(partial:"component_preview",layout:false, locals:{component:@component})
+    component_params
+    render(partial:"component_preview",layout:false, locals:{component:ComponentSettings.new(@name,@args)})
   end
 
   def component_settings
@@ -78,20 +78,19 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
     if(params[:args])
       @args = params[:args].permit!.to_h.symbolize_keys
     end
-    @name = params.permit(:name)
+    @name = params[:name].to_s
   end
 
 
   def set_component
     set_page
     id_is_name = (params[:component_id].present? && params[:component_id].to_i == 0 && params[:component_id] != "0")
-
+    # byebug
     if(id_is_name)
       @component = ComponentSettings.new(params[:component_id])
     elsif(params[:component_id].present?)
       @component = @page.components[params[:component_id].to_i]
     end
-    component_params
   end
 
   def set_page
