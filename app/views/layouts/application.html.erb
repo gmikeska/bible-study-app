@@ -49,10 +49,10 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+  <a class="navbar-brand" href="/">
+    <img src="<%= image_path("umlogo_100_transparent.gif") %>" alt=""><span class="">Memorial United Methodist Church</span>
+  </a>
   <div class="collapse navbar-collapse" id="navbarToggler">
-      <a class="navbar-brand move-on-collapsed" href="/">
-        <img src="<%= image_path("umlogo_100_transparent.gif") %>" alt=""><span class="">Memorial United Methodist Church</span>
-      </a>
       <ul class="navbar-nav mr-auto">
         <% @pages.each do |page| %>
           <% if(@page.present? && @page.id == page.id) %>
@@ -134,27 +134,38 @@
   </body>
   <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
   <script type="text/javascript">
-    $(document).ready(()=>{
-        if(document.documentElement.clientWidth < 1200)
-        {
-          $(".float-on-collapsed").css("float","right")
-          $("#user-menu").css("position","absolute")
-          $("#user-menu").css("right","44px")
-          $($("#user-menu")[0].parentElement).css("float","right")
-          $($("#user-menu")[0].parentElement).css("position","relative")
-          $($("#user-menu")[0].parentElement).css("bottom","36px")
-          $($("#user-menu")[0].parentElement).css("right","2%")
-          $(".dropdown-menu",$("#user-menu")).css("position","absolute")
-          title = $(".move-on-collapsed")[0]
-          $(title).remove()
-          $(title).insertBefore($(".navbar-collapse")[0])
-          $(title).css("float","right")
-          giving = $("#onlineGiving")
-          giving.hide()
 
-        }
-
-
-    })
+    responsiveAdjustments = ()=>{
+      giving = $("#onlineGiving")
+      title = $(".move-on-collapsed")[0]
+      userMenu = $("#user-menu")[0]
+      userMenuWrap = $(userMenu).parentElement
+      userDropdown = $(".dropdown-menu",userMenu)
+      if(document.documentElement.clientWidth < 1200)
+      {
+        $(userMenu).css("position","absolute")
+        $(userMenu).css("right","11%")
+        $(userMenu).css("bottom","10px")
+        $(userMenuWrap).css("float","right")
+        $(userMenuWrap).css("position","relative")
+        $(userMenuWrap).css("bottom","36px")
+        $(userDropdown).css("right","30px")
+        $(userDropdown).css("position","absolute")
+        $(userDropdown).css("min-width","180px")
+        // $(title).remove()
+        // $(title).insertBefore($(".navbar-collapse")[0])
+        // $(title).css("float","right")
+        giving.hide()
+      }
+      else
+      {
+        $(userMenu).attr("style","")
+        $(userMenuWrap).attr("style","")
+        $(userDropdown).attr("style","")
+        giving.show()
+      }
+    }
+    $(document).ready(responsiveAdjustments)
+    $(window).resize(responsiveAdjustments)
   </script>
 </html>
