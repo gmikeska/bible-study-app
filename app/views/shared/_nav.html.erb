@@ -1,0 +1,74 @@
+<nav class="navbar border navbar-expand-xl navbar-light" style="">
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<a class="navbar-brand" href="/">
+<img src="<%= image_path("umlogo_100_transparent.gif") %>" alt=""><span class="">Memorial United Methodist Church</span>
+</a>
+<div class="collapse navbar-collapse" id="navbarToggler">
+  <ul class="navbar-nav mr-auto">
+    <% @pages.each do |page| %>
+      <% if(@page.present? && @page.id == page.id) %>
+            <li class="nav-item active">
+      <% else %>
+            <li class="nav-item">
+      <% end %>
+          <% if(page.name == "home") %><a class="nav-link" href="/"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a>
+          <% else %><a class="nav-link" href="/pages/<%= page.slug %>"><%= page.name.titleize %><span class="sr-only"><%= page.name.titleize %></span></a><% end %>
+          </li>
+    <% end %>
+    <% if(@courses.count > 0) %>
+    <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="courseDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Courses
+    </a>
+    <div class="dropdown-menu" aria-labelledby="courseDropdown">
+      <% @courses.each do |course| %>
+        <a class="dropdown-item" href="/courses/<%= course.slug %>"><%= course.name %></a>
+      <% end %>
+      <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/courses/">All Courses</a>
+    </div>
+    </li>
+    <% end %>
+  </ul>
+    <a class="nav-link" id="onlineGiving" href="<%= new_payment_path %>">
+      <span class="btn btn-sm btn-default">Online Giving</span>
+    </a>
+  <% if(!user_signed_in?) %>
+  <span class="navbar-text">
+    <%= link_to('Log In', new_user_session_path) %> | <%= link_to('Sign Up', new_user_registration_path) %>
+  </span>
+  <% else %>
+  <ul class="navbar-nav" id="nav-right">
+    <% if(current_user.isAdmin? && Course.count_pending_reviews > 0) %>
+    <li class="nav-item" id="user-menu-wrap">
+      <a class="nav-link" href="/assessments">
+        <span class="badge badge-danger"><%= pluralize(Course.count_pending_reviews,"assessment") %> awaiting review!</span>
+      </a>
+    </li>
+    <% end %>
+    <li class="nav-item dropdown" id="user-menu">
+      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <%= current_user.email %>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="userDropdown">
+          <% if(current_user.isStudent?) %>
+          <a class="dropdown-item" href="/my-courses/">My Courses</a>
+          <div class="dropdown-divider"></div>
+          <% elsif(current_user.isAdmin?) %>
+            <a class="dropdown-item" href="/articles/">Articles</a>
+            <a class="dropdown-item" href="/emails/">Emails</a>
+            <a class="dropdown-item" href="/invoices/">Invoices</a>
+            <a class="dropdown-item" href="/pages/">Pages</a>
+            <a class="dropdown-item" href="/users/">User Management</a>
+            <div class="dropdown-divider"></div>
+          <% end %>
+          <%= link_to('My Profile', "/users/#{current_user.id}/edit", class:"dropdown-item") %>
+          <div class="dropdown-divider"></div>
+          <%= link_to('Log Out', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+      </div>
+    </li>
+  </ul>
+  <% end %>
+</nav>
