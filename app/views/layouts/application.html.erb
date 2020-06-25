@@ -39,15 +39,19 @@
 
   <body>
     <nav class="navbar border navbar-expand-lg navbar-light" style="background: rgba(226,226,226,1);
-background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
-background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(226,226,226,1)), color-stop(49%, rgba(219,219,219,1)), color-stop(53%, rgba(209,209,209,1)), color-stop(100%, rgba(254,254,254,1)));
-background: -webkit-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
-background: -o-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
-background: -ms-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
-background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );">
-      <a class="navbar-brand" href="/">
-        <img src="<%= image_path("umlogo_100_transparent.gif") %>" alt=""> Memorial United Methodist Church
+    background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(226,226,226,1)), color-stop(49%, rgba(219,219,219,1)), color-stop(53%, rgba(209,209,209,1)), color-stop(100%, rgba(254,254,254,1)));
+  background: -webkit-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+  background: -o-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+  background: -ms-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+  background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarToggler">
+      <a class="navbar-brand move-on-collapsed" href="/">
+        <img src="<%= image_path("umlogo_100_transparent.gif") %>" alt=""><span class="">Memorial United Methodist Church</span>
       </a>
       <ul class="navbar-nav mr-auto">
         <% @pages.each do |page| %>
@@ -75,7 +79,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
         </li>
         <% end %>
       </ul>
-        <a class="nav-link" href="<%= new_payment_path %>">
+        <a class="nav-link" id="onlineGiving" href="<%= new_payment_path %>">
           <span class="btn btn-sm btn-default">Online Giving</span>
         </a>
       <% if(!user_signed_in?) %>
@@ -91,7 +95,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
           </a>
         </li>
         <% end %>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" id="user-menu">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <%= current_user.email %>
           </a>
@@ -129,4 +133,28 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
     </div>
   </body>
   <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+  <script type="text/javascript">
+    $(document).ready(()=>{
+        if($(".navbar-toggler").css("display") != "none")
+        {
+          $(".float-on-collapsed").css("float","right")
+          $("#user-menu").css("position","absolute")
+          $("#user-menu").css("right","44px")
+          $($("#user-menu")[0].parentElement).css("float","right")
+          $($("#user-menu")[0].parentElement).css("position","relative")
+          $($("#user-menu")[0].parentElement).css("bottom","36px")
+          $($("#user-menu")[0].parentElement).css("right","2%")
+          $(".dropdown-menu",$("#user-menu")).css("position","absolute")
+          title = $(".move-on-collapsed")[0]
+          $(title).remove()
+          $(title).insertBefore($(".navbar-collapse")[0])
+          $(title).css("float","right")
+          giving = $("#onlineGiving")
+          giving.hide()
+
+        }
+
+
+    })
+  </script>
 </html>
