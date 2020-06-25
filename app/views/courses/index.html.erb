@@ -1,6 +1,6 @@
+<%= toolbar([link_to( 'New Course', new_course_path, class: 'btn btn-sm btn-default')]) %>
 <h1>Courses</h1>
 <% if(current_user.present? && current_user.isStaff?) %>
-  <%= link_to 'New Course', new_course_path, class: 'btn btn-sm toolbar btn-default' %>
   <% fields = [:name, :description, :visibility];edit=true; delete=true %>
 <% else %>
   <% fields = [:name, :description]; edit=false; delete=false %>

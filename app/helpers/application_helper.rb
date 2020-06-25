@@ -73,11 +73,7 @@ module ApplicationHelper
     else
       args[:class] = "#{args[:class]} toolbar"
     end
-    if(args[:style].nil?)
-      args[:style] = "padding-top: 1px;padding-bottom: 1px;"
-    else
-      args[:style] = "#{args[:style]} padding-top:1px;padding-bottom: 1px;"
-    end
+    
     %Q(<div class="#{args[:class]}" style="#{args[:style]}">
       #{buttons.join('')}
     </div>).html_safe
