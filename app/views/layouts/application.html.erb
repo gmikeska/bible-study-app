@@ -135,7 +135,7 @@
   <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
   <script type="text/javascript">
     $(document).ready(()=>{
-        if($(".navbar-toggler").css("display") != "none")
+        if(document.documentElement.clientWidth < 1200)
         {
           $(".float-on-collapsed").css("float","right")
           $("#user-menu").css("position","absolute")
