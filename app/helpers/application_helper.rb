@@ -68,12 +68,15 @@ module ApplicationHelper
     link_to content, link, method: :delete, data: { confirm: 'Are you sure?' }, **args
   end
   def toolbar(buttons,**args)
+    if(!buttons.is_a? Array)
+      buttons = [buttons]
+    end
     if(args[:class].nil?)
       args[:class] = "border row toolbar"
     else
       args[:class] = "#{args[:class]} toolbar"
     end
-    
+
     %Q(<div class="#{args[:class]}" style="#{args[:style]}">
       #{buttons.join('')}
     </div>).html_safe

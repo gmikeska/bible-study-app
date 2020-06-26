@@ -1,18 +1,18 @@
 <h3>Unfiled Lessons</h3>
-<table class="table">
-  <thead>
-      <% if(current_user.isStaff?) %>
-        <%= RecordComponent.new(fields:[:name, :description, :visibility]).header %>
-      <% else %>
-        <%= RecordComponent.new(fields:[:name, :description], edit:false, delete:false).header %>
-      <% end %>
-  </thead>
+    <%= render(TableComponent.new(records:lessons,fields:[:name, :description, :visibility])) do |component| %>
 
-  <tbody>
-    <% if(current_user.isStaff?) %>
-      <%= render RecordComponent.with_collection(lessons,fields:[:name, :description, :visibility]) %>
-    <% else %>
-      <%= render RecordComponent.with_collection(lessons.select{|l| l.visible_to(current_user)},fields:[:name, :description], edit:false, delete:false) %>
+    <% component.with(:header) do %>
+      <% if(current_user.isStaff?) %>
+        <%= component.table_header(fields:component.fields) %>
+      <% else %>
+        <%= component.table_header(fields:component.fields, edit:false, delete:false) %>
+      <% end %>
     <% end %>
-  </tbody>
-</table>
+
+    <% component.with(:body) do %>
+      <% if(current_user.isStaff?) %>
+        <%= render RecordComponent.with_collection(lessons,fields:[:name_titleize, :description, :visibility]) %>
+      <% else %>
+        <%= render RecordComponent.with_collection(lessons.select{|l| l.visible_to(current_user)},fields:[:name_titleize, :description], edit:false, delete:false) %>
+      <% end %>
+    <% end %>

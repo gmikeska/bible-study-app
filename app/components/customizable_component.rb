@@ -1,5 +1,7 @@
 class CustomizableComponent < ViewComponent::Base
-  include TagHelper
+  include Rails.application.routes.named_routes.path_helpers_module
+  include Rails.application.routes.named_routes.url_helpers_module
+  include ApplicationHelper
   def initialize(**args)
     if(args[:css_class])
       @css_class = args[:css_class]
@@ -78,6 +80,7 @@ class CustomizableComponent < ViewComponent::Base
       return link_reference
     end
   end
+
   def self.params
     return ComponentInfo.new([:css_class,:id])
   end

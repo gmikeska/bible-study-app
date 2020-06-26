@@ -1,31 +1,10 @@
 <h1>My Courses</h1>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Student</th>
-      <% if(@user.isStaff?) %>
-      <th colspan="2"></th>
-      <% else %>
-      <th colspan="1"></th>
-      <% end %>
-    </tr>
-  </thead>
+<%= render(TableComponent.new(records:@enrollments,fields:[:course_name,:course_description,:user_name], show: :course, edit: :course, delete: :course)) do |component| %>
 
-  <tbody>
-
-    <% @enrollments.each do |enrollment| %>
-      <tr>
-        <td> <%= enrollment.course.name %> </td>
-        <td> <%= enrollment.course.description %> </td>
-        <td> <%= enrollment.user.name %> </td>
-
-        <td><%= link_to 'View', enrollment.course, class: 'btn btn-sm btn-default' %></td>
-        <% if(@user.isStaff?) %>
-        <td><%= link_to 'Edit', enrollment.course, class: 'btn btn-sm btn-secondary' %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <% component.with(:header) do %>
+    <%= component.table_header(fields:["Course", "Description", "Student"], show:component.show, edit:component.edit, delete:component.delete) %>
+  <% end %>
+  <% component.with(:placeholder) do %>
+  You have no courses yet.
+  <% end %>
+<% end %>

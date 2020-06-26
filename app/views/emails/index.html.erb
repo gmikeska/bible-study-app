@@ -1,14 +1,12 @@
 
 <%= toolbar([link_to('New Email', new_email_path,class:"btn-sm btn-default")]) %>
 <h1>Emails</h1>
-<% fields = [:name, :subject];edit=true; delete=true %>
-<%= render(TableComponent.new(fields:fields)) do |component| %>
+<% fields = [:name_titleize, :subject];edit=true; delete=true %>
+<%= render(TableComponent.new(records:@emails,fields:fields, edit:edit,delete:delete)) do |component| %>
   <% component.with(:header) do %>
-    <%= RecordComponent.new(fields:fields, edit:edit,delete:delete).header %>
+    <%= component.table_header(fields:[:name, :subject]) %>
   <% end %>
-  <% component.with(:body) do %>
-    <%= render RecordComponent.with_collection(@emails, fields:fields) %>
-  <% end %>
+
   <% component.with(:placeholder) do %>
     There are no emails yet.
   <% end %>
