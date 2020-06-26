@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     post "payment", to:"invoices#payment", as:"payment"
     get "refund", to:"invoices#refund", as:"refund"
   end
+  resources :galleries
   resources :emails
   resources :bibles
   get "bibles/:id/load/", to:"bibles#load", as:"load_bible"
