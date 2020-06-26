@@ -1,4 +1,4 @@
-<div id="lessonCarousel" class="carousel" style="width:942px;margin-left:-100px;">
+<div id="lessonCarousel" class="carousel" data-target="lesson.slides" style="width:942px;margin-left:-100px;">
   <div class="carousel-inner border" style="max-width: 80%;">
     <% @lesson.slides.each_index do |index| %>
       <%= render "slide", lesson:@lesson, slide:@lesson.slides[index], index:index  %>
@@ -49,17 +49,10 @@ end %>
   showNext = ()=>{
     $(".carousel-control-next").show()
   }
-  $('#lessonCarousel').on('slid.bs.carousel', function (e) {
-      if(e.to == $(".carousel-item").length-1)
-      {
-        $(".chapterLesson").show()
-      }
-      else{ $(".chapterLesson").hide()  }
-  })
   $("body").ready(()=>{
-    $("#lessonCarousel").carousel({
-      pause:true
-    })
+    // $("#lessonCarousel").carousel({
+    //   pause:true
+    // })
     <%= testInProgressHandler %>
     $(".carousel-item").each((i,slide)=>{
       $(".submitAnswers",slide).click((e)=>{

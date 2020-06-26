@@ -44,11 +44,8 @@ class CustomizableComponent < ViewComponent::Base
     @id = id
   end
 
-  def set_style(**args)
-    args.each_pair do |key, value|
-      @style = @style+"#{key}:#{value};"
-    end
-    @style = "style=#{@style}"
+  def set_style(style_string)
+    @style = style_string
   end
   def tag_args
     args = {}

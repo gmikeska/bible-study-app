@@ -2,6 +2,8 @@
 <html>
   <head>
     <%= render "shared/items_for_head" %>
+    <meta name="current-user" id="<%= @current_user.try(:name).parameterize %>">
+    <meta name="lesson-slug" id="<%= @lesson.slug %>">
   </head>
 
   <body>
