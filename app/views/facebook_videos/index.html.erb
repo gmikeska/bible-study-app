@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+<%= link_to 'New Facebook Video', new_facebook_video_path %>
+
+
+<%= render(TableComponent.new(fields:[:title, :video_url], records:@facebook_videos)) do |component| %>
+  <% component.with(:header) do %>
+    <%= component.table_header %>
+  <% end %>
+<% end %>
+<br>

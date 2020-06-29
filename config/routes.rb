@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :facebook_videos, param: :slug
+  get 'live', to:"facebook_videos#live"
+  resources :facebook_videos, param: :slug, :path => "videos"
   resources :helps, :path => "help", param: :slug do
   end
   get "help/:category/create", to:"helps#new", as:"help_create_subpage"

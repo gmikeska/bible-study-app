@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_27_030805) do
+ActiveRecord::Schema.define(version: 2020_06_29_202721) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -123,6 +123,14 @@ ActiveRecord::Schema.define(version: 2020_06_27_030805) do
     t.integer "invoice_id"
     t.integer "user_id"
     t.index ["invoice_id"], name: "index_enrollments_on_invoice_id"
+  end
+
+  create_table "facebook_videos", force: :cascade do |t|
+    t.string "title"
+    t.string "slug"
+    t.string "video_url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "galleries", force: :cascade do |t|

@@ -23,7 +23,7 @@ videos.save
 # admin = User.create(first_name:"Kendall",last_name:"Smith",email:"kendallsmith@accentfoods.com", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 # admin = User.create(first_name:"Mark",last_name:"Corry",email:"mark@corrywood.net", password:"temp1234", password_confirmation:"temp1234", user_type:"admin")
 
-demo_course = Course.create(name:"Demo Course", description:"Example of Course Capabilities", summary:"This is an example of the features included for course development",price:Money.new(1, 'USD')*100)
+demo_course = Course.create(name:"Demo Course", description:"Example of Course Capabilities", summary:"This is an example of the features included for course development",price:Money.new(0, 'USD')*100)
 example_chapter = demo_course.chapters.create(name:"Example Chapter")
 lesson = demo_course.lessons.create(name:"Test Lesson", chapter:example_chapter)
 lesson.save
@@ -53,3 +53,4 @@ Bible.list_bibles
 b = Bible.find_by(bible_id:"06125adad2d5898a-01")
 b.load_book(45)
 puts student.email
+f = FacebookVideo.create(id:1, title:"Worship - Sunday, June 28, 2020",video_url:"https://www.facebook.com/MemorialUnitedMethodistChurchAustin/videos/2338495259780230/")
