@@ -12,6 +12,10 @@ class FacebookVideosController < ApplicationController
   def show
   end
 
+  def live
+    @facebook_video = FacebookVideo.all.last
+  end
+
   # GET /facebook_videos/new
   def new
     @facebook_video = FacebookVideo.new

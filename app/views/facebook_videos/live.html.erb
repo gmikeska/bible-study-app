@@ -1,0 +1,16 @@
+<%= toolbar([back_button(facebook_videos_path), edit_button(edit_facebook_video_path(@facebook_video))]) %>
+<p id="notice"><%= notice %></p>
+  <% if(@facebook_video.is_live?) %>
+    <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="false" data-width="800px" style="800"><%= @facebook_video.citation %></div>
+  <% else %>
+    <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="true" data-width="800px" style="800"><%= @facebook_video.citation %></div>
+    <div class="container">
+      Services are streamed here on Sunday from 10:45 to 11:45 AM, Central time. We hope to see you at our next service, but in the meantime, enjoy this replay of our most recent service.
+    </div>
+
+  <% end %>
+  <style media="screen">
+  .fb-video{
+    margin-left: 16%;
+  }
+</style>

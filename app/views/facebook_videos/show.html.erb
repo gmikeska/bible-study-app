@@ -1,6 +1,6 @@
 <%= toolbar([back_button(facebook_videos_path), edit_button(edit_facebook_video_path(@facebook_video))]) %>
 <p id="notice"><%= notice %></p>
-    <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="false" data-width="800px" style="800px;"><blockquote cite="https://developers.facebook.com/MemorialUnitedMethodistChurchAustin/videos/2338495259780230/" class="fb-xfbml-parse-ignore"><a href="https://developers.facebook.com/MemorialUnitedMethodistChurchAustin/videos/2338495259780230/"></a><p></p>Posted by <a href="https://www.facebook.com/MemorialUnitedMethodistChurchAustin/">Memorial United Methodist Church-Austin</a> on Sunday, June 28, 2020</blockquote></div>
+<div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="false" data-width="800px" style="800"><%= @facebook_video.citation %></div>
 <style media="screen">
   .fb-video{
     margin-left: 16%;
