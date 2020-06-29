@@ -72,7 +72,7 @@ class CustomizableComponent < ViewComponent::Base
   end
   def create_link_url(link_reference)
     if(Page.first.is_pointer?(link_reference))
-      return Page.first.resolve_pointer(link_reference).url
+      return Page.resolve_pointer(link_reference).url
     else
       return link_reference
     end

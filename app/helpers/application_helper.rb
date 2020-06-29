@@ -67,6 +67,33 @@ module ApplicationHelper
     end
     link_to content, link, method: :delete, data: { confirm: 'Are you sure?' }, **args
   end
+  def help_text(help_pointer, type=:collapse)
+    help_id = help_pointer.gsub(":","_")
+    help_pointer = Help.parse_pointer(help_pointer)
+    section = help_pointer[:attribute]
+    help_document = Help.find_or_create_by(slug:help_pointer[:param])
+    if(type == :collapse)
+      help_section = help_document.section(section)
+    elsif(type == :tooltip)
+      help_section = help_document.section(section).gsub(/<h3 id="[\w]*">[\w]*<\/h3>/,"")
+      help_section = strip_tags(help_section)
+    end
+    if(help_section.present?)
+      if(type == :collapse)
+        return %Q(<a class="helpIcon" data-toggle="collapse" href="##{help_id}" role="button" aria-expanded="false" aria-controls="#{help_id}">🛈</a>
+          <div class="collapse help" id="#{help_id}">
+          <div class="card card-body inline-help">
+          #{help_section}
+          </div>
+          </div>)
+      elsif(type == :tooltip)
+        return %Q(<a href="#" data-toggle="tooltip" title="#{help_section}">🛈</a>)
+      end
+
+    else
+      return ""
+    end
+  end
   def toolbar(buttons,**args)
     if(!buttons.is_a? Array)
       buttons = [buttons]

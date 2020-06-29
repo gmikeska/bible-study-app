@@ -135,11 +135,29 @@ html {
     color: inherit;
     background-color: inherit;
 }
-
+a {
+    color:#fe4110;
+}
+.dropdown-menu a {
+    color:black;
+}
+.dropdown-menu a:visited {
+    color:black;
+}
+.dropdown-menu a:hover {
+    color:black;
+}
+.dropdown-menu a:active {
+    color:white;
+}
+a:visited {
+  color: #fe4110;
+}
 a:hover {
-    color: #fff;
+    color:red;
     background-color: initial;
 }
+
 span.v {
     vertical-align: super;
     font-size: x-small;
@@ -156,4 +174,24 @@ span.v {
   background: -ms-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
   background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 49%, rgba(209,209,209,1) 53%, rgba(254,254,254,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0 );
+}
+.inline-help h3 {
+    font-size: medium;
+}
+.inline-help p {
+    font-size: medium;
+}
+.help {
+  width: 20%;
+  float: right;
+  margin-bottom: 14px;
+}
+a.helpIcon {
+    float: right;
+    margin-left: 19px;
+}
+a[data-toggle="tooltip"]
+{
+  text-decoration: none;
+  margin-left: 10px;
 }

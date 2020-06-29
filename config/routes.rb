@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :helps, :path => "help", param: :slug do
+  end
+  get "help/:category/create", to:"helps#new", as:"help_create_subpage"
+
   resources :payments do
     post "payment", to:"payments#braintree_processing", as:"braintree_processing"
     get "paid", to:"payments#paid", as:"paid"

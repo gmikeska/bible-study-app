@@ -72,6 +72,8 @@ gem 'money-uphold-bank'
 gem "rqrcode"
 gem "stimulus-rails"
 gem "api_gears"
+gem "kramdown"
+gem "kramdown-parser-gfm"
 gem 'bitcoin-ruby', '~> 0.0.8'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

@@ -7,7 +7,13 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 home = Page.create(name:"home")
 events = Page.create(name:"events")
+docsHome = %Q(This section will have 2 main purposes:
 
+1. Allow site developer and admins to document usage of the site's features.
+2. Provide a home to documentation for management of the church's IT infrastructure.)
+helpHome = Help.create(title:"Home",content:docsHome, system:true)
+editing = Help.create(title:"Pages", content:"TODo: Add Documentation about editing pages", system:true, slug:"page-editing", category:"home")
+editing = Help.create(title:"Navigation", content:"Add documentation here about navigation.", system:false, :created_at=>"2020-06-27T13:55:26.370Z", :updated_at=>"2020-06-27T13:56:18.400Z", slug:"navigation", category:"home")
 videos = Gallery.create(name:"Videos")
 images = Gallery.create(name:"Images")
 # images.files.attach(io: File.open(Rails.root.join("public/dog-placeholder.png")), filename: 'dog-placeholder.png')

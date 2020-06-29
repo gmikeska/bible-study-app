@@ -1,0 +1,7 @@
+<p id="notice"><%= notice %></p>
+<%= toolbar [link_to('Create Documentation', new_help_path, class:"btn btn-sm btn-default")] %>
+<h1>Help - <%= Help.first.title %></h1>
+
+
+<pre><%= Help.first.content %></pre>
+<br>

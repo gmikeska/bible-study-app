@@ -13,10 +13,8 @@
   <div id="components">
     <%= form.submit "Save Changes", class:"btn btn-default" %>
     <div class="field">
-      <%==  %>
-      <%= form.text_field :name, label:("Name"+help_text("model:help:pages:Name",:tooltip).html_safe).html_safe %>
+      <%= form.text_field :name %>
     </div>
-    <%==  %>
     <% if(page.components.length > 0)
       page.components.each_with_index do |component,i| %>
       <div class="component" id="component-<%= i %>">
