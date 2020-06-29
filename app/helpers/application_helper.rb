@@ -72,13 +72,13 @@ module ApplicationHelper
     help_pointer = Help.parse_pointer(help_pointer)
     section = help_pointer[:attribute]
     help_document = Help.find_or_create_by(slug:help_pointer[:param])
-    if(type == :collapse)
-      help_section = help_document.section(section)
-    elsif(type == :tooltip)
-      help_section = help_document.section(section).gsub(/<h3 id="[\w]*">[\w]*<\/h3>/,"")
-      help_section = strip_tags(help_section)
-    end
     if(help_section.present?)
+      if(type == :collapse)
+        help_section = help_document.section(section)
+      elsif(type == :tooltip)
+        help_section = help_document.section(section).gsub(/<h3 id="[\w]*">[\w]*<\/h3>/,"")
+        help_section = strip_tags(help_section)
+      end
       if(type == :collapse)
         return %Q(<a class="helpIcon" data-toggle="collapse" href="##{help_id}" role="button" aria-expanded="false" aria-controls="#{help_id}">🛈</a>
           <div class="collapse help" id="#{help_id}">
