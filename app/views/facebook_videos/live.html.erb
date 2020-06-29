@@ -1,16 +1,26 @@
 <%= toolbar([back_button(facebook_videos_path), edit_button(edit_facebook_video_path(@facebook_video))]) %>
 <p id="notice"><%= notice %></p>
   <% if(@facebook_video.is_live?) %>
-    <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="false" data-width="800px" style="800"><%= @facebook_video.citation %></div>
+    <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="false" data-width="800px"><%= @facebook_video.citation %></div>
   <% else %>
-    <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="true" data-width="800px" style="800"><%= @facebook_video.citation %></div>
+    <div class="container alert alert-primary">
+      <span class="icon">&#128712;</span>
+      <span>Services are streamed here on Sunday from 10:45 to 11:45 AM, Central time. We hope you'll join us at our next service, but in the meantime, enjoy this replay of our most recent service, streamed on <%= @facebook_video.recording_date %>.</span>
+    </div>
     <div class="container">
-      Services are streamed here on Sunday from 10:45 to 11:45 AM, Central time. We hope to see you at our next service, but in the meantime, enjoy this replay of our most recent service.
+      <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="true" data-width="800px"><%= @facebook_video.citation %></div>
     </div>
 
   <% end %>
   <style media="screen">
+  .icon{
+    font-size: 3em;
+    height: 100%;
+    float: left;
+    margin-right: 20px;
+    margin-top: -14px;
+}
   .fb-video{
-    margin-left: 16%;
+    margin-left: 14%;
   }
 </style>
