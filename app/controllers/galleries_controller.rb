@@ -7,11 +7,15 @@ before_action :set_gallery, only: [:show, :edit, :update, :destroy]
   end
 
   def show
-
   end
 
   def new
 
+  end
+
+  def file_select
+    set_gallery
+    render "file_select"
   end
 
   def create
@@ -41,14 +45,13 @@ before_action :set_gallery, only: [:show, :edit, :update, :destroy]
     end
   end
 
-  def show_files
+  def show_file
     set_gallery
-    render partial:"show_files"
   end
 
-  def show_video
+  def serve_file
     set_gallery
-    render :show_video
+    send_data(@file.download,type:@file.content_type, filename:@file.filename.to_s)
   end
 
   def destroy
@@ -64,9 +67,17 @@ before_action :set_gallery, only: [:show, :edit, :update, :destroy]
 
 
   def set_gallery
-    @gallery = Gallery.find_by id: params[:id]
+    if(params[:gallery_id].present?)
+      @gallery = Gallery.find(params[:gallery_id])
+    elsif(params[:id].present?)
+      @gallery = Gallery.find(params[:id])
+    end
     if(params[:fileid])
       @file = @gallery.files.find(params[:fileid])
+    elsif(params[:filename] && params[:action] != "serve_file")
+      @file = @gallery.files.select{|f| f.filename.to_s == "#{params[:filename]}" }.first
+    elsif(params[:filename] && params[:action] == "serve_file")
+      @file =  @gallery.files.select{|f| f.filename.to_s == "#{params[:filename]}.#{params[:format]}"}.first
     end
   end
 

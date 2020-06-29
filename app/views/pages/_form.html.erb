@@ -10,6 +10,9 @@
       </ul>
     </div>
   <% end %>
+  <div class="field">
+    <%= render "shared/file_select", files:Gallery.last.files, fieldName:"page[files[]]" %>
+  </div>
   <div id="components">
     <%= form.submit "Save Changes", class:"btn btn-default" %>
     <div class="field">

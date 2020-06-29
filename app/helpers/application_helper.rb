@@ -3,7 +3,11 @@ module ApplicationHelper
     return (current_user && current_user.type == type)
   end
   def preview_video(file,url)
-      return %Q(<div style="background-image:url('#{url_for(file.preview(resize_to_limit: [200, 200]).processed)}'); min-height:200px; min-width:200px;">#{link_to "<div class='w-100' style='font-size: xx-large;padding-left: 45%;padding-top: 30%;color: white;'>►</div>".html_safe, url, style:'text-decoration:none;'} </div> )
+      if(url != false)
+        return %Q(<div style="background-image:url('#{url_for(file.preview(resize_to_limit: [200, 200]).processed)}'); min-height:200px; min-width:200px;">#{link_to "<div class='w-100' style='font-size: xx-large;padding-left: 45%;padding-top: 30%;color: white;'>►</div>".html_safe, url, style:'text-decoration:none;'} </div> )
+      else
+        return %Q(<div style="background-image:url('#{url_for(file.preview(resize_to_limit: [200, 200]).processed)}'); min-height:200px; min-width:200px;"><div class='w-100' style='font-size: xx-large;padding-left: 45%;padding-top: 30%;color: white;'>►</div> </div> )
+      end
   end
   def video_path(lesson,file)
       return "/videos/#{file.filename.base.to_s}"

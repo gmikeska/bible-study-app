@@ -1,0 +1,9 @@
+<% if(file.image?) %>
+  <%= image_tag(file.variant(resize_to_limit: [100, 100]), style:"width:100px;") %>
+<% elsif(file.previewable? && link) %>
+  <%== preview_video(file, polymorphic_path(@gallery,file)) %>
+<% elsif(file.previewable? && !link) %>
+  <%== preview_video(file, false) %>
+<% else %>
+  <span class="fiv-sqo fiv-icon-<%= file.filename.extension %>" style="width: 100px;font-size: 6em;"></span>
+<% end %>

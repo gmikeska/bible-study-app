@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :facebook_videos, param: :slug
   resources :helps, :path => "help", param: :slug do
   end
   get "help/:category/create", to:"helps#new", as:"help_create_subpage"
@@ -12,6 +13,11 @@ Rails.application.routes.draw do
     post "payment", to:"invoices#payment", as:"payment"
     get "refund", to:"invoices#refund", as:"refund"
   end
+  get '/galleries/:id/view', to: 'galleries#show_file',as:"gallery_show_file"
+  get '/galleries/:id/select', to: 'galleries#file_select',as:"gallery_file_select"
+  get '/galleries/:id/:filename', to: 'galleries#serve_file', as:"file_friendly"
+  patch '/galleries/:id/upload', to: 'galleries#upload'
+  get '/galleries/:id/upload', to: 'galleries#upload'
   resources :galleries
   resources :emails
   resources :bibles
