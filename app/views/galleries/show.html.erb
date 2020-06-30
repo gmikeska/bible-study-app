@@ -19,7 +19,7 @@
       <tbody>
         <% @gallery.files.each do |file| %>
         <tr>
-          <td><%= render("file_preview", file:file)%></td>
+          <td><%= render("file_preview", file:file, link:gallery_show_file_path(@gallery)+"?filename=#{file.filename.to_s}")%></td>
           <td><%= link_to(file.filename, gallery_show_file_path(@gallery)+"?filename=#{file.filename.to_s}") %></td>
           <td><%= file.created_at %></td>
           <td><%= file.byte_size/1000 %> kB</td>

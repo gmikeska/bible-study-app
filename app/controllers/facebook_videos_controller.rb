@@ -73,6 +73,6 @@ class FacebookVideosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def facebook_video_params
-      params.fetch(:facebook_video, {})
+      params.require(:facebook_video).permit(:title,:url,:video)
     end
 end

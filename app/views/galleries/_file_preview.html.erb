@@ -4,7 +4,7 @@
 <% if(file.image?) %>
   <%= image_tag(file.variant(resize_to_limit: [100, 100]), style:"width:100px;") %>
 <% elsif(file.previewable? && link) %>
-  <%== preview_video(file, gallery_show_file_path(@gallery,file)) %>
+  <%== preview_video(file, gallery_show_file_path(@gallery)+"?filename=#{file.filename.to_s}") %>
 <% elsif(file.previewable? && !link) %>
   <%== preview_video(file, false) %>
 <% else %>

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'live', to:"facebook_videos#live"
+  get '/videos/:id/video', to: 'galleries#serve_video'
   resources :facebook_videos, param: :slug, :path => "videos"
   resources :helps, :path => "help", param: :slug do
   end

@@ -1,6 +1,4 @@
+<%= toolbar([back_button(facebook_videos_path),view_button(@facebook_video)]) %>
 <h1>Editing Facebook Video</h1>
 
 <%= render 'form', facebook_video: @facebook_video %>
-
-<%= link_to 'Show', @facebook_video %> |
-<%= link_to 'Back', facebook_videos_path %>
