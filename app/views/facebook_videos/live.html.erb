@@ -31,8 +31,9 @@
 </style>
 <script type="text/javascript">
   $(document).ready(()=>{
-    viewportWidth = $("body").innerWidth()
-    offset = (viewportWidth-800)/2
-    $(".fb-video").css("margin-left",)
+    viewportWidth = $($(".container")[0]).innerWidth()
+    videoWidth = 800
+    offset = (viewportWidth-videoWidth)/2
+    $(".fb-video").css("margin-left",offset)
   })
 </script>
