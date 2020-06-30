@@ -12,9 +12,7 @@
     <% if(@facebook_video.video.present?) %>
       <%=  render "shared/video_player", url:polymorphic_path(@facebook_video.video)  %>
     <% else %>
-      <div class="container">
         <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="true" data-width="800px"><%= @facebook_video.citation %></div>
-      </div>
     <% end %>
 
   <% end %>
@@ -28,6 +26,13 @@
     margin-top: -14px;
 }
   .fb-video{
-    margin-left: 14%;
+    margin-left: 7%;
   }
 </style>
+<script type="text/javascript">
+  $(document).ready(()=>{
+    viewportWidth = $("body").innerWidth()
+    offset = (viewportWidth-800)/2
+    $(".fb-video").css("margin-left",)
+  })
+</script>
