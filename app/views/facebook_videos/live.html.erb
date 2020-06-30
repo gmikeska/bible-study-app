@@ -6,7 +6,7 @@
   </div>
   <% else %>
     <div class="container alert alert-primary">
-      <span class="icon">&#128712;</span>
+      <span class="icon">ⓘ</span>
       <span>Services are streamed here on Sunday from 10:45 to 11:45 AM, Central time. We hope you'll join us at our next service, but in the meantime, enjoy this replay of our most recent service, streamed on <%= @facebook_video.recording_date %>.</span>
     </div>
     <% if(@facebook_video.video.present?) %>
@@ -20,6 +20,7 @@
   <% end %>
   <style media="screen">
   .icon{
+    font-family: inherit;
     font-size: 3em;
     height: 100%;
     float: left;
