@@ -119,6 +119,10 @@ GEM
     docx (0.5.0)
       nokogiri (~> 1.10, >= 1.10.4)
       rubyzip (~> 2.0)
+    dotenv (2.7.5)
+    dotenv-rails (2.7.5)
+      dotenv (= 2.7.5)
+      railties (>= 3.2, < 6.1)
     erubi (1.9.0)
     eventmachine (1.2.7)
     execjs (2.7.0)
@@ -351,6 +355,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   devise
   docx
+  dotenv-rails
   factory_bot_rails
   faker
   image_processing
