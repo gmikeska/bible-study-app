@@ -6,12 +6,12 @@ export default class extends Controller {
     $(this.slidesTarget).carousel({
       pause:true
     })
-    this.channel = {}
-    application.channelLoader = (c)=>{
-      this.setChannel(c)
-    }
+    application.channels.forEach((c)=>{
+      if(c.identifier == '{"channel":"LessonChannel"}')
+          this.channel = c
+    })
     application.receiveCallback = (data)=>{
-      this.messageRecieved(data)
+      this.messageReceived(data)
     }
     $(this.slidesTarget).on('slid.bs.carousel', function (e) {
         if(e.to == $(".carousel-item").length-1)
@@ -22,15 +22,10 @@ export default class extends Controller {
     })
     $('#incoming').scrollTop($('#incoming').innerHeight())
   }
-  // getChannel() {
-  //   application.channels.filter(function(x){
-  //     return x.identifier == `{"channel":"LessonChannel"}`
-  //   })[0]
-  // }
   setChannel(channel) {
     this.channel = channel
   }
-  messageRecieved(data){
+  messageReceived(data){
     $("#incoming").attr({ scrollTop: $("#incoming").attr("scrollHeight") });
     let currentScroll = $('#incoming').scrollTop();
     let scrollDelta = parseInt($("#incoming").css("line-height"))
