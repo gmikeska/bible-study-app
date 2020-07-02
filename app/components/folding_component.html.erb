@@ -1,0 +1,28 @@
+<div class="card card-body" style="margin: 0; padding: 0 1.25rem; padding-top: .27rem; margin-bottom: 10px;">
+    <% if(toggle.present?) %>
+      <%= toggle %>
+    <% else %>
+    <span data-toggle="collapse" data-target="#<%= @name %>" aria-expanded="false" aria-controls="scheduling">
+      <h3 style="cursor:pointer;"><span class="popout-icon" style="transition:2s;">➤</span> <%= @title %></h3>
+    </span>
+    <% end %>
+  <div class="collapse" id="<%= @name %>">
+    <%= body %>
+  </div>
+</div>
+<script type="text/javascript">
+  $("body").ready(()=>{
+    $("#scheduling").on("show.bs.collapse",(e)=>{
+      $(".popout-icon",e.currentTarget.parentElement).html("⮟")
+    })
+    $("#scheduling").on("hide.bs.collapse",(e)=>{
+      $(".popout-icon",e.currentTarget.parentElement).html("➤")
+    })
+
+    <% if(@starts_expanded) %>
+      $("#scheduling").collapse('show')
+    <% end %>
+
+  })
+
+</script>

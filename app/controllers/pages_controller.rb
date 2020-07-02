@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
 before_action :set_page, only: [:show, :edit, :update, :destroy]
+before_action :authenticate_user!, only: [:index,:edit, :update, :destroy]
   layout 'application'
 
   def index

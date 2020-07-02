@@ -32,6 +32,9 @@ class Course < ApplicationRecord
   def to_param
     slug
   end
+  def scheduled?
+    self.start_time.present?
+  end
   def self.pending_reviews
     reviews_pending = []
     Course.all.each do |course|
