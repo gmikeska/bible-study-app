@@ -1,5 +1,6 @@
 class FacebookVideo < ApplicationRecord
   has_one_attached :video
+  serialize :webhook_message, Hash
   after_initialize do |video|
     if(video.slug.nil? && !video.title.nil?)
       video.slug = video.title.parameterize

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_29_202721) do
+ActiveRecord::Schema.define(version: 2020_07_03_142115) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -96,6 +96,16 @@ ActiveRecord::Schema.define(version: 2020_06_29_202721) do
     t.text "summary"
     t.integer "price_cents", default: 0, null: false
     t.string "price_currency", default: "USD", null: false
+    t.date "start_date"
+    t.integer "frequency"
+    t.string "frequency_interval"
+    t.time "start_time"
+    t.time "end_time"
+    t.boolean "on_calendar?"
+    t.boolean "all_day?"
+    t.integer "breeze_calendar_id"
+    t.string "breeze_events"
+    t.integer "breeze_id"
   end
 
   create_table "courses_pets", id: false, force: :cascade do |t|
@@ -131,6 +141,9 @@ ActiveRecord::Schema.define(version: 2020_06_29_202721) do
     t.string "video_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "webhook_message"
+    t.string "from_address"
+    t.string "from_dns"
   end
 
   create_table "galleries", force: :cascade do |t|
@@ -190,6 +203,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_202721) do
     t.integer "chapter_id"
     t.text "slides"
     t.string "messages"
+    t.integer "current_slide"
   end
 
   create_table "pages", force: :cascade do |t|

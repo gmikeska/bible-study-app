@@ -12,6 +12,27 @@ class FacebookVideosController < ApplicationController
   def show
   end
 
+  def webhook_verify
+    # params = facebook_video_webhook_params
+    if(params["hub.mode"] == "subscribe" && params["hub.verify_token"] == "myVerifyToken")
+      render body:params["hub.challenge"]
+      byebug
+      return
+    else
+
+      head :no_content
+    end
+  end
+  def webhook_recieve
+    # params = facebook_video_webhook_params
+      @facebook_video = FacebookVideo.new
+      @facebook_video.webhook_message = params[:entry]
+      @facebook_video.from_address = request.remote_ip
+      @facebook_video.from_dns = Addrinfo.tcp(request.remote_ip, 80).getnameinfo[0]
+      @facebook_video.save
+      head :no_content
+  end
+
   def live
     @facebook_video = FacebookVideo.all.last
   end
@@ -74,5 +95,9 @@ class FacebookVideosController < ApplicationController
     # Only allow a list of trusted parameters through.
     def facebook_video_params
       params.require(:facebook_video).permit(:title,:url,:video)
+    end
+
+    def facebook_video_webhook_params
+      params.permit("hub.mode".to_sym,"hub.challenge".to_sym,"hub.verify_token".to_sym)
     end
 end
