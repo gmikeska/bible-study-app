@@ -26,10 +26,8 @@ class FacebookVideosController < ApplicationController
   end
   def webhook_recieve
     # params = facebook_video_webhook_params
-      @facebook_video = FacebookVideo.new
-      @facebook_video.title = "Test Title"
-      @facebook_video.slug = @facebook_video.title
-      @facebook_video.webhook_message = params[:entry]
+      puts "recieved notification from #{request.remote_ip} --------------------------------------------------------------------------------"
+      @facebook_video = FacebookVideo.create(title:"Test Title",slug:"Test Title".parameterize,webhook_message:params[:entry])
       @facebook_video.from_address = request.remote_ip
       @facebook_video.from_dns = Addrinfo.tcp(request.remote_ip, 80).getnameinfo[0]
       @facebook_video.save
