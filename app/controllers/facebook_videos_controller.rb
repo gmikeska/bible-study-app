@@ -16,7 +16,6 @@ class FacebookVideosController < ApplicationController
     # params = facebook_video_webhook_params
     if(params["hub.mode"] == "subscribe" && params["hub.verify_token"] == "myVerifyToken")
       render body:params["hub.challenge"]
-      byebug
       return
     else
 
