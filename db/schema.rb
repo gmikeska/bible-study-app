@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_03_142115) do
+ActiveRecord::Schema.define(version: 2020_07_03_180854) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -141,9 +141,6 @@ ActiveRecord::Schema.define(version: 2020_07_03_142115) do
     t.string "video_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "webhook_message"
-    t.string "from_address"
-    t.string "from_dns"
   end
 
   create_table "galleries", force: :cascade do |t|
