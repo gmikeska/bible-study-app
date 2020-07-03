@@ -11,8 +11,8 @@ class FacebookVideo < ApplicationRecord
   def to_param
     slug
   end
-  def video_id
-    return self.video_url.match('https:\/\/www.facebook.com\/MemorialUnitedMethodistChurchAustin\/videos\/(\w*)\/')[1]
+  def video_url
+    return "https://ww.facebook.com/MemorialUnitedMethodistChurchAustin/videos/#{self.video_id}/"
   end
   def citation
     "<blockquote cite='https://developers.facebook.com/MemorialUnitedMethodistChurchAustin/videos/#{self.video_id}/' class='fb-xfbml-parse-ignore'><a href='https://developers.facebook.com/MemorialUnitedMethodistChurchAustin/videos/#{self.video_id}/'></a><p></p>Posted by <a href='https://www.facebook.com/MemorialUnitedMethodistChurchAustin/'>Memorial United Methodist Church-Austin</a> on #{self.recording_date}</blockquote>"
