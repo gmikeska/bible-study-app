@@ -1,5 +1,7 @@
 class FacebookVideosController < ApplicationController
   before_action :set_facebook_video, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token, only: :webhook_recieve
+
   layout 'live'
   # GET /facebook_videos
   # GET /facebook_videos.json
@@ -25,6 +27,8 @@ class FacebookVideosController < ApplicationController
   def webhook_recieve
     # params = facebook_video_webhook_params
       @facebook_video = FacebookVideo.new
+      @facebook_video.title = "Test Title"
+      @facebook_video.slug = @facebook_video.title
       @facebook_video.webhook_message = params[:entry]
       @facebook_video.from_address = request.remote_ip
       @facebook_video.from_dns = Addrinfo.tcp(request.remote_ip, 80).getnameinfo[0]
