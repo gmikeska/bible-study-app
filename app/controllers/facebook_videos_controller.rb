@@ -15,7 +15,7 @@ class FacebookVideosController < ApplicationController
   end
 
   def live
-    @facebook_video = FacebookVideo.all.last
+    @facebook_video = FacebookVideo.all.order(created_at: :asc).last
   end
 
   # GET /facebook_videos/new
