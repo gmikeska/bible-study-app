@@ -20,6 +20,8 @@ class FacebookGraphApi < ApiGears
       end
     else
       endpoint "videos",path:"memorialUnitedMethodistChurchAustin/videos", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN")}
+      endpoint "live_videos",path:"memorialUnitedMethodistChurchAustin/live_videos", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN"),fields:"creation_time,permalink_url"}
+      endpoint "video",path:"{video_id}", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN")}
     end
   end
 
