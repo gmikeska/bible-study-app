@@ -1,5 +1,5 @@
 require "api_gears"
-require "byebug"
+# require "byebug"
 class FacebookGraphApi < ApiGears
   def initialize(**options)
     url = "https://graph.facebook.com/v7.0/"
