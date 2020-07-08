@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid" data-controller="lesson">
 <div class="row">
  <% if(@lesson.slides.nil? || @lesson.slides.length == 0) %>
    <div class="col-1">
@@ -33,7 +33,7 @@
     <div class="col">
       <%= render "slides", lesson:@lesson  %>
     </div>
-      <%= render MessengerComponent.new(users:@course.online_users, lesson:@lesson) %>
+      <%= render MessengerComponent.new(users:@course.online_users, lesson:@lesson, data:{target:"lesson.messenger"}) %>
   <% end %>
 </div>
 </div>

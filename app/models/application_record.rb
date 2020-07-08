@@ -40,7 +40,7 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def resolve_pointer(pointer)
+  def self.resolve_pointer(pointer)
     pointer = parse_pointer(pointer)
     searchClass = pointer[:class].capitalize.constantize
     if(pointer[:type] == "model")
@@ -49,17 +49,17 @@ class ApplicationRecord < ActiveRecord::Base
       else
         record = searchClass.find_by slug:pointer[:param]
       end
-      if(pointer[:attribute].present?)
-        return(record[pointer[:attribute].to_sym])
-      else
+      # if(pointer[:attribute].present?)
+        # return(record[pointer[:attribute].to_sym])
+      # else
         return record
-      end
+      # end
     elsif(pointer[:type] == "scope" && searchClass.scope_names.include?(pointer[:param].to_sym) )
       return searchClass.send(pointer[:param])
     end
   end
 
-  def parse_pointer(pointer)
+  def self.parse_pointer(pointer)
     parts = pointer.split(":")
     if(parts[0] == "file")
       data = {type:parts[0], class:"Gallery", param:parts[1], resource:parts[2]}

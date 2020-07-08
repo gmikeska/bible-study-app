@@ -1,0 +1,9 @@
+<%= toolbar(link_to( 'New Facebook Video', new_facebook_video_path, class:"btn btn-sm btn-default")) %>
+
+
+<%= render(TableComponent.new(fields:[:title, :video_url,:video_attached?], records:@facebook_videos)) do |component| %>
+  <% component.with(:header) do %>
+    <%= component.table_header(fields:[:title, :video_url,:has_archive_video?]) %>
+  <% end %>
+<% end %>
+<br>

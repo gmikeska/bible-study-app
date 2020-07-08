@@ -1,0 +1,71 @@
+<% fieldName = "files[]" unless(fieldName.present?) %>
+<div class="container" id="fileList" style="margin-bottom:6px;">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#file-select" style="float:left; margin-right:4px;">
+    Select Files
+  </button>
+  Files selected:
+  <span id="showFileNames">
+
+  </span>
+
+</div>
+
+  <%== render ModalComponent.new(name:"file-select",title:"Select Files",submit_button:"Select") do |component|
+    component.with(:body) do %>
+        <% files.each do |file| %>
+        <div class="card fileChoice" data-file="<%= file.filename.to_s %>" style="width: 18rem;float:left; margin-right:10px; padding-left:5px; padding-top:5px;">
+            <%= render("shared/file_preview", file:file, link:false) %>
+          <div class="card-body">
+            <%= file.filename.to_s %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<style media="screen">
+  .modal-body{
+    overflow-y:scroll;
+    max-height: 400px;
+  }
+</style>
+
+
+<script type="text/javascript">
+  window.fieldName = `<%= fieldName %>`
+</script>
+<script type="text/javascript">
+  $("body").ready(()=>{
+    window.modal["file-select"].onInit((el)=>{
+        $(".fileChoice").click((e)=>{
+          if(!$(e.currentTarget).data("selected"))
+          {
+            $(e.currentTarget).data("selected",true)
+            $(e.currentTarget).addClass("bg-primary text-white")
+          }
+          else {
+            $(e.currentTarget).data("selected",false)
+            $(e.currentTarget).removeClass("bg-primary")
+            $(e.currentTarget).removeClass("text-white")
+          }
+        })
+    })
+    window.modal["file-select"].onSubmit((e)=>{
+
+      selectedFiles = $(".card",window.modal["file-select"].element).filter((i,el)=>{ return ($(el).data("selected") == true)}).map((i,el)=>{
+        return $(el).data("file")
+      })
+      selectedFiles.each(function (i,item){
+        debugger
+        if(i < (selectedFiles.length-1))
+        {
+          $("#showFileNames").append(`<span>${this}</span>,&nbsp;`)
+
+        }
+        else {
+          $("#showFileNames").append(`<span>${this}</span>`)
+        }
+        $("#fileList").append(`<input type="hidden" name="${fieldName}" value="${this}">`)
+      });
+    })
+  })
+</script>

@@ -1,0 +1,35 @@
+<%= bootstrap_form_with(model: facebook_video, local: true) do |form| %>
+  <% if facebook_video.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(facebook_video.errors.count, "error") %> prohibited this facebook_video from being saved:</h2>
+
+      <ul>
+        <% facebook_video.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.text_field :video_url %>
+  </div>
+  <div class="field file">
+    <%= form.file_field :video, direct_upload: true %>
+    <small>When you upload a video for this service, the uploaded video will replace the facebook video.</small>
+  </div>
+
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+<style media="screen">
+  .file .form-group {
+    margin-bottom:0;
+  }
+</style>

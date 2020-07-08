@@ -11,4 +11,12 @@
     </div>
   </body>
   <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+      $('[data-toggle="tooltip"]').click((e)=>{
+        e.preventDefault()
+      })
+    })
+  </script>
 </html>

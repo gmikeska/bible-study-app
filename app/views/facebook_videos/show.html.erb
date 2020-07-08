@@ -1,0 +1,16 @@
+<%= toolbar([back_button(facebook_videos_path), edit_button(edit_facebook_video_path(@facebook_video))]) %>
+<p id="notice"><%= notice %></p>
+<% if(@facebook_video.video.present?) %>
+  <%=  render "shared/video_player", url:polymorphic_path(@facebook_video.video)  %>
+<% else %>
+  <div class="d-flex justify-content-center">
+    <div class="video">
+      <div class="fb-video" data-href="<%= @facebook_video.video_url %>" data-show-text="true" data-width="800px"><%= @facebook_video.citation %></div>
+    </div>
+  </div>
+<% end %>
+<style media="screen">
+  .video{
+    width: 800px;
+  }
+</style>

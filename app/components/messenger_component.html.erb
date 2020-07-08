@@ -1,20 +1,20 @@
-    <div class="col" style="padding:0; margin:0; max-width:50%">
-    <div class="messages border" style="height: 100%;">
-      <ul class="list-unstyled border" style="float:left; height:100%; margin-right: 3px;min-width: 10%;padding-left: 4px;">
+<%= wrap do %>
+  <div class="messages border" style="height:300px;">
+    <ul class="list-unstyled border" style="float:left; height:100%; margin-right: 3px;min-width: 10%;padding-left: 4px;">
         <% @users.each do |user| %>
           <li><%= user.name %></li>
         <% end %>
-      </ul>
-      <div id="incoming" style="height:80%;margin:0;">
+    </ul>
+      <div id="incoming" style="height:80%;margin:0;overflow-y: scroll;">
 <!-- <pre style="padding-left:2px;"> -->
 <% @lesson.messages.each do |message| %>
 <%= "#{message["from"]}:#{message["content"]}" %><br>
 <% end %>
 <!-- </pre> -->
       </div>
-      <div class="" id="chatBox" style="width:100%">
-            <textarea id='chatMessage' rows="2" cols="10" class="form-control" placeholder="Write your message here." style="width:80%; float:left;"></textarea>
-            <span class="btn-sm btn-default" id='chatButton' style="float:left; cursor:pointer;">Submit</span>
-      </div>
+    <div class="" id="chatBox" style="width:100%">
+            <textarea id='chatMessage' rows="2" cols="10" class="form-control" data-target="lesson.messenger.messageInput" placeholder="Write your message here." style="width:80%; float:left;"></textarea>
+            <button class="btn btn-sm btn-default" id='chatButton' data-action="lesson#sendMessage" style="float:left; cursor:pointer;">Submit</button>
     </div>
-    </div>
+  </div>
+<% end %>

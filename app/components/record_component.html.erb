@@ -3,21 +3,59 @@
 end %>
 <tr data-id=<%= @record[:id] %>>
   <% @fields.each do |fieldName| %>
-    <td><%= @record[fieldName] %></td>
+  <% if(@record.respond_to? fieldName) %>
+    <td><%= @record.send(fieldName) %></td>
+  <% elsif(fieldName.to_s.include? "_" ) %>
+    <% methods = fieldName.to_s.split("_"); cursor = @record
+       methods.each do |m|
+       cursor = cursor.send(m)
+       end %>
+     <td><%= cursor %></td>
+   <% end %>
   <% end %>
   <% if(@show.present? && @show == true) %>
     <td><%= helpers.view_button(@record) %></td>
   <% elsif(@show.present? && @show.class == String) %>
     <td><%= helpers.view_button(@record, content:@show) %></td>
+  <% elsif(@show.present? && @show.class == Symbol) %>
+    <% if(@record.respond_to? @show) %>
+      <td><%= helpers.view_button(@record.send(@show)) %></td>
+    <% elsif(@show.to_s.include? "_" ) %>
+    <% methods = @show.to_s.split("_"); cursor = @record
+       methods.each do |m|
+       cursor = cursor.send(m)
+       end %>
+       <td><%= helpers.view_button(@record.send(cursor)) %></td>
+    <% end %>
   <% end %>
   <% if(@edit && @edit == true) %>
     <td><%= helpers.edit_button(edit_polymorphic_path(@record), class: 'btn btn-sm btn-secondary') %></td>
   <% elsif(@edit.present? && @edit.class == String) %>
     <td><%= helpers.edit_button(@record, content:@edit) %></td>
+  <% elsif(@edit.present? && @edit.class == Symbol) %>
+    <% if(@record.respond_to? @edit) %>
+    <td><%= helpers.edit_button(@record.send(@edit)) %></td>
+    <% elsif(@edit.to_s.include? "_" ) %>
+      <% methods = @edit.to_s.split("_"); cursor = @record
+         methods.each do |m|
+         cursor = cursor.send(m)
+         end %>
+       <td><%= helpers.edit_button(@record.send(cursor)) %></td>
+    <% end %>
   <% end %>
   <% if(@delete && @delete == true) %>
     <td><%= helpers.delete_button(@record) %></td>
   <% elsif(@delete.present? && @delete.class == String) %>
     <td><%= helpers.delete_button(@record, content:@delete) %></td>
+  <% elsif(@delete.present? && @delete.class == Symbol) %>
+    <% if(@record.respond_to? @delete) %>
+      <td><%= helpers.delete_button(@record.send(@delete)) %></td>
+    <% elsif(@delete.to_s.include? "_" ) %>
+      <% methods = @delete.to_s.split("_"); cursor = @record
+         methods.each do |m|
+         cursor = cursor.send(m)
+         end %>
+       <td><%= helpers.delete_button(@record.send(cursor)) %></td>
+     <% end %>
   <% end %>
 </tr>

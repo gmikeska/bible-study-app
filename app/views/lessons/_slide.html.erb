@@ -4,7 +4,7 @@
     carouselClass = "carousel-item"
   end
 %>
-  <div class="<%= carouselClass %>" id="slide-<%= index %>">
+  <div class="<%= carouselClass %>" id="slide-<%= index %>" data-lesson-slides-index="<%= index %>">
       <% if(slide[:media].present?) %>
         <div class="container <%= slide[:vertical_alignment] %> <%= slide[:horizontal_alignment] %>">
           <% slide[:media].each_index do |index|;filename = slide[:media][index];file = @lesson.get_file(filename) %>

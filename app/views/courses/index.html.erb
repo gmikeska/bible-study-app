@@ -5,9 +5,9 @@
 <% else %>
   <% fields = [:name, :description]; edit=false; delete=false %>
 <% end %>
-<%= render(TableComponent.new(fields:[:title])) do |component| %>
+<%= render(TableComponent.new(fields:fields)) do |component| %>
   <% component.with(:header) do %>
-      <%= RecordComponent.new(fields:[:name, :description], edit:edit,delete:delete).header %>
+      <%= component.table_header %>
     <% end %>
   <% component.with(:body) do %>
     <% @courses.each do |course|
@@ -16,7 +16,7 @@
       else
         viewText = "Learn More"
       end %>
-      <%= render RecordComponent.new(record:course,fields:[:name, :description],show:viewText, edit:edit,delete:delete) %>
+      <%= render RecordComponent.new(record:course,fields:component.fields,show:viewText, edit:edit,delete:delete) %>
     <% end %>
   <% end %>
   <% component.with(:placeholder) do %>

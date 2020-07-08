@@ -1,6 +1,6 @@
 <div class="component-select" data-controller="component-editor" data-component-editor-index="<%= index %>">
   <% if(component.present?) %>
-    <%= form.select("components[][name]".to_sym, Page.component_options, {selected:component.name, label:"Component Type",include_blank:"Select a component type..."}, class:"componentType", data:{action:"component-editor#changeType"}) %>
+    <%= form.select("components[][name]".to_sym, Page.component_options, {selected:component.name, label:("Component Type"+help_text("model:help:pages:Components", :tooltip).html_safe).html_safe,include_blank:"Select a component type..."}, class:"componentType", data:{action:"component-editor#changeType"}) %>
     Preview:
     <div class="component-preview" style="zoom:.8" data-target="component-editor.preview">
       <%= render("component_preview", component:component) %>
@@ -9,7 +9,7 @@
       <%= render("component_settings",form:form, component:component) %>
     </div>
   <% elsif(index == 0) %>
-    <%= form.select("components[][name]".to_sym, Page.component_options, {label:"Component Type", include_blank:"Select a component type..."}, class:"componentType", data:{action:"component-editor#changeType"}) %>
+    <%= form.select("components[][name]".to_sym, Page.component_options, {label:("Component Type"+help_text("model:help:pages:Components", :tooltip).html_safe).html_safe, include_blank:"Select a component type..."}, class:"componentType", data:{action:"component-editor#changeType"}) %>
     <div class="component-preview" data-target="component-editor.preview">
     </div>
     <div class="settings" data-target="component-editor.settings">

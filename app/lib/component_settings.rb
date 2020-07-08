@@ -36,10 +36,10 @@ class ComponentSettings
     end
     if(get_type(key) == "Image")
       return %Q(<div class="row"><div class="field col">
-        #{form.select "components[][args][#{key}][0]", Gallery.all.collect{|g| [g.name, g.pointer]}, {selected:Page.first.resolve_pointer(@args[key][0]), label:"Gallery for "+key.to_s.titleize, include_blank:"Select a gallery..."},class:"file_select",data:{action:"component-editor#settingsChanged"}}
+        #{form.select "components[][args][#{key}][0]", Gallery.all.collect{|g| [g.name, g.pointer]}, {selected:Page.resolve_pointer(@args[key][0]), label:"Gallery for "+key.to_s.titleize, include_blank:"Select a gallery..."},class:"file_select",data:{action:"component-editor#settingsChanged"}}
       </div>
       <div class="row"><div class="field col">
-        #{form.select "components[][args][#{key}][1]".to_sym, Gallery.resolve_pointer(@args[key][0]).files.collect{|f| [f.filename.titleize, f.filename] }, {selected:Page.first.resolve_pointer(@args[key][1]), label:key.to_s.titleize, include_blank:"Select a file..."},class:"file_select",data:{action:"component-editor#settingsChanged"}}
+        #{form.select "components[][args][#{key}][1]".to_sym, Gallery.resolve_pointer(@args[key][0]).files.collect{|f| [f.filename.titleize, f.filename] }, {selected:Page.resolve_pointer(@args[key][1]), label:key.to_s.titleize, include_blank:"Select a file..."},class:"file_select",data:{action:"component-editor#settingsChanged"}}
       </div>).html_safe
     end
     if(get_type(key) == "URL")

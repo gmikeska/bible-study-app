@@ -3,7 +3,11 @@ module ApplicationHelper
     return (current_user && current_user.type == type)
   end
   def preview_video(file,url)
-      return %Q(<div style="background-image:url('#{url_for(file.preview(resize_to_limit: [200, 200]).processed)}'); min-height:200px; min-width:200px;">#{link_to "<div class='w-100' style='font-size: xx-large;padding-left: 45%;padding-top: 30%;color: white;'>►</div>".html_safe, url, style:'text-decoration:none;'} </div> )
+      if(url != false)
+        return %Q(<div style="background-image:url('#{url_for(file.preview(resize_to_limit: [200, 200]).processed)}'); min-height:200px; min-width:200px;">#{link_to "<div class='w-100' style='font-size: xx-large;padding-left: 45%;padding-top: 30%;color: white;'>►</div>".html_safe, url, style:'text-decoration:none;'} </div> )
+      else
+        return %Q(<div style="background-image:url('#{url_for(file.preview(resize_to_limit: [200, 200]).processed)}'); min-height:200px; min-width:200px;"><div class='w-100' style='font-size: xx-large;padding-left: 45%;padding-top: 30%;color: white;'>►</div> </div> )
+      end
   end
   def video_path(lesson,file)
       return "/videos/#{file.filename.base.to_s}"
@@ -67,13 +71,40 @@ module ApplicationHelper
     end
     link_to content, link, method: :delete, data: { confirm: 'Are you sure?' }, **args
   end
+  def help_text(help_pointer, type=:collapse)
+    help_id = help_pointer.gsub(":","_")
+    help_pointer = Help.parse_pointer(help_pointer)
+    section = help_pointer[:attribute]
+    help_document = Help.find_or_create_by(slug:help_pointer[:param])
+    help_section = help_document.section(section)
+    if(help_section.present?)
+      if(type == :collapse)
+        return %Q(<a class="helpIcon" data-toggle="collapse" href="##{help_id}" role="button" aria-expanded="false" aria-controls="#{help_id}">🛈</a>
+          <div class="collapse help" id="#{help_id}">
+          <div class="card card-body inline-help">
+          #{help_section}
+          </div>
+          </div>)
+      elsif(type == :tooltip)
+        help_section = help_section.gsub(/<h3 id="[\w]*">[\w]*<\/h3>/,"")
+        help_section = strip_tags(help_section)
+        return %Q(<a href="#" data-toggle="tooltip" title="#{help_section}">🛈</a>)
+      end
+
+    else
+      return ""
+    end
+  end
   def toolbar(buttons,**args)
+    if(!buttons.is_a? Array)
+      buttons = [buttons]
+    end
     if(args[:class].nil?)
       args[:class] = "border row toolbar"
     else
       args[:class] = "#{args[:class]} toolbar"
     end
-    
+
     %Q(<div class="#{args[:class]}" style="#{args[:style]}">
       #{buttons.join('')}
     </div>).html_safe

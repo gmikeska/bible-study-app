@@ -1,0 +1,67 @@
+<%= bootstrap_form_with(model:page, local: true) do |form| %>
+  <% if page.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(page.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+      <ul>
+        <% page.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div id="components">
+    <%= form.submit "Save Changes", class:"btn btn-default" %>
+    <div class="field">
+      <%= form.text_field :name %>
+    </div>
+    <% if(page.components.length > 0)
+      page.components.each_with_index do |component,i| %>
+      <div class="component" id="component-<%= i %>">
+        <div class="field">
+          <%= render "component_select", index:i, form:form, component:component %>
+        </div>
+        <% end %>
+      </div>
+    <% else %>
+    <div class="component" id="component-0">
+      <div class="field">
+        <%= render "component_select", index:0, form:form, component:nil %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+
+  <div class="addComponent">
+    <%= link_to "+ Add Component", "#", class:"btn btn-secondary", id:"addComponent" %>
+  </div>
+  <div class="actions">
+    <%= form.submit "Save Changes", class:"btn btn-default" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  if(!!$)
+  {
+    $("body").ready(()=>{
+
+
+      $("#addComponent").click((e)=>{
+        e.preventDefault()
+        numComponents = $(".component").length
+        i = parseInt($(".component")[numComponents-1].id.split("-")[1])
+        nextId = "component-"+(i+1)
+        component_selector = $(`#component-${i}`)[0].cloneNode()
+        component_selector.id = nextId
+        $(component_selector).html($(`#component-${i}`).html())
+        $(".component-preview",component_selector).html("")
+        $(".settings",component_selector).html("")
+        $(".settings",component_selector).data("")
+        $("#components").append(component_selector)
+        $("select","#"+component_selector.id).val("")
+
+      })
+    })
+  }
+
+</script>

@@ -1,5 +1,7 @@
 class CustomizableComponent < ViewComponent::Base
-  include TagHelper
+  include Rails.application.routes.named_routes.path_helpers_module
+  include Rails.application.routes.named_routes.url_helpers_module
+  include ApplicationHelper
   def initialize(**args)
     if(args[:css_class])
       @css_class = args[:css_class]
@@ -42,11 +44,8 @@ class CustomizableComponent < ViewComponent::Base
     @id = id
   end
 
-  def set_style(**args)
-    args.each_pair do |key, value|
-      @style = @style+"#{key}:#{value};"
-    end
-    @style = "style=#{@style}"
+  def set_style(style_string)
+    @style = style_string
   end
   def tag_args
     args = {}
@@ -73,11 +72,12 @@ class CustomizableComponent < ViewComponent::Base
   end
   def create_link_url(link_reference)
     if(Page.first.is_pointer?(link_reference))
-      return Page.first.resolve_pointer(link_reference).url
+      return Page.resolve_pointer(link_reference).url
     else
       return link_reference
     end
   end
+
   def self.params
     return ComponentInfo.new([:css_class,:id])
   end

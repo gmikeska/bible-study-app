@@ -1,0 +1,12 @@
+<% if(helps.length > 0) %>
+  <div class="border" style="max-width: 30%;">
+    <div class="container">
+      <strong>Topics</strong>
+    </div>
+    <ol>
+      <% helps.each do |help|  %>
+          <li><span><%= link_to(help.title.titleize,help) %></span><% if(current_user.present? && current_user.isAdmin?) %><span style="float:right; margin-right:8px;"><%= edit_button(edit_help_path(help), class:"") %>|<%= delete_button(help,class:"") %></span><% end %></li>
+      <% end %>
+    </ol>
+  </div>
+<% end %>

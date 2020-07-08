@@ -1,0 +1,31 @@
+<h1><%= @file.filename.to_s %></h1>
+<div class="row">
+  <div class="col">
+    &nbsp;
+  </div>
+  <div class="col">
+<% if(@file.image?) %>
+    <img src="<%= @gallery.get_url(@file) %>" alt="">
+<% elsif(@file.video?) %>
+  <%= render "shared/video_player", url:@gallery.get_url(@file) %>
+<% else %>
+<a href="<%= file_friendly_url(@gallery,@file.filename) %>">
+<span class="fiv-sqo fiv-icon-<%= @file.filename.extension %>" style="width: 100%;font-size: 13em;"></span>
+</a>
+<div class="row">
+  <div class="col">
+    &nbsp;
+  </div>
+  <div class="col">
+  <a href="<%= file_friendly_url(@gallery,@file.filename) %>">Download</a>
+</div>
+<div class="col">
+  &nbsp;
+</div>
+</div>
+<% end %>
+</div>
+<div class="col">
+  &nbsp;
+</div>
+</div>

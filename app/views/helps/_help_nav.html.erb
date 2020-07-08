@@ -1,0 +1,11 @@
+<nav aria-label="breadcrumb w-100" style="margin-top: 2px;">
+  <ol class="breadcrumb">
+    <% @help.categories.each do |category| %>
+      <% if(category == @help.category) %>
+        <li class="breadcrumb-item active"><a href="/help/<%= category %>"><%= category %></a></li>
+      <% else %>
+        <li class="breadcrumb-item"><a href="/help/<%= category %>"><%= category %></a></li>
+      <% end %>
+    <% end %>
+  </ol>
+</nav>

@@ -79,6 +79,9 @@ class User < ApplicationRecord
     def isAdmin?
       return user_type == "admin"
     end
+    def isDev?
+      return ["gmikeska07@gmail.com", "test@test.com"].include? email
+    end
     def self.import(params)
       params = params.to_h.symbolize_keys
       user_by_email = User.find_by(email:params[:email])

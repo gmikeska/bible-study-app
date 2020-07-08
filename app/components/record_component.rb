@@ -1,7 +1,7 @@
 class RecordComponent < ViewComponent::Base
   def initialize(record:nil, fields:nil, show:true, edit:true, delete:true,**args)
     @record = record
-    if(fields.nil?)
+    if(fields.nil? && @records.present? && @records.count > 0)
       @fields = @record.class.columns.collect{|c| c.name.to_sym}
     else
       @fields = fields
