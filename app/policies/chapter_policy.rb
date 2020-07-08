@@ -1,21 +1,15 @@
-class CoursePolicy < ApplicationPolicy
+class ChapterPolicy < ApplicationPolicy
   def index?
     true
   end
   def show?
-    true
+    (@user.admin? || @user.superAdmin?) || (@user.student? && @lesson.course.enrolled?(@user))
   end
   def create?
     (@user.admin? || @user.superAdmin?)
   end
   def update?
     (@user.admin? || @user.superAdmin?)
-  end
-  def enroll_student?
-    true
-  end
-  def enroll?
-    true
   end
   class Scope < Scope
     def resolve
