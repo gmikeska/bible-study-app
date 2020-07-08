@@ -37,9 +37,9 @@ admin = User.create(
   email:"test@test.com",
   password:"temp1234",
   password_confirmation:"temp1234",
-  user_type:"admin"
+  role: :superAdmin
 )
-student = User.create(first_name:first_name,last_name:last_name,email:email, password:pass, password_confirmation:pass, user_type:"student")
+student = User.create(first_name:first_name,last_name:last_name,email:email, password:pass, password_confirmation:pass, role: :student)
 
 demo_course.enroll(student)
 demo_course.save
@@ -53,4 +53,4 @@ Bible.list_bibles
 b = Bible.find_by(bible_id:"06125adad2d5898a-01")
 b.load_book(45)
 puts student.email
-f = FacebookVideo.create(id:1, title:"Worship - Sunday, June 28, 2020",video_url:"https://www.facebook.com/MemorialUnitedMethodistChurchAustin/videos/2338495259780230/")
+FacebookVideo.import()

@@ -12,12 +12,16 @@ class User < ApplicationRecord
   has_many :children, class_name: "User",
                           foreign_key: "parent_id"
   belongs_to :parent, class_name: "User", optional: true
-  scope :admins, -> { where(user_type: 'admin') }
-  scope :instructors, -> { where(user_type: 'instructor') }
-  scope :students, -> { where(user_type: 'student') }
+  enum role: [:student, :instructor, :admin, :superAdmin]
+  scope :admins, -> { where(role: 'admin') }
+  scope :instructors, -> { where(role: 'instructor') }
+  scope :students, -> { where(role: 'student') }
     after_initialize do |user|
       if(user.user_type.nil?)
         user.user_type = "student"
+      end
+      if(user.role.nil?)
+        user.role = "student"
       end
       if(user.breeze_id.present? &&  user.breeze_data.nil?)
         user.load_breeze_data
@@ -68,19 +72,22 @@ class User < ApplicationRecord
       return parent.present?
     end
     def isStudent?
-      return user_type == "student"
+      return self.student? == "student"
     end
     def isInstructor?
-      return (user_type == "instructor")
+      return self.instructor?
+    end
+    def staff?
+      return (self.instructor? || self.admin? || self.superAdmin?)
     end
     def isStaff?
-      return (user_type == "instructor" || user_type == "admin")
+      return (self.staff?)
     end
     def isAdmin?
-      return user_type == "admin"
+      return (self.admin? || self.superAdmin?)
     end
     def isDev?
-      return ["gmikeska07@gmail.com", "test@test.com"].include? email
+      return self.superAdmin?
     end
     def self.import(params)
       params = params.to_h.symbolize_keys

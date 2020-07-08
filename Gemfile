@@ -60,6 +60,7 @@ gem 'bootstrap', '~> 4.4.1'
 gem "bootstrap_form", "~> 4.0"
 gem 'image_processing'
 gem 'devise'
+gem 'pundit'
 gem 'faker'
 gem 'docx'
 gem 'zoomus'

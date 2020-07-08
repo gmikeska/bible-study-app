@@ -16,7 +16,7 @@
       <%= form.text_field :name %>
     </div>
     <div class='col'>
-      <%= form.select :visibility, [['Public', 'Public'], ['Enrolled', 'Enrolled'], ['Private', 'Private']], selected:course.visibility %>
+      <%= form.select :visibility, [['Public', "visibility_hidden"], ['Enrolled', "visibility_enrolled"], ['Private', "visibility_public"]], selected:course.visibility %>
     </div>
   </div>
   <div class='field row'>

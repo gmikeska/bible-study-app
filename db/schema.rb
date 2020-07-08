@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_01_133914) do
+ActiveRecord::Schema.define(version: 2020_07_06_140412) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -90,7 +90,6 @@ ActiveRecord::Schema.define(version: 2020_07_01_133914) do
     t.string "name"
     t.string "slug"
     t.string "description"
-    t.string "visibility"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "summary"
@@ -106,6 +105,7 @@ ActiveRecord::Schema.define(version: 2020_07_01_133914) do
     t.integer "breeze_calendar_id"
     t.string "breeze_events"
     t.integer "breeze_id"
+    t.integer "visibility"
   end
 
   create_table "courses_pets", id: false, force: :cascade do |t|
@@ -138,9 +138,10 @@ ActiveRecord::Schema.define(version: 2020_07_01_133914) do
   create_table "facebook_videos", force: :cascade do |t|
     t.string "title"
     t.string "slug"
-    t.string "video_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "video_id"
+    t.integer "visibility"
   end
 
   create_table "galleries", force: :cascade do |t|
@@ -255,6 +256,7 @@ ActiveRecord::Schema.define(version: 2020_07_01_133914) do
     t.string "first_name"
     t.string "last_name"
     t.string "breeze_data"
+    t.integer "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
