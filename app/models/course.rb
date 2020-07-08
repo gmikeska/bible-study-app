@@ -7,6 +7,7 @@ class Course < ApplicationRecord
   has_many :parents, through: :students
   validates :name, presence: true
   monetize :price_cents
+  enum visibility: [:visibility_hidden,:visibility_enrolled,:visibility_public]
   after_initialize do |course|
     if(course.instruction.nil?)
     course.instruction = Instruction.new(status:"idle")
@@ -17,7 +18,7 @@ class Course < ApplicationRecord
       # course.save
     end
     if(!course.visibility)
-      course.visibility = "Private"
+      course.visibility = :visibility_hidden
     end
   end
   def update(params)
@@ -99,9 +100,9 @@ class Course < ApplicationRecord
     (self.students.to_ary + User.admins).select{|u| u.online == true}.uniq
   end
   def visible_to(user)
-    if(visibility == "Public")
+    if(self.visibility_public?)
       return true
-    elsif(visibility == "Enrolled")
+    elsif(self.visibility_enrolled?)
       user_is_enrolled_and_paid = (user.present? && enrolled?(user) && (self.enrollments.select{|enrollment| enrollment.user == user}.first.invoice.paid?))
       return((user_is_enrolled_and_paid || user.isStaff?))
     else

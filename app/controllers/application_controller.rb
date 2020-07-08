@@ -1,7 +1,93 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :load_template_vars
+  before_action :set_naming_vars
+  include Pundit
 
+
+
+  def set_naming_vars
+    @resource_name_root = self.class.name.match(/(?<model>\w*)Controller/)[:model]
+    @resource_model_name = @resource_name_root.singularize
+    @resource_collection_name = "@"+@resource_name_root.downcase
+    @resource_instance_name = "@"+(@resource_model_name.underscore)
+    @resource_model = @resource_model_name.constantize
+  end
+
+  def set_resource
+    if(params[:action] == "new")
+      instance_variable_set(@resource_instance_name.to_sym,@resource_model.new())
+    elsif(params[:action] == "create")
+      params_method_name = (@resource_name_root.singularize.downcase+"_params").to_sym
+      instance_variable_set(@resource_instance_name.to_sym,@resource_model.new(self.send(params_method_name)))
+    elsif(params[:action] == "index")
+      instance_variable_set(@resource_collection_name.to_sym,@resource_model.all)
+    else
+      param_prefix = @resource_name_root.downcase.singularize
+      if(params["slug".to_sym].present?)
+        instance_variable_set(@resource_instance_name.to_sym,@resource_model.find_by( slug: params["slug".to_sym]))
+      elsif(params[(param_prefix+"_slug".to_sym)].present?)
+        instance_variable_set(@resource_instance_name.to_sym, @resource_model.find_by(slug: params[(param_prefix+"_slug".to_sym)]))
+      end
+    end
+  end
+  def authorize_action
+    if(params[:action] != "index")
+      begin
+        authorize(instance_variable_get(@resource_instance_name), (params[:action]+"?").to_sym)
+      rescue
+        message = redirect_message
+
+        if(message.present?)
+          redirect_to redirect_target, alert:message
+        else
+          redirect_to redirect_target
+        end
+
+      else
+        puts "Authorized #{params[:action]}."
+      end
+    else
+      instance_variable_set(@resource_collection_name, policy_scope(@resource_model_name.constantize))
+    end
+  end
+
+  def redirect_target
+    return "/"
+  end
+  def redirect_message
+    if(params[:action] == "create" || params[:action] == "new")
+      return "You are not authorized to create that item."
+    elsif(params[:action] == "edit" || params[:action] == "update")
+      return "You are not authorized to edit that item."
+    elsif(params[:action] == "show" || params[:action] == "index")
+      return "You are not authorized to view that item."
+    else
+      return "You are not authorized to edit that item."
+    end
+  end
+  def filter_params(**args)
+    if(args[:params].nil?)
+      p = @resource_model.column_names
+      p = p.reject{|c| (c.include?( "_at")) }
+      if(args[:exclude].present?)
+        args[:exclude].each do |name|
+          p = p.reject{|c| c.to_sym == name.to_sym }
+        end
+      end
+    else
+      p = args[:params]
+    end
+    if(args[:include].present?)
+      if(args[:include].is_a? Array)
+        p = p.concat(args[:include])
+      else
+        p << args[:include]
+      end
+    end
+    p = p.map{|c| c = c.to_sym}
+    return params.require(@resource_name_root.singularize.downcase.to_sym).permit(*p)
+  end
   def requester_is_authorized(condition,target=nil)
     if(current_user.present? && condition)
       if(!target.nil?)
@@ -17,7 +103,6 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
-
   def requester_is_staff
     return requester_is_authorized(current_user.present? && current_user.isStaff?)
   end

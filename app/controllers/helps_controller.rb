@@ -1,5 +1,7 @@
 class HelpsController < ApplicationController
-  before_action :set_help, only: [:show, :edit, :update, :destroy]
+  before_action :set_resource
+  before_action :authenticate_user!, except:[:index, :show]
+  before_action :authorize_action
 
   # GET /helps
   # GET /helps.json
@@ -85,6 +87,6 @@ class HelpsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def help_params
-      params.require(:help).permit(:title, :content, :system, :category)
+      filter_params(params:[:title, :content, :system, :category])
     end
 end

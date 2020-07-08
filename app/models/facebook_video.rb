@@ -1,6 +1,7 @@
 class FacebookVideo < ApplicationRecord
   has_one_attached :video
   serialize :webhook_message, Array
+  enum visibility: [:visibility_hidden,:visibility_member,:visibility_public]
   after_initialize do |video|
     if(video.slug.nil? && !video.title.nil?)
       video.slug = video.title.parameterize
