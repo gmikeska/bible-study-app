@@ -4,46 +4,70 @@ class ApplicationController < ActionController::Base
   before_action :set_naming_vars
   include Pundit
 
-
-
   def set_naming_vars
-    @resource_name_root = self.class.name.match(/(?<model>\w*)Controller/)[:model]
-    @resource_model_name = @resource_name_root.singularize
-    @resource_collection_name = "@"+@resource_name_root.downcase
-    @resource_instance_name = "@"+(@resource_model_name.underscore)
-    @resource_model = @resource_model_name.constantize
+    if(!self.respond_to?("skip_naming") || !(self.skip_naming == true))
+      @resource_name_root = self.class.name.match(/(?<model>\w*)Controller/)[:model]
+      @resource_model_name = @resource_name_root.singularize
+      @resource_collection_name = "@"+@resource_name_root.downcase
+      @resource_instance_name = "@"+(@resource_model_name.underscore)
+      @resource_model = @resource_model_name.constantize
+    end
   end
 
-  def set_resource
-    if(params[:action] == "new")
-      instance_variable_set(@resource_instance_name.to_sym,@resource_model.new())
-    elsif(params[:action] == "create")
-      params_method_name = (@resource_name_root.singularize.downcase+"_params").to_sym
-      instance_variable_set(@resource_instance_name.to_sym,@resource_model.new(self.send(params_method_name)))
-    elsif(params[:action] == "index")
-      instance_variable_set(@resource_collection_name.to_sym,@resource_model.all)
+  def set_resource(**args)
+    if(args[:param].nil?)
+      args[:param] = :id
+    end
+    if(args[:model].present?)
+      short_param = args[:param]
+      param_prefix = @resource_name_root.underscore.singularize
+      long_param = (args[:model].to_s+"_#{args[:param].to_s}").to_sym
+      model = args[:model].to_s.classify.constantize
+      if(params[short_param].present?)
+        search = {}
+        search[short_param] = params[short_param]
+        instance_variable_set(("@"+args[:model].to_s.underscore).to_sym, model.find_by(**search))
+      elsif(params[long_param].present?)
+        search = {}
+        search[short_param] = params[long_param]
+        instance_variable_set(("@"+args[:model].to_s.underscore).to_sym, model.find_by(**search))
+      end
     else
-      param_prefix = @resource_name_root.downcase.singularize
-      if(params["slug".to_sym].present?)
-        instance_variable_set(@resource_instance_name.to_sym,@resource_model.find_by( slug: params["slug".to_sym]))
-      elsif(params[(param_prefix+"_slug".to_sym)].present?)
-        instance_variable_set(@resource_instance_name.to_sym, @resource_model.find_by(slug: params[(param_prefix+"_slug".to_sym)]))
+      if(params[:action] == "new")
+        instance_variable_set(@resource_instance_name.to_sym,@resource_model.new())
+      elsif(params[:action] == "create")
+        params_method_name = (@resource_name_root.singularize.downcase+"_params").to_sym
+        instance_variable_set(@resource_instance_name.to_sym,@resource_model.new(self.send(params_method_name)))
+      elsif(params[:action] == "index")
+        instance_variable_set(@resource_collection_name.to_sym,@resource_model.all)
+      else
+        short_param = args[:param]
+        param_prefix = @resource_name_root.underscore.singularize
+        long_param = (param_prefix+"_#{args[:param].to_s}").to_sym
+        if(params[short_param].present?)
+          search = {}
+          search[short_param] = params[short_param]
+          instance_variable_set(@resource_instance_name.to_sym, @resource_model.find_by(**search))
+        elsif(params[long_param].present?)
+          search = {}
+          search[short_param] = params[long_param]
+          instance_variable_set(@resource_instance_name.to_sym, @resource_model.find_by(**search))
+        end
       end
     end
   end
+  
   def authorize_action
     if(params[:action] != "index")
       begin
         authorize(instance_variable_get(@resource_instance_name), (params[:action]+"?").to_sym)
       rescue
         message = redirect_message
-
         if(message.present?)
           redirect_to redirect_target, alert:message
         else
           redirect_to redirect_target
         end
-
       else
         puts "Authorized #{params[:action]}."
       end
@@ -55,6 +79,7 @@ class ApplicationController < ActionController::Base
   def redirect_target
     return "/"
   end
+
   def redirect_message
     if(params[:action] == "create" || params[:action] == "new")
       return "You are not authorized to create that item."
@@ -66,6 +91,7 @@ class ApplicationController < ActionController::Base
       return "You are not authorized to edit that item."
     end
   end
+
   def filter_params(**args)
     if(args[:params].nil?)
       p = @resource_model.column_names
@@ -103,6 +129,7 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
+
   def requester_is_staff
     return requester_is_authorized(current_user.present? && current_user.isStaff?)
   end
