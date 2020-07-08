@@ -15,7 +15,9 @@ class Users::PasswordsController < Devise::PasswordsController
   # def edit
   #   super
   # end
-
+  def skip_naming
+    true
+  end
   # PUT /resource/password
   # def update
   #   super
