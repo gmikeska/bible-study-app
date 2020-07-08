@@ -72,7 +72,7 @@ class FacebookVideosController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_facebook_video
       # params["slug"] = params["slug"].parameterize
-      set_resource
+      set_resource(param: :slug)
     end
     # Only allow a list of trusted parameters through.
     def facebook_video_params

@@ -1,5 +1,5 @@
 class HelpsController < ApplicationController
-  before_action :set_resource
+  before_action :set_help, except:[:index]
   before_action :authenticate_user!, except:[:index, :show]
   before_action :authorize_action
 
@@ -18,10 +18,10 @@ class HelpsController < ApplicationController
   # GET /helps/1
   # GET /helps/1.json
   def show
-    if(@help.restricted)
-      auth = (current_user && current_user.isStaff?)
-      return unless requester_is_authorized(auth)
-    end
+    # if(@help.restricted)
+    #   auth = (current_user && current_user.isStaff?)
+    #   return unless requester_is_authorized(auth)
+    # end
   end
 
   # GET /helps/new
@@ -34,8 +34,7 @@ class HelpsController < ApplicationController
 
   # GET /helps/1/edit
   def edit
-    auth = (current_user && current_user.isStaff?) && (!@help.system || current_user.isDev?)
-    return unless requester_is_authorized(auth)
+    
   end
 
   # POST /helps
@@ -81,7 +80,8 @@ class HelpsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_help
-      @help = Help.find_by slug:params[:slug].parameterize
+      params[:slug] = params[:slug].parameterize
+      set_resource(param: :slug)
       @contents = Help.where(category:params[:slug].parameterize)
     end
 

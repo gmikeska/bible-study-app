@@ -1,6 +1,8 @@
 class LessonsController < ApplicationController
   before_action :set_lesson, only: [:show,:show_video,:upload,:delete_file, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token, only:[:upload]
+  before_action :authenticate_user!
+  before_action :authorize_action
   # GET /lessons
   # GET /lessons.json
   def index
@@ -249,13 +251,8 @@ class LessonsController < ApplicationController
     def set_lesson
       set_course
       set_chapter
-      if(params[:slug])
-        @lesson = Lesson.find_by slug: params[:slug]
-        @enrollment = @lesson.course.enrollments.select{|e| e.user == current_user}.first
-      elsif(params[:lesson_slug])
-        @lesson = Lesson.find_by slug: params[:lesson_slug]
-        @enrollment = @lesson.course.enrollments.select{|e| e.user == current_user}.first
-      end
+      set_resource(param: :slug)
+      @enrollment = @lesson.course.enrollments.select{|e| e.user == current_user}.first
       if(@lesson.quiz)
         @quiz = @lesson.quiz
       end
@@ -270,12 +267,13 @@ class LessonsController < ApplicationController
 
     def set_course
       if(params[:course_slug])
-        @course = Course.find_by slug: params[:course_slug]
+        set_resource(model: :course, param: :slug)
       end
     end
+
     def set_chapter
       if(params[:chapter_slug])
-        @chapter = @course.chapters.find_by slug:params[:chapter_slug]
+        set_resource(model: :chapter, param: :slug)
       end
     end
     # Only allow a list of trusted parameters through.

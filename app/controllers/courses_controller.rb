@@ -1,5 +1,5 @@
 class CoursesController < ApplicationController
-  before_action :set_resource
+  before_action :set_course
   before_action :authenticate_user!, except:[:index, :show]
   before_action :authorize_action
 
@@ -115,6 +115,10 @@ class CoursesController < ApplicationController
     else
       return "You are not authorized to edit that course."
     end
+  end
+  def set_course
+    # params["slug"] = params["slug"].parameterize
+    set_resource(param: :slug)
   end
 
   def course_params
