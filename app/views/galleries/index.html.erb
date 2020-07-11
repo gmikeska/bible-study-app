@@ -1,5 +1,5 @@
 <%= toolbar(link_to('New Gallery', new_gallery_path, class:'btn btn-sm btn-default')) %>
-<p id='notice'><%= notice %></p>
+
 
 <h1> Galleries </h1>
 <%= render(TableComponent.new(records:@galleries,fields:[:name_titleize, :files_count])) do |component| %>

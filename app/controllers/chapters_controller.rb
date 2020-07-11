@@ -1,5 +1,5 @@
 class ChaptersController < ApplicationController
-  before_action :set_chapter, only: [:show, :edit, :update, :destroy]
+  before_action :set_chapter
   # GET /chapters
   # GET /chapters.json
   # def index
@@ -9,27 +9,20 @@ class ChaptersController < ApplicationController
   # GET /chapters/1
   # GET /chapters/1.json
   def show
-    return unless requester_is_staff
   end
 
   # GET /chapters/new
   def new
-    return unless requester_is_staff
-    set_course
-    @chapter = Chapter.new
     @chapter.course = @course
   end
 
   # GET /chapters/1/edit
   def edit
-    return unless requester_is_staff
   end
 
   # POST /chapters
   # POST /chapters.json
   def create
-    return unless requester_is_staff
-    @chapter = Chapter.new(chapter_params)
     set_course
     @course.chapters << @chapter
     respond_to do |format|
@@ -45,7 +38,6 @@ class ChaptersController < ApplicationController
   # PATCH/PUT /chapters/1
   # PATCH/PUT /chapters/1.json
   def update
-    return unless requester_is_staff
     respond_to do |format|
       if @chapter.update(chapter_params)
         format.html { redirect_to @chapter.course, notice: 'Chapter was successfully updated.' }
@@ -60,8 +52,6 @@ class ChaptersController < ApplicationController
   # DELETE /chapters/1
   # DELETE /chapters/1.json
   def destroy
-    return unless requester_is_staff
-    set_course
     @chapter.destroy
     respond_to do |format|
       format.html { redirect_to @course, notice: 'Chapter was successfully destroyed.' }
@@ -72,11 +62,11 @@ class ChaptersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
-      @course = Course.find_by slug: params[:course_slug]
+      set_resource(model: :course, param: :slug)
     end
     def set_chapter
       set_course
-      @chapter = Chapter.find_by slug: params[:slug]
+      set_resource(param: :slug)
     end
 
     # Only allow a list of trusted parameters through.

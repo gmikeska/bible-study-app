@@ -148,8 +148,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def cancel
   #   super
   # end
-
-  # protected
+  def skip_naming
+    true
+  end
+  protected
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_sign_up_params
@@ -183,6 +185,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params[:user].delete(:password_confirmation)
     end
   end
+
+
 
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)

@@ -1,4 +1,4 @@
-<div id="lessonCarousel" class="carousel" data-target="lesson.slides" style="width:942px;margin-left:-100px;">
+<div id="lessonCarousel" class="carousel" data-target="lesson.slides" data-lesson-starting-slide="<%= @lesson.current_slide %>" style="width:942px;margin-left:-100px;">
   <div class="carousel-inner border" style="max-width: 80%;">
     <% @lesson.slides.each_index do |index| %>
       <%= render "slide", lesson:@lesson, slide:@lesson.slides[index], index:index  %>
@@ -43,12 +43,7 @@ else
 testInProgressHandler = ""
 end %>
 <script type="text/javascript">
-  hideNext = ()=>{
-    $(".carousel-control-next").hide()
-  }
-  showNext = ()=>{
-    $(".carousel-control-next").show()
-  }
+
   $("body").ready(()=>{
     // $("#lessonCarousel").carousel({
     //   pause:true

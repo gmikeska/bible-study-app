@@ -7,9 +7,6 @@ consumer.subscriptions.create("LessonChannel", {
       application.channels = []
 
     application.channels.push(this)
-    application.channelLoader(this)
-    // Called when the subscription is ready for use on the server
-    console.log("Connected to the room!");
   },
 
   disconnected() {

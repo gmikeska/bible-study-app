@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
 before_action :set_page, only: [:show, :edit, :update, :destroy]
+before_action :authenticate_user!, only: [:index,:edit, :update, :destroy]
   layout 'application'
 
   def index
@@ -69,7 +70,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
 
 
   def page_params
-    p = params.require(:page).permit(:name,components:[:name,args:{}]).to_h.symbolize_keys
+    p = filter_params(:name,components:[:name,args:{}]).to_h.symbolize_keys
     p[:components] = p[:components].map{|c| c.to_h.symbolize_keys; }
     return p
   end
@@ -94,7 +95,7 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
   end
 
   def set_page
-    @page = Page.find_by slug: params[:slug]
+    set_resource(param: :slug)
   end
 
 

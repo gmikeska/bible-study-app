@@ -16,7 +16,7 @@
       <%= form.text_field :name %>
     </div>
     <div class='col'>
-      <%= form.select :visibility, [['Public', 'Public'], ['Enrolled', 'Enrolled'], ['Private', 'Private']], selected:course.visibility %>
+      <%= form.select :visibility, [['Public', "visibility_hidden"], ['Enrolled', "visibility_enrolled"], ['Private', "visibility_public"]], selected:course.visibility %>
     </div>
   </div>
   <div class='field row'>
@@ -33,7 +33,36 @@
   </div>
 
 
-  <div class="actions">
+    <%= render FoldingComponent.new(name:"scheduling", title:"Scheduling",starts_expanded:course.scheduled?) do |component|
+      component.with(:body) do %>
+        <div class='row'>
+          <div class='field col'>
+            <%= form.time_select :start_time, selected:course.start_time %>
+          </div>
+          <div class='field col'>
+            <%= form.time_select :end_time, selected:course.end_time %>
+          </div>
+        </div>
+        <div class='field'>
+          <%= form.date_select :start_date, selected:course.start_date %>
+        </div>
+        <div class='row'>
+          <div class='field col'>
+            <%= form.number_field :frequency, value:course.frequency, placeholder:"1" %>
+          </div>
+          <div class='field col'>
+            <% if(course.frequency_interval.nil?)
+                selected_frequency = "weeks"
+               else
+                selected_frequency = course.frequency_interval
+             end %>
+            <%= form.select :frequency_interval, [["Months", "months"],["Weeks", "weeks"],["Days", "days"]], selected:selected_frequency %>
+          </div>
+        </div>
+    <% end %>
+  <% end %>
+
+<div class="actions">
     <%= form.submit "Save Changes", class:"btn btn-default" %>
   </div>
 <% end %>

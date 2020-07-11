@@ -9,13 +9,17 @@ class LessonChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    data["from"] = data["from"].titleize
-    # message_str = data["from"]+":"+data["message"]
-    lesson = Lesson.find_by slug:data["lesson_slug"]
-    lesson.messages << data
-    lesson.save
-    # puts data
-    transmit(data)
+    if(data["type"] == "message")
+      data["from"] = data["from"].titleize
+      # message_str = data["from"]+":"+data["message"]
+      lesson = Lesson.find_by slug:data["lesson_slug"]
+      lesson.messages << data
+      lesson.save
+      # puts data
+      transmit(data)
+    elsif(data["type"] == "slide")
+
+    end
     # ActionCable.server.broadcast("InstructionChannel", data)
   end
 end

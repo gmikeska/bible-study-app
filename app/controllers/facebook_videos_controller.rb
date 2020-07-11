@@ -1,5 +1,8 @@
 class FacebookVideosController < ApplicationController
-  before_action :set_facebook_video, only: [:show, :edit, :update, :destroy]
+  before_action :set_facebook_video
+  before_action :authenticate_user!, except:[:index, :show, :live]
+  before_action :authorize_action
+
   layout 'live'
   # GET /facebook_videos
   # GET /facebook_videos.json
@@ -13,7 +16,7 @@ class FacebookVideosController < ApplicationController
   end
 
   def live
-    @facebook_video = FacebookVideo.all.last
+    @facebook_video = FacebookVideo.all.order(created_at: :asc).last
   end
 
   # GET /facebook_videos/new
@@ -68,11 +71,15 @@ class FacebookVideosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_facebook_video
-      @facebook_video = FacebookVideo.find_by(slug:params[:slug])
+      # params["slug"] = params["slug"].parameterize
+      set_resource(param: :slug)
     end
-
     # Only allow a list of trusted parameters through.
     def facebook_video_params
-      params.require(:facebook_video).permit(:title,:url,:video)
+      filter_params(params:[:title,:url,:video])
+    end
+
+    def facebook_video_webhook_params
+      params.permit("hub.mode".to_sym,"hub.challenge".to_sym,"hub.verify_token".to_sym)
     end
 end

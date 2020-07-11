@@ -7,6 +7,11 @@ class Lesson < ApplicationRecord
   serialize :slides, Array
   serialize :messages, Array
 
+  after_initialize do |lesson|
+    if(lesson.interactive? && lesson.starting_slide.nil?)
+      lesson.starting_slide = 0
+    end
+  end
 
   def set_filename
     if(self.files.count > 0 && Rails.env != "test")
@@ -84,6 +89,9 @@ class Lesson < ApplicationRecord
   end
   def update_slide(slide_params,index)
     self.slides[index] == slide_params
+  end
+  def interactive?
+    return self.course.start_time.present?
   end
   def visible_to(user)
     if(visibility == "Public")
