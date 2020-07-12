@@ -29,7 +29,7 @@ class Email < ApplicationRecord
     if(recipients.length > 0)
       recipients.each do |r|
         if(is_pointer?(r))
-          result = resolve_pointer(r)
+          result = Email.resolve_pointer(r)
           if(result.is_a? ActiveRecord::Relation)
             arr << result.to_a
           else

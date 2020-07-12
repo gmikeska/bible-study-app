@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def authorize_action
     if(params[:action] != "index")
       begin
@@ -111,7 +111,7 @@ class ApplicationController < ActionController::Base
         p << args[:include]
       end
     end
-    p = p.map{|c| c = c.to_sym}
+    # p = p.map{|c| c = c.to_sym}
     return params.require(@resource_name_root.singularize.downcase.to_sym).permit(*p)
   end
   def requester_is_authorized(condition,target=nil)
