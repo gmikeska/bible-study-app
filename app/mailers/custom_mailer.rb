@@ -1,5 +1,5 @@
 class CustomMailer < ApplicationMailer
-  default from:"website@memorialumcaustin.com"
+  default from:"Memorial United Methodist Church <website@memorialumcaustin.com>"
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
