@@ -1,5 +1,5 @@
 class CustomMailer < ApplicationMailer
-  default from:"noreply@church-sunday-school.herokuapp.com"
+  default from:"website@memorialumcaustin.com"
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
