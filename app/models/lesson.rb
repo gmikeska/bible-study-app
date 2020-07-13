@@ -8,8 +8,8 @@ class Lesson < ApplicationRecord
   serialize :messages, Array
 
   after_initialize do |lesson|
-    if(lesson.interactive? && lesson.starting_slide.nil?)
-      lesson.starting_slide = 0
+    if(lesson.interactive? && lesson.current_slide.nil?)
+      lesson.current_slide = 0
     end
   end
 
