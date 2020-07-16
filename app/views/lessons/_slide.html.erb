@@ -22,7 +22,7 @@
         <div class="container">
           <% if(@quiz.present? && @enrollment.present? && @enrollment.status?(@quiz) == :in_progress) %>
             <% if(slide[:questions].present? && slide[:questions].length > 0 && slide[:questions] != [""]) %>
-              <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@quiz.course, @lesson.chapter,@lesson, @quiz)+"/#{current_user.id}/slide_response/") do |form| %>
+              <%= bootstrap_form_with(url:partial_response_course_lesson_quiz_url(@quiz.course,@lesson)) do |form| %>
                  <% slide[:questions].each_index do |i|; question = @lesson.quiz.questions[slide[:questions][i].to_i].symbolize_keys  %>
                    <div id="question-<%= index %>">
                      <%= render 'quizzes/show_question', number:slide[:questions][i].to_i, form: form, question:question %>
@@ -35,7 +35,7 @@
             <% end %>
           <% else %>
           <% if(slide[:questions].present? && slide[:questions].length > 0 && slide[:questions].first != "") %>
-            <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@quiz.course, @lesson.chapter,@lesson, @quiz)+"/#{current_user.id}/slide_response/") do |form| %>
+            <%= bootstrap_form_with(url:partial_response_course_lesson_quiz_url(@quiz.course,@lesson)) do |form| %>
                <% slide[:questions].each_index do |i|;qIndex = slide[:questions][i].to_i; question = @lesson.quiz.questions[qIndex].symbolize_keys
                if(@enrollment.present?)
                  user_answer = @enrollment.quiz_responses[@quiz][:answers][qIndex]

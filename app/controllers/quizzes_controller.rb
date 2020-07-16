@@ -103,23 +103,26 @@ class QuizzesController < ApplicationController
     set_current_user
     set_enrollment
     if(@enrollment.quiz_responses[@quiz].nil?)
-      @enrollment.quiz_responses[@quiz] = {answers:[],correct_answer:@quiz.questions.collect{|q| q[:answer] }, results:[]}
+      quiz_responses = {answers:[],correct_answer:@quiz.questions.collect{|q| q[:answer] }, results:[]}
+    else
+      quiz_responses = @enrollment.quiz_responses[@quiz]
     end
     answers = result_params
     response = { }
     answers.each do |key,value|
-      @enrollment.quiz_responses[@quiz][:answers][key.to_i] = value
-      @enrollment.quiz_responses[@quiz][:results][key.to_i] = @quiz.check_answer(key.to_i, value)
-
-      if(@enrollment.quiz_responses[@quiz][:results][key.to_i] == :correct)
-        response[key] = {result:@enrollment.quiz_responses[@quiz][:results][key.to_i]}
-      elsif(@enrollment.quiz_responses[@quiz][:results][key.to_i] == :incorrect)
-        response[key] = {result:@enrollment.quiz_responses[@quiz][:results][key.to_i],correct_answer:@enrollment.quiz_responses[@quiz][:correct_answer][key.to_i]}
+    quiz_responses[:answers][key.to_i] = value
+      quiz_responses[:results][key.to_i] = @quiz.check_answer(key.to_i, value)
+      if(quiz_responses[:results][key.to_i] == :correct)
+        response[key] = {result:quiz_responses[:results][key.to_i]}
+      elsif(quiz_responses[:results][key.to_i] == :incorrect)
+        response[key] = {result:quiz_responses[:results][key.to_i],correct_answer:quiz_responses[:correct_answer][key.to_i]}
         if(@quiz[:questions][key.to_i][:field_type] == "radio_button")
           response[key][:correct_answer] = @quiz[:questions][key.to_i][:choices][response[:correct_answer].to_i]
         end
       end
     end
+    @enrollment.quiz_responses[@quiz] = quiz_responses
+    @enrollment.save
     if(@enrollment.status?(@quiz) == :complete)
       @enrollment.quiz_responses[@quiz][:score] = @quiz.check_score(@enrollment.quiz_responses[@quiz][:results])
       response["score"] = @enrollment.quiz_responses[@quiz][:score]

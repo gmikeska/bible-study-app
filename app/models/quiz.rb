@@ -12,7 +12,7 @@ class Quiz < ApplicationRecord
   end
   def check_answer(index,answer)
     results = []
-    question = self.questions[index]
+    question = self.questions[index].symbolize_keys
     if(question[:field_type] == "radio_button")
       answer = answer.to_i
     end

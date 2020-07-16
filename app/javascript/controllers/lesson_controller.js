@@ -32,7 +32,7 @@ export default class extends Controller {
         if(c.identifier == '{"channel":"LessonChannel"}')
             this.channel = c
       })
-    }  
+    }
 
     application.receiveCallback = (data)=>{
       if(data.type == "message")
@@ -62,8 +62,7 @@ export default class extends Controller {
           data: $(form).serialize(),
           type: "POST",
           success:(response)=>{
-            // debugger
-             var keys = Object.keys(response)
+           var keys = Object.keys(response)
             $(keys).each((i,key)=>{
               if(!isNaN(parseInt(key)))
               {
