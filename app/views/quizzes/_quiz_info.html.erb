@@ -13,7 +13,7 @@
 
   <tbody>
     <% if(@quiz.questions.length > 0) %>
-      <% @quiz.questions.each_index do |index|; question = @quiz.questions[index] %>
+      <% @quiz.questions.each_index do |index|; question = @quiz.questions[index].symbolize_keys %>
         <tr>
           <td><%= (index+1).to_s %></td>
           <td><%= question[:text] %></td>

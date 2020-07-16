@@ -2,11 +2,10 @@ class LessonsController < ApplicationController
   before_action :set_lesson, only: [:show,:show_video,:upload,:delete_file, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token, only:[:upload]
   before_action :authenticate_user!
-  before_action :authorize_action
+  before_action :authorize_action, except:[:upload,:delete_file, :new_slide,:create_slide,:edit_slide, :update_slide,:reorder_slides,:delete_slide,:show_slide]
   # GET /lessons
   # GET /lessons.json
   def index
-    return unless requester_is_staff
     @lessons = Lesson.all
   end
 
@@ -14,7 +13,6 @@ class LessonsController < ApplicationController
   # GET /lessons/1.json
   def show
     # enrolled =  @lesson.visible_to(current_user)
-    return unless requester_is_authorized(true)
     if(@chapter)
       @index = @chapter.lessons.index(@lesson)
     end
@@ -23,16 +21,16 @@ class LessonsController < ApplicationController
   def show_slide
     set_slide
     # enrolled =  @lesson.visible_to(current_user)
-    return unless requester_is_authorized(true,:show)
   end
   def new_slide
-    return unless requester_is_staff
     set_lesson
+    authorize_edit_action
+    @index = @lesson.slides.length
     @slide = {content:""}
   end
   def create_slide
-    return unless requester_is_staff
     set_lesson
+    authorize_edit_action
     @lesson.slides << slide_params
     @lesson.save
     redirect_to edit_lesson_path(@lesson)
@@ -40,16 +38,16 @@ class LessonsController < ApplicationController
 
   def edit_slide
     set_slide
+    authorize_edit_action
     # enrolled =  @lesson.visible_to(current_user)
     enrolled =  true
-    return unless requester_is_authorized(enrolled,:edit_slide)
   end
 
   def update_slide
     set_slide
+    authorize_edit_action
     # enrolled =  @lesson.visible_to(current_user)
     enrolled =  true
-    return unless requester_is_staff
     params = slide_params
     @lesson.slides[@index][:content] = params[:content]
     @lesson.slides[@index][:title] = params[:title]
@@ -78,8 +76,8 @@ class LessonsController < ApplicationController
   end
 
   def reorder_slides
-    return unless requester_is_staff()
     set_lesson
+    authorize_edit_action
     slides = []
     slide_order_params.each do |newIndex, v|
       slides << @lesson.slides[v[:id].to_i]
@@ -90,14 +88,13 @@ class LessonsController < ApplicationController
 
   def delete_slide
     set_lesson
+    authorize_edit_action
     # enrolled =  @lesson.visible_to(current_user)
     enrolled =  true
-    return unless requester_is_authorized(enrolled,:show)
   end
 
   # GET /lessons/new
   def new
-    return unless requester_is_staff
     set_course
     set_chapter
     @lesson = Lesson.new
@@ -108,7 +105,6 @@ class LessonsController < ApplicationController
   # GET /lessons/1/edit
   def edit
     set_lesson
-    return unless requester_is_staff
   end
 
   def show_file
@@ -120,7 +116,7 @@ class LessonsController < ApplicationController
   end
 
   def upload
-    return unless requester_is_staff
+    authorize_edit_action
     if(@lesson.chapter.present? && @chapter.nil?)
       @chapter = @lesson.chapter
     end
@@ -189,8 +185,8 @@ class LessonsController < ApplicationController
   end
 
   def delete_file
-    return unless requester_is_staff
     set_lesson
+    authorize_edit_action
     attachment = ActiveStorage::Attachment.find(lesson_params[:id])
     attachment.purge
     redirect_to edit_lesson_path(@lesson)

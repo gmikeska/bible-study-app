@@ -5,7 +5,7 @@
   end
 %>
   <div class="<%= carouselClass %>" id="slide-<%= index %>" data-lesson-slides-index="<%= index %>">
-      <% if(slide[:media].present?) %>
+      <% if(slide[:media].present? && slide[:media] != [""]) %>
         <div class="container <%= slide[:vertical_alignment] %> <%= slide[:horizontal_alignment] %>">
           <% slide[:media].each_index do |index|;filename = slide[:media][index];file = @lesson.get_file(filename) %>
           <video-js class="videoPlayer vjs-big-play-centered" id="media-<%= index %>" controls>
@@ -21,22 +21,22 @@
       </div>
         <div class="container">
           <% if(@quiz.present? && @enrollment.present? && @enrollment.status?(@quiz) == :in_progress) %>
-            <% if(slide[:questions].present? && slide[:questions].length > 0) %>
+            <% if(slide[:questions].present? && slide[:questions].length > 0 && slide[:questions] != [""]) %>
               <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@quiz.course, @lesson.chapter,@lesson, @quiz)+"/#{current_user.id}/slide_response/") do |form| %>
-                 <% slide[:questions].each_index do |i|; question = @lesson.quiz.questions[slide[:questions][i].to_i]  %>
+                 <% slide[:questions].each_index do |i|; question = @lesson.quiz.questions[slide[:questions][i].to_i].symbolize_keys  %>
                    <div id="question-<%= index %>">
                      <%= render 'quizzes/show_question', number:slide[:questions][i].to_i, form: form, question:question %>
                    </div>
                  <% end %>
                 <div class="actions">
-                  <%= form.submit "Submit Answers", class:"btn btn-default submitAnswers" %>
+                  <%= form.submit "Submit Answers", class:"btn btn-default submitAnswers", data:{action:"lesson#submitAnswers"} %>
                 </div>
               <% end %>
             <% end %>
           <% else %>
           <% if(slide[:questions].present? && slide[:questions].length > 0 && slide[:questions].first != "") %>
             <%= bootstrap_form_with(url:course_chapter_lesson_quiz_url(@quiz.course, @lesson.chapter,@lesson, @quiz)+"/#{current_user.id}/slide_response/") do |form| %>
-               <% slide[:questions].each_index do |i|;qIndex = slide[:questions][i].to_i; question = @lesson.quiz.questions[qIndex]
+               <% slide[:questions].each_index do |i|;qIndex = slide[:questions][i].to_i; question = @lesson.quiz.questions[qIndex].symbolize_keys
                if(@enrollment.present?)
                  user_answer = @enrollment.quiz_responses[@quiz][:answers][qIndex]
                  correct_answer = @enrollment.quiz_responses[@quiz][:correct_answer][qIndex]
@@ -45,6 +45,7 @@
                  user_answer = @quiz[:questions][qIndex][:answer]
                  correct_answer = @quiz[:questions][qIndex][:answer]
                  result = :correct
+                 # byebug
                end
                %>
                  <div id="question-<%= index %>">

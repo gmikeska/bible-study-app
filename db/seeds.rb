@@ -27,6 +27,7 @@ demo_course = Course.create(name:"Demo Course", description:"Example of Course C
 example_chapter = demo_course.chapters.create(name:"Example Chapter")
 lesson = demo_course.lessons.create(name:"Test Lesson", chapter:example_chapter)
 lesson.save
+Quiz.create(questions:[{"text"=>"Which of these animals are featured in the video?", "field_type"=>"radio_button", "choices"=>["Cats", "Birds", "Dogs"], "answer"=>1}, {"text"=>"What color is the sky in the video?", "field_type"=>"radio_button", "choices"=>["Red", "Blue", "Orange with green spots"], "answer"=>1}, {"text"=>"What other animals make an appearance in the video?", "field_type"=>"radio_button", "choices"=>["Pandas", "Badgers", "Dolphins & Whales"], "answer"=>2}],lesson:lesson)
 first_name = Faker::Name.first_name
 last_name = Faker::Name.last_name
 email = [first_name,last_name].join('.').downcase.delete(?').split(' ').join('.')+"@"+Faker::Internet.domain_name(domain: "example")

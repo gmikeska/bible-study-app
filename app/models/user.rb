@@ -13,7 +13,8 @@ class User < ApplicationRecord
                           foreign_key: "parent_id"
   belongs_to :parent, class_name: "User", optional: true
   enum role: [:student, :instructor, :admin, :superAdmin]
-  scope :admins, -> { where(role: 'admin') }
+  scope :staff, -> { where(role: 'admin').or(where(role:"superAdmin")).or(where(role:"instructor")) }
+  scope :admins, -> { where(role: 'admin').or(where(role:"superAdmin")) }
   scope :instructors, -> { where(role: 'instructor') }
   scope :students, -> { where(role: 'student') }
     after_initialize do |user|

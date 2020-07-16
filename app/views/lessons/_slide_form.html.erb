@@ -13,7 +13,7 @@
 questions = []
 media = []
 @lesson.quiz.questions.each_index do |index|
-  questions << [(index+1).to_s+". "+@lesson.quiz.questions[index][:text], index]
+  questions << [(index+1).to_s+". "+@lesson.quiz.questions.map(&:symbolize_keys)[index][:text], index]
  end
 @lesson.files.each do |file|
   media << [file.filename.to_s, file.filename.to_s]

@@ -27,18 +27,13 @@
 <div class="container">
   <%= render 'form', lesson:@lesson %>
 </div>
-  <%= render ModalComponent.new(title:"Upload Files", body:render('add_file', lesson: @lesson), submit_button:"Upload")%>
+  <%= render ModalComponent.new(title:"Upload Files", name:"uploadModal", body:render('add_file', lesson: @lesson), submit_button:"Upload")%>
 
 <script>
 
     $('body').ready(()=>{
-      completeUpload = ()=>{
-        pth = $("#pathHolder").data("path")
-        pth = pth.replace('upload','show_files')
-        $.get(pth,(content)=>{
-            $("#fileList").replaceWith(content)
-        })
-        $('#uploadModal').modal('hide')
+      completeUpload = (data)=>{
+        
       }
       $('#uploadModal').modal({
         show: false
@@ -48,10 +43,8 @@
         e.preventDefault()
         $('#uploadModal').modal('show')
       })
-      $('#submit').click((e)=>{
-        e.preventDefault()
+      window.modal["uploadModal"].onSubmit((e)=>{
         uf = $('form').last()[0]
-        // debugger
         data = new FormData(uf)
         for(let n=0; n < $(':file')[0].files.length; n++)
         {
@@ -66,14 +59,38 @@
             type: "POST",
             contentType: false,
             processData: false,
-            success:()=>{
-              completeUpload()
+            success:(data)=>{
+              completeUpload(data)
             }
         });
         path =  $('form')[0].action
-        $('.modal-body').empty()
-        $('.modal-body').html(`<div class="d-flex justify-content-center"><div class="spinner-grow" role="status">
-          <div id="pathHolder" data-path="${path}" style="hidden:true"></div><span class="sr-only">Loading...</span></div></div>`)
       })
+      // $('#submit').click((e)=>{
+      //   e.preventDefault()
+      //   uf = $('form').last()[0]
+      //   // debugger
+      //   data = new FormData(uf)
+      //   for(let n=0; n < $(':file')[0].files.length; n++)
+      //   {
+      //     data.append("files",$(':file')[0].files[0])
+      //   }
+      //   $(document).on("direct-upload:progress",(e)=>{
+      //     console.log(e)
+      //   })
+      // $.ajax({
+      //       url: $('form',"#uploadModal")[0].action,
+      //       data: data,
+      //       type: "POST",
+      //       contentType: false,
+      //       processData: false,
+      //       success:()=>{
+      //         completeUpload()
+      //       }
+      //   });
+      //   path =  $('form')[0].action
+      //   $('.modal-body').empty()
+      //   $('.modal-body').html(`<div class="d-flex justify-content-center"><div class="spinner-grow" role="status">
+      //     <div id="pathHolder" data-path="${path}" style="hidden:true"></div><span class="sr-only">Loading...</span></div></div>`)
+      // })
     })
   </script>
