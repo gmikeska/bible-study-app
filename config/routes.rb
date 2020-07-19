@@ -78,9 +78,9 @@ resources :courses, param: :slug do
       post '/upload', to: 'lessons#upload'
       patch '/upload', to: 'lessons#upload'
       post '/chat', to: 'lessons#send_message', as:"chat"
-      resources :quizzes do
-        post '/:id/response', to:'quizzes#student_response'
-        post '/:id/slide_response', to:'quizzes#student_response_partial'
+      resource :quiz do
+        post '/response', to:'quizzes#student_response'
+        post '/slide_response', to:'quizzes#student_response_partial', as:"partial_response"
         get '/:user_id/review', to:'quizzes#instructor_review'
         post '/:user_id/review', to:'quizzes#submit_instructor_review'
       end

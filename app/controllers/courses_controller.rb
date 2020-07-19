@@ -97,20 +97,26 @@ class CoursesController < ApplicationController
 
   private
 
-  def redirect_target
-    if(params[:action] == "edit" || params[:action] == "update")
+  def redirect_target(action=nil)
+    if(action.nil?)
+      action = params[:action]
+    end
+    if(action == "edit" || action == "update")
       return @course
     else
       return "/"
     end
   end
 
-  def redirect_message
-    if(params[:action] == "create" || params[:action] == "new")
+  def redirect_message(action=nil)
+    if(action.nil?)
+      action = params[:action]
+    end
+    if(action == "create" || action == "new")
       return nil
-    elsif(params[:action] == "edit" || params[:action] == "update")
+    elsif(action == "edit" || action == "update")
       return "You are not authorized to edit that course."
-    elsif(params[:action] == "show" || params[:action] == "index")
+    elsif(action == "show" || action == "index")
       return "You are not authorized to view that course."
     else
       return "You are not authorized to edit that course."

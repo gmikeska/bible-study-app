@@ -2,7 +2,7 @@ import consumer from "./consumer"
 
 consumer.subscriptions.create("LessonChannel", {
   connected() {
-    // debugger
+    console.log("Lesson Channel connected.")
     if(!application.channels)
       application.channels = []
 

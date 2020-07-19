@@ -1,5 +1,5 @@
-<div id="lessonCarousel" class="carousel" data-target="lesson.slides" data-lesson-starting-slide="<%= @lesson.current_slide %>" style="width:942px;margin-left:-100px;">
-  <div class="carousel-inner border" style="max-width: 80%;">
+<div id="lessonCarousel" class="carousel" data-target="lesson.slides" data-lesson-starting-slide="<%= @lesson.current_slide %>" style="width:942px;margin-left:-100px;height:100%">
+  <div class="carousel-inner border" style="max-width: 80%;height:100%;">
     <% @lesson.slides.each_index do |index| %>
       <%= render "slide", lesson:@lesson, slide:@lesson.slides[index], index:index  %>
     <% end %>
@@ -28,79 +28,6 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
-<% if(@enrollment.present? && @enrollment.status?(@quiz) == :in_progress)
-  testInProgressHandler = %Q($('#lessonCarousel').on('slid.bs.carousel', function (e) {
-      if($("form",e.relatedTarget).length > 0 && $($("input",e.relatedTarget)[1]).attr("disabled") != "disabled")
-      {
-        hideNext()
-      }
-      else
-      {
-        showNext()
-      }
-  })).html_safe
-else
-testInProgressHandler = ""
-end %>
-<script type="text/javascript">
-
-  $("body").ready(()=>{
-    // $("#lessonCarousel").carousel({
-    //   pause:true
-    // })
-    <%= testInProgressHandler %>
-    $(".carousel-item").each((i,slide)=>{
-      $(".submitAnswers",slide).click((e)=>{
-        e.preventDefault();
-        form = e.currentTarget.parentElement.parentElement
-        $.ajax({
-              url: $(form)[0].action,
-              data: $(form).serialize(),
-              type: "POST",
-              success:(response)=>{
-                // debugger
-                 keys = Object.keys(response)
-                $(keys).each((i,key)=>{
-                  if(!isNaN(parseInt(key)))
-                  {
-                    questionDiv = form.parentElement.parentElement
-                    key = parseInt(key)
-                    if(response[key].result == "correct")
-                    {
-                      label = $("label", questionDiv)[0]
-                      question  = label.textContent
-                      resultIndicator = `<span class='text-success' title='Correct' style='font-size:x-large'>✓</span>`
-                      $(label).html(`${resultIndicator}${question}`)
-                      $(".form-check-input",questionDiv).attr('disabled',true);
-                      $("input",questionDiv).attr('disabled',true);
-                    }
-                    if(response[key].result == "incorrect")
-                    {
-                      label = $("label", questionDiv)[0]
-                      question  = label.textContent
-                      resultIndicator = `<span class='text-danger' title='Correct' style='font-size:x-large'>&times</span>`
-                      $(label).html(`${resultIndicator}${question}`)
-                      $(".form-check-input",questionDiv).attr('disabled',true);
-                      $("input",questionDiv).attr('disabled',true);
-                      correctAnswer = `Correct Answer:${response[key].correct_answer}`
-                      $(questionDiv).append(correctAnswer)
-                    }
-                  }
-                  if(response["score"])
-                  {
-                    summary = `${response["correct"]} of ${response["correct"]+response["incorrect"]} correct.
-                    <br>Score:${response["score"]}`
-                    $("#quiz-results").html(summary)
-                  }
-
-                })
-                showNext()
-              }
-          });
-      })
-    })
-  })
-</script>
 
 
 <style media="screen">

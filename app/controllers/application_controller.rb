@@ -23,11 +23,7 @@ class ApplicationController < ActionController::Base
       param_prefix = @resource_name_root.underscore.singularize
       long_param = (args[:model].to_s+"_#{args[:param].to_s}").to_sym
       model = args[:model].to_s.classify.constantize
-      if(params[short_param].present?)
-        search = {}
-        search[short_param] = params[short_param]
-        instance_variable_set(("@"+args[:model].to_s.underscore).to_sym, model.find_by(**search))
-      elsif(params[long_param].present?)
+      if(params[long_param].present?)
         search = {}
         search[short_param] = params[long_param]
         instance_variable_set(("@"+args[:model].to_s.underscore).to_sym, model.find_by(**search))
@@ -56,7 +52,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def authorize_action
     if(params[:action] != "index")
       begin
@@ -75,17 +71,38 @@ class ApplicationController < ActionController::Base
       instance_variable_set(@resource_collection_name, policy_scope(@resource_model_name.constantize))
     end
   end
+  def authorize_edit_action
+    if(params[:action] != "index")
+      begin
+        authorize(instance_variable_get(@resource_instance_name), :edit?)
+      rescue
+        message = redirect_message("edit")
+        if(message.present?)
+          redirect_to redirect_target, alert:message
+        else
+          redirect_to redirect_target
+        end
+      else
+        puts "Authorized #{params[:action]}."
+      end
+    else
+      instance_variable_set(@resource_collection_name, policy_scope(@resource_model_name.constantize))
+    end
+  end
 
   def redirect_target
     return "/"
   end
 
-  def redirect_message
-    if(params[:action] == "create" || params[:action] == "new")
+  def redirect_message(action=nil)
+    if(action.nil?)
+      action = params[:action]
+    end
+    if(action == "create" || action == "new")
       return "You are not authorized to create that item."
-    elsif(params[:action] == "edit" || params[:action] == "update")
+    elsif(action == "edit" || action == "update")
       return "You are not authorized to edit that item."
-    elsif(params[:action] == "show" || params[:action] == "index")
+    elsif(action == "show" || action == "index")
       return "You are not authorized to view that item."
     else
       return "You are not authorized to edit that item."
@@ -111,7 +128,7 @@ class ApplicationController < ActionController::Base
         p << args[:include]
       end
     end
-    p = p.map{|c| c = c.to_sym}
+    # p = p.map{|c| c = c.to_sym}
     return params.require(@resource_name_root.singularize.downcase.to_sym).permit(*p)
   end
   def requester_is_authorized(condition,target=nil)

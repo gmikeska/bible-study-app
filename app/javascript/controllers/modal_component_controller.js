@@ -10,7 +10,6 @@ export default class extends Controller {
     this.submit_callbacks = []
     this.resetAfterSubmit = true
     this.initial_html = this.element.innerHTML
-
   }
   onInit(cb)
   {
