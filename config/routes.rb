@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   post "component/:component_id/", to:"pages#component_preview", as:"component"
   post "pages/:slug/component/:component_id/", to:"pages#component_preview", as:"page_component"
   get "component/:component_id/settings", to:"pages#component_settings"
+  get "privacy", to:"static_pages#privacy"
   resources 'pages', param: :slug, controller: 'pages'
   # resources 'lessons', param: :slug, controller: 'lessons'
 
