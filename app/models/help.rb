@@ -2,7 +2,7 @@
 class Help < ApplicationRecord
   serialize :missing_sections, Array
   after_initialize do |help|
-    if(help.title.present? && help.slug != help.title.parameterize)
+    if(!!help.title && help.slug != help.title.parameterize)
       help.slug = help.title.parameterize
     end
     help.missing_sections.each do |name|
