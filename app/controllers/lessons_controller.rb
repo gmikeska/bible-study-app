@@ -1,12 +1,20 @@
 class LessonsController < ApplicationController
   before_action :set_lesson, only: [:show,:show_video,:upload,:delete_file, :edit, :update, :destroy]
-  skip_before_action :verify_authenticity_token, only:[:upload]
   before_action :authenticate_user!
-  before_action :authorize_action, except:[:upload,:delete_file, :new_slide,:create_slide,:edit_slide, :update_slide,:reorder_slides,:delete_slide,:show_slide]
+  before_action :authorize_action, except:[:upload,:delete_file,:new,:c, :new_slide,:create_slide,:edit_slide, :update_slide,:reorder_slides,:delete_slide,:show_slide]
   # GET /lessons
   # GET /lessons.json
   def index
     @lessons = Lesson.all
+  end
+  def verify_authenticity_token
+    if(params["action"] == "upload")
+      byebug
+      params["authenticity_token"] = params["ckCsrfToken"]
+      super
+    else
+      super
+    end
   end
 
   # GET /lessons/1
@@ -97,9 +105,9 @@ class LessonsController < ApplicationController
   def new
     set_course
     set_chapter
-    @lesson = Lesson.new
+    @lesson = Lesson.new(course:@course)
     @lesson.chapter = @chapter
-    @lesson.course = @course
+    authorize(@lesson,:new?)
   end
 
   # GET /lessons/1/edit
@@ -116,6 +124,7 @@ class LessonsController < ApplicationController
   end
 
   def upload
+    byebug
     authorize_edit_action
     if(@lesson.chapter.present? && @chapter.nil?)
       @chapter = @lesson.chapter
@@ -145,6 +154,7 @@ class LessonsController < ApplicationController
       lp[:chapter] = @chapter
       @lesson = Lesson.new(lp)
       respond_to do |format|
+        authorize(@lesson,:create?)
         if @lesson.save
           format.html { redirect_to [@lesson.course,@chapter,@lesson], notice: 'Lesson was successfully created.' }
           format.json { render :show, status: :created, location: @lesson }
@@ -156,6 +166,7 @@ class LessonsController < ApplicationController
     else
       @lesson = Lesson.new(lp)
       respond_to do |format|
+        authorize(@lesson,:create?)
         if @lesson.save
           format.html { redirect_to [@lesson.course,@lesson], notice: 'Lesson was successfully created.' }
           format.json { render :show, status: :created, location: @lesson }

@@ -1,13 +1,13 @@
 class FacebookVideosController < ApplicationController
   before_action :set_facebook_video
   before_action :authenticate_user!, except:[:index, :show, :live]
-  before_action :authorize_action
+  before_action :authorize_action, except:[:live]
 
   layout 'live'
   # GET /facebook_videos
   # GET /facebook_videos.json
   def index
-    @facebook_videos = FacebookVideo.all
+    @facebook_videos = FacebookVideo.all.order("created_at DESC").reject{|v| v.slug.nil?}
   end
 
   # GET /facebook_videos/1

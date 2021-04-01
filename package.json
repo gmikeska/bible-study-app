@@ -8,7 +8,22 @@
     "@rails/webpacker": "4.2.2",
     "jquery": "^3.5.1",
     "stimulus": "^1.1.1",
-    "turbolinks": "^5.2.0"
+    "turbolinks": "^5.2.0",
+    "@ckeditor/ckeditor5-build-classic":"^20.0.0",
+    "@ckeditor/ckeditor5-adapter-ckfinder": "^20.0.0",
+    "@ckeditor/ckeditor5-autoformat": "^20.0.0",
+    "@ckeditor/ckeditor5-basic-styles": "^20.0.0",
+    "@ckeditor/ckeditor5-block-quote": "^20.0.0",
+    "@ckeditor/ckeditor5-easy-image": "^20.0.0",
+    "@ckeditor/ckeditor5-editor-classic": "^20.0.0",
+    "@ckeditor/ckeditor5-essentials": "^20.0.0",
+    "@ckeditor/ckeditor5-heading": "^20.0.0",
+    "@ckeditor/ckeditor5-image": "^20.0.0",
+    "@ckeditor/ckeditor5-link": "^20.0.0",
+    "@ckeditor/ckeditor5-list": "^20.0.0",
+    "@ckeditor/ckeditor5-paragraph": "^20.0.0",
+    "@ckeditor/ckeditor5-theme-lark": "^20.0.0",
+    "@ckeditor/ckeditor5-upload": "^20.0.0"
   },
   "version": "0.1.0",
   "devDependencies": {

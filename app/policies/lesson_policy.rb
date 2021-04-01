@@ -12,11 +12,9 @@ class LessonPolicy < ApplicationPolicy
     (@user.admin? || @user.superAdmin?)
   end
   def upload?
-    byebug
     @user.staff?
   end
   def destroy?
-    byebug
     @user.staff?
   end
   class Scope < Scope
