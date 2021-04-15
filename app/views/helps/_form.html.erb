@@ -32,6 +32,9 @@
       <% end %>
     </div>
   </div>
+  <div class="field">
+    <%= form.text_area :description %>
+  </div>
   <div class="row">
     <% if(current_user.present? && is_dev(current_user))%>
       <div class="field col-4">
@@ -49,6 +52,10 @@
   </div>
 <% end %>
 <style media="screen">
+  #help_description{
+    min-height: 100px;
+    font-family: monospace;
+  }
   #help_content{
     min-height: 300px;
     font-family: monospace;

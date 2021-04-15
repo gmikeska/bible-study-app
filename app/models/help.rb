@@ -25,8 +25,14 @@ class Help < ApplicationRecord
   def doc
     Kramdown::Document.new(self.content, input:"GFM")
   end
+  def doc_description
+    Kramdown::Document.new(self.description, input:"GFM")
+  end
   def html_content
     doc.to_html
+  end
+  def html_description
+    doc_description.to_html
   end
   def nodes
     doc.root.children
