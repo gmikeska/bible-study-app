@@ -32,7 +32,11 @@ class Help < ApplicationRecord
     doc.to_html
   end
   def html_description
-    doc_description.to_html
+    if(!!doc_description)
+      doc_description.to_html
+    else
+      return ""
+    end
   end
   def nodes
     doc.root.children
