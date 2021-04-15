@@ -26,7 +26,11 @@ class Help < ApplicationRecord
     Kramdown::Document.new(self.content, input:"GFM")
   end
   def doc_description
-    Kramdown::Document.new(self.description, input:"GFM")
+    if(!!self.description)
+      Kramdown::Document.new(self.description, input:"GFM")
+    else
+      return nil
+    end
   end
   def html_content
     doc.to_html
