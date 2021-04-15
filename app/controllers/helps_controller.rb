@@ -87,6 +87,6 @@ class HelpsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def help_params
-      filter_params(params:[:title, :content, :system, :category])
+      filter_params(params:[:title, :content, :system, :category, :description])
     end
 end
