@@ -35,9 +35,14 @@ class Help < ApplicationRecord
   def html_content
     doc.to_html
   end
-  def html_description
+  def html_description(class_name=nil)
     if(!!doc_description)
-      doc_description.to_html
+      result = doc_description.to_html
+      if(!!class_name)
+        wrapper_el = /\<p\>/
+        result.gsub!(wrapper_el,"<p class='#{class_name}'>")
+      end
+      return result
     else
       return ""
     end
