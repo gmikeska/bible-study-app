@@ -33,6 +33,7 @@ class User < ApplicationRecord
     end
 
     def type=(typestr)
+      typestr = typestr.to_s.downcase
       if(typestr == "admin" || typestr == "instructor" || typestr == "student")
         user_type = typestr
       end
