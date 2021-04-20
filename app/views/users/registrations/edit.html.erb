@@ -45,9 +45,9 @@
 
   </div>
   </div>
-<% elsif(current_user.type = "admin") %>
+<% elsif(current_user.isAdmin?) %>
 <div class='field'>
-  <%= f.select :user_type, [['Admin', 'admin'], ['Instructor', 'instructor'], ['Student', 'student']], selected:resource.user_type %>
+  <%= f.select :role, [['Admin', 'admin'], ['Instructor', 'instructor'], ['Student', 'student']], selected:resource.role %>
 </div>
 <% end %>
   <div class="actions">
