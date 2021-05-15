@@ -202,7 +202,6 @@ class QuizzesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def quiz_params
       questions = []
-      byebug
       params[:quiz][:questions].each do |question|
         question = question.permit!
         if(question[:choices].present?)

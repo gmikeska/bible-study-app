@@ -1,9 +1,23 @@
+<style>
+  .descriptionCard
+  {
+    width: 42%;
+    padding-left:4px;
+    padding-top:4px;
+    margin-bottom:5px;
+  }
+</style>
 <%= render "help_nav" %>
 <% if(current_user.present? && current_user.isAdmin?) %>
 <%= toolbar([back_button(helps_path), edit_button(edit_help_path(@help)), link_to('Create Documentation', new_help_path, class:"btn btn-sm btn-default"),link_to('Create Documentation from here', help_create_subpage_path(@help), class:"btn btn-sm btn-default")],style:"width: 100%; margin-left: 0%;margin-top: -13px;") %>
 <% end %>
 <h1>Help - <%= @help.title %></h1>
+<% if(!!@help.description) %>
+  <div class="card descriptionCard border border-dark">
+    <%== @help.html_description %>
+  </div>
+<% end %>
   <div class="container">
     <%= render "helps_table", helps:@contents %>
   </div>
-<%== @help.html_content %>
+  <%== @help.html_content %>

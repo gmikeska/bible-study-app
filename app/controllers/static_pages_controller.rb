@@ -20,6 +20,14 @@ before_action :set_page, only: [:show, :edit, :update, :destroy]
     # end
     render "about-us"
   end
+  def privacy
+    # @page = StaticPage.find_by slug:"home"
+    # @components = []
+    # @page.components.each do |component|
+    #   @components << component[:name].camelcase.constantize.new(**component[:args].symbolize_keys)
+    # end
+    render "privacy"
+  end
 
   def show
     @components = @page.components

@@ -21,7 +21,7 @@
     </div>
     <% if(current_user && current_user.isAdmin?) %>
       <div class="col" style="margin-top: 1.5%;">
-        <strong>Visibility:</strong><%= @course.visibility %><br>
+        <strong>Visibility:</strong><%= @course.visibility.split('_')[1].titleize %><br>
         <% if(@course.price.to_i > 0) %>
           <strong>Price:</strong>$<%= @course.price  %>
         <% else %>

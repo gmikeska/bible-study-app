@@ -2,7 +2,7 @@
 class Help < ApplicationRecord
   serialize :missing_sections, Array
   after_initialize do |help|
-    if(help.title.present? && help.slug != help.title.parameterize)
+    if(!!help.title && help.slug != help.title.parameterize)
       help.slug = help.title.parameterize
     end
     help.missing_sections.each do |name|
@@ -25,8 +25,27 @@ class Help < ApplicationRecord
   def doc
     Kramdown::Document.new(self.content, input:"GFM")
   end
+  def doc_description
+    if(!!self.description)
+      Kramdown::Document.new(self.description, input:"GFM")
+    else
+      return nil
+    end
+  end
   def html_content
     doc.to_html
+  end
+  def html_description(class_name=nil)
+    if(!!doc_description)
+      result = doc_description.to_html
+      if(!!class_name)
+        wrapper_el = /\<p\>/
+        result.gsub!(wrapper_el,"<p class='#{class_name}'>")
+      end
+      return result
+    else
+      return ""
+    end
   end
   def nodes
     doc.root.children

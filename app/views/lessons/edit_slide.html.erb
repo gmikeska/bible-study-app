@@ -1,19 +1,9 @@
 <%= render 'slide_form', lesson: @lesson %>
 <script type="text/javascript">
+  const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
   $("body").ready(()=>{
-    ClassicEditor
-            .create( document.querySelector( '#editor' ),{
-              ckfinder: {
-                  // Upload the images to the server using the CKFinder QuickUpload command.
-                  uploadUrl: '<%= lesson_upload_url(@lesson) %>',
-              }
-            } )
-            .then( editor => {
-                    console.log( editor );
-                      // $(".ck-content").css("height","400px")
-            } )
-            .catch( error => {
-                    console.error( error );
-            } );
+    ClassicEditor.create( document.querySelector( '#editor' ))
+
   })
 </script>

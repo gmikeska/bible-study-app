@@ -62,6 +62,7 @@
             <a class="dropdown-item" href="/invoices/">Invoices</a>
             <a class="dropdown-item" href="/pages/">Pages</a>
             <a class="dropdown-item" href="/users/">User Management</a>
+            <%= render :partial => 'helps/nav_items' %>
             <div class="dropdown-divider"></div>
           <% end %>
           <%= link_to('My Profile', "/users/#{current_user.id}/edit", class:"dropdown-item") %>

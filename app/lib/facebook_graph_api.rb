@@ -19,9 +19,21 @@ class FacebookGraphApi < ApiGears
         end
       end
     else
-      endpoint "videos",path:"memorialUnitedMethodistChurchAustin/videos", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN")}
-      endpoint "live_videos",path:"memorialUnitedMethodistChurchAustin/live_videos", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN"),fields:"creation_time,permalink_url"}
+      endpoint "videos",path:"MemorialUnitedMethodistChurchAustin/videos", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN")}
+      endpoint "live_videos",path:"MemorialUnitedMethodistChurchAustin/live_videos", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN"), fields:"creation_time,permalink_url"}
       endpoint "video",path:"{video_id}", set_query_params:{access_token:ENV.fetch("FB_PAGE_ACCESS_TOKEN")}
+    end
+    def request(**args)
+      output = {}
+      result = super
+      output["data"] = result["data"]
+      if(args[:endpoint].to_s == "live_videos" && !!result["paging"]["next"])
+        while(!!result["paging"]["next"])
+          result = JSON.parse(Net::HTTP.get(URI.parse(result["paging"]["next"])))
+          output["data"].concat(result["data"])
+        end
+      end
+      return output
     end
   end
 

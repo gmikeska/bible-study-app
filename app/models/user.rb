@@ -18,23 +18,11 @@ class User < ApplicationRecord
   scope :instructors, -> { where(role: 'instructor') }
   scope :students, -> { where(role: 'student') }
     after_initialize do |user|
-      if(user.user_type.nil?)
-        user.user_type = "student"
-      end
       if(user.role.nil?)
         user.role = "student"
       end
       if(user.breeze_id.present? &&  user.breeze_data.nil?)
         user.load_breeze_data
-      end
-    end
-    def type
-      user_type
-    end
-
-    def type=(typestr)
-      if(typestr == "admin" || typestr == "instructor" || typestr == "student")
-        user_type = typestr
       end
     end
     def name

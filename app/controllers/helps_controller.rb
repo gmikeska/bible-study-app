@@ -1,5 +1,5 @@
 class HelpsController < ApplicationController
-  before_action :set_help, except:[:index]
+  before_action :set_help, except:[:index,:new]
   before_action :authenticate_user!, except:[:index, :show]
   before_action :authorize_action
 
@@ -34,7 +34,7 @@ class HelpsController < ApplicationController
 
   # GET /helps/1/edit
   def edit
-    
+
   end
 
   # POST /helps
@@ -87,6 +87,6 @@ class HelpsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def help_params
-      filter_params(params:[:title, :content, :system, :category])
+      filter_params(params:[:title, :content, :system, :category, :description])
     end
 end

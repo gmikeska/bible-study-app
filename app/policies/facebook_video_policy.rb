@@ -11,6 +11,9 @@ class FacebookVideoPolicy < ApplicationPolicy
   def update?
     (@user.admin? || @user.superAdmin?)
   end
+  def live?
+    true
+  end
   class Scope < Scope
     def resolve
       scope.all
