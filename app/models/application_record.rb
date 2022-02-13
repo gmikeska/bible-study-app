@@ -20,8 +20,12 @@ class ApplicationRecord < ActiveRecord::Base
   def resource_type
     return "model"
   end
-  def pointer
-    return "#{resource_type}:#{resource_name}:#{resource_identifier}"
+  def pointer(anchor=nil)
+    if(!anchor)
+      return "#{resource_type}:#{resource_name}:#{resource_identifier}"
+    else
+      return "#{resource_type}:#{resource_name}:#{resource_identifier}##{anchor.underscore}"
+    end
   end
   def self.pointer(scope)
     if(self.scope_names.include?(scope.to_sym))
@@ -60,6 +64,9 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.parse_pointer(pointer)
+    if(pointer.include?("#") && pointer.split('#')[1].length > 0)
+      pointer, anchor = pointer.split('#')
+    end
     parts = pointer.split(":")
     if(parts[0] == "file")
       data = {type:parts[0], class:"Gallery", param:parts[1], resource:parts[2]}
@@ -68,6 +75,9 @@ class ApplicationRecord < ActiveRecord::Base
     end
     if(parts[3].present?)
       data[:attribute] = parts[3]
+    end
+    if(!!anchor)
+      data[:anchor] = anchor
     end
     return data
   end

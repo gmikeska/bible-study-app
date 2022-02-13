@@ -75,6 +75,7 @@ module ApplicationHelper
     help_id = help_pointer.gsub(":","_")
     help_pointer = Help.parse_pointer(help_pointer)
     section = help_pointer[:attribute]
+    category = help_pointer[:class]
     help_document = Help.find_or_create_by(slug:help_pointer[:param])
     help_section = help_document.section(section)
     if(help_section.present?)

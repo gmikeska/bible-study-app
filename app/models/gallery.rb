@@ -14,6 +14,8 @@ class Gallery < ApplicationRecord
   def url_for(file)
     if(is_video(file))
       return "/galleries/#{self.id}/videos/#{file.id}"
+    elsif(is_image(file))
+      return "/galleries/#{self.id}/#{file.filename}"
     else
       # files = self.files.select {|f| f.filename == filename }
       return Rails.application.routes.url_helpers.rails_blob_path(file, only_path: true)

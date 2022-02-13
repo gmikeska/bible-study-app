@@ -5,10 +5,12 @@ class Help < ApplicationRecord
     if(!!help.title && help.slug != help.title.parameterize)
       help.slug = help.title.parameterize
     end
-    help.missing_sections.each do |name|
-      if(help.headers.include?(name))
-        help.missing_sections.delete(name)
-        help.save
+    if(help.missing_sections.present? && help.missing_sections.length > 0)
+      help.missing_sections.each do |name|
+        if(help.headers.include?(name))
+          help.missing_sections.delete(name)
+          help.save
+        end
       end
     end
   end
@@ -23,6 +25,9 @@ class Help < ApplicationRecord
     return result
   end
   def doc
+    if(self.content.nil?)
+      return ""
+    end
     Kramdown::Document.new(self.content, input:"GFM")
   end
   def doc_description
@@ -33,6 +38,9 @@ class Help < ApplicationRecord
     end
   end
   def html_content
+    if(self.content.nil?)
+      return " "
+    end
     doc.to_html
   end
   def html_description(class_name=nil)
@@ -57,6 +65,7 @@ class Help < ApplicationRecord
     header_objects.to_a.map{|h| h.options[:raw_text] }
   end
   def section(name, type=:html)
+    return nil if(!name)
     name = name.titleize
     docNodes = self.nodes
     header_objects = docNodes.select{|n| n.type == :header}
